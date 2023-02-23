@@ -19,6 +19,8 @@ class AnswerFactory extends Factory
         return [
             'name' => $this->faker->text(20),
             'rightAns' => $this->faker->text(5),
+            'question_id' => $this->faker->randomElement([1, 2, 3]),
+
         ];
     }
 }

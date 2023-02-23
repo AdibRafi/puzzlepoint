@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,14 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $answers = Question::find(3)->answers->all();
+//        $answers = Question::all();
+//        $p =
+//        $answers = Question::all();
+
+//        dd($answers);
+
+        return inertia('Test', compact('answers'));
     }
 
     /**
