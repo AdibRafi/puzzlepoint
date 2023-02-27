@@ -43,4 +43,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('question', [QuestionController::class, 'index']);
 
+Route::inertia('profileTest', 'Profile')->name('profileIndex');
+
 require __DIR__.'/auth.php';
