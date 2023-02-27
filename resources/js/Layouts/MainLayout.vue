@@ -47,15 +47,18 @@
             </router-link>
         </div>
         <div class="navbar-end">
+            <Link class="btn btn-ghost btn-circle" :href="route('profile.edit')">
+                <font-awesome-icon class="scale-125" icon="fa-solid fa-user"/>
+            </Link>
             <button class="btn btn-ghost btn-circle">
                 <font-awesome-icon class="scale-125" icon="fa-solid fa-arrow-right-from-bracket"/>
             </button>
         </div>
     </div>
-<!--todo: find a way untuk dpt heading-->
+    <!--todo: find a way untuk dpt heading-->
     <header class="bg-white shadow" v-if="$slots.header">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <slot name="header" />
+            <slot name="header"/>
         </div>
     </header>
 
@@ -70,6 +73,8 @@
 </template>
 
 <script setup>
+import {Link} from "@inertiajs/vue3";
+
 </script>
 
 <style scoped>

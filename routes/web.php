@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Models\Question;
@@ -32,9 +33,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
+    Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
+    Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
 });
 
 //Route::get('/test', function () {
@@ -42,7 +43,8 @@ Route::middleware('auth')->group(function () {
 //});
 
 Route::get('question', [QuestionController::class, 'index']);
+Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
-Route::inertia('profileTest', 'Profile')->name('profileIndex');
+//Route::inertia('profileTest', 'Profile')->name('profileIndex');
 
 require __DIR__.'/auth.php';
