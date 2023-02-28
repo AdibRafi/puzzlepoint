@@ -37,11 +37,12 @@
             </div>
         </div>
 <!--        todo: do backend of delete account-->
+<!--        todo: do 'are you sure to delete account pop up-->
         <div class="card w-1/2 bg-base-100 shadow-xl p-6 my-6">
             <h2 class="card-title ">Delete Account</h2>
             <p>Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.</p>
             <div class="card-actions my-4">
-                <button class="btn btn-error">Delete</button>
+                <button class="btn btn-warning">Delete</button>
             </div>
         </div>
 

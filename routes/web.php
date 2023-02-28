@@ -28,9 +28,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboardA', function () {
+    return Inertia::render('Archives/DashboardA');
+})->middleware(['auth', 'verified'])->name('dashboardA');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 //});
 
 Route::get('question', [QuestionController::class, 'index']);
+
+Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
 //Route::inertia('profileTest', 'Profile')->name('profileIndex');

@@ -43,8 +43,9 @@
             </div>
         </div>
         <div class="navbar-center">
-            <router-link class="btn btn-ghost normal-case text-xl" :to="{name:'lectDashboard'}">PuzzlePoint
-            </router-link>
+            <Link :href="route('dashboard')" class="btn btn-ghost normal-case text-xl">
+                PuzzlePoint
+            </Link>
         </div>
         <div class="navbar-end">
             <Link class="btn btn-ghost btn-circle" :href="route('profile.edit')">
