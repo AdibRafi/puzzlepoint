@@ -49,10 +49,13 @@ Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
 Route::group(['prefix' => 'LecturerSide'], function () {
+    //todo: rename create -> topic related stuff (with directory)
     Route::inertia('/CreateTopic', 'Lecturer/CreateTopic/CreateTopic')->name('lect.create.topic');
     Route::inertia('/CreateModule', 'Lecturer/CreateTopic/CreateModule')->name('lect.create.module');
     Route::inertia('/CreateOption', 'Lecturer/CreateTopic/CreateOption')->name('lect.create.option');
     Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/CreateVerify')->name('lect.create.verify');
+
+    Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');
 });
 
 //Route::inertia('profileTest', 'Profile')->name('profileIndex');
