@@ -1,5 +1,5 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import GuestLayout from '@/Layouts/Archives/GuestLayout.vue';
 import InputError from '@/Components/Archives/InputError.vue';
 import InputLabel from '@/Components/Archives/InputLabel.vue';
 import PrimaryButton from '@/Components/Archives/PrimaryButton.vue';
