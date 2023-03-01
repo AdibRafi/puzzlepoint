@@ -8,22 +8,22 @@
                 <ul tabindex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li>
-                        <router-link :to="{name:'lectDashboard'}">Home</router-link>
+                        <Link :href="route('dashboard')">Home</Link>
                     </li>
                     <li>
-                        <router-link :to="{name:'lectCreateTopic'}">Topic</router-link>
+                        <Link :href="route('lect.create.topic')">CreateTopic</Link>
                     </li>
                     <li>
-                        <router-link :to="{name:'lectCreateModule'}">Module</router-link>
+                        <Link :href="route('lect.create.module')">CreateModule</Link>
                     </li>
                     <li>
-                        <router-link :to="{name:'lectCreateOption'}">Option</router-link>
+                        <Link :href="route('lect.create.option')">CreateOption</Link>
                     </li>
                     <li>
-                        <router-link :to="{name:'lectCreateVerify'}">Verify</router-link>
+                        <Link :href="route('lect.create.verify')">CreateVerify</Link>
                     </li>
                     <li>
-                        <router-link :to="{name:'lectCreateAssessment'}">Assessment</router-link>
+                        <Link :href="route('lect.assessment.create')">CreateAssessment</Link>
                     </li>
                     <li tabindex="0">
                         <a>
