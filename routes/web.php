@@ -56,6 +56,8 @@ Route::group(['prefix' => 'LecturerSide'], function () {
     Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/CreateVerify')->name('lect.create.verify');
 
     Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');
+
+    Route::inertia('/ExpertSession', 'Lecturer/Session/ExpertSession')->name('lect.session.expert');
 });
 
 //Route::inertia('profileTest', 'Profile')->name('profileIndex');

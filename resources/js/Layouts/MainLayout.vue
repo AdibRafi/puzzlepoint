@@ -35,7 +35,7 @@
                         </a>
                         <ul class="p-2 bg-base-100">
                             <li>
-                                <router-link :to="{name:'lectExpertSession'}">Expert Session</router-link>
+                                <Link :href="route('lect.session.expert')">Expert</Link>
                             </li>
                         </ul>
                     </li>
