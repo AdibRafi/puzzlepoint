@@ -35,7 +35,10 @@
                         </a>
                         <ul class="p-2 bg-base-100">
                             <li>
-                                <Link :href="route('lect.session.expert')">Expert</Link>
+                                <Link :href="route('lect.session.expert')">Lecturer</Link>
+                            </li>
+                            <li>
+                                <Link :href="route('stud.session.expert')">Student</Link>
                             </li>
                         </ul>
                     </li>
@@ -76,6 +79,7 @@
 
 <script setup>
 import {Link} from "@inertiajs/vue3";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 </script>
 
