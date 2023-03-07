@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Assessment
@@ -23,4 +24,11 @@ use Illuminate\Database\Eloquent\Model;
 class Assessment extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'mark'];
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

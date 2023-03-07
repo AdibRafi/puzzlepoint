@@ -78,11 +78,16 @@ class User extends Authenticatable
 
     public function classrooms(): BelongsToMany
     {
-        return $this->belongsToMany(Classroom::class,'classroom_user');
+        return $this->belongsToMany(Classroom::class, 'classroom_user');
     }
 
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class);
+    }
+
+    public function assessments(): BelongsToMany
+    {
+        return $this->belongsToMany(Assessment::class);
     }
 }

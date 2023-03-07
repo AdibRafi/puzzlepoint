@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Answer;
+use App\Models\Assessment;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Module;
@@ -55,7 +56,17 @@ class DatabaseSeeder extends Seeder
             );
         });
 
+        Assessment::factory(3)->create();
+        $assessments = Assessment::all();
+
+        User::all()->each(function ($user) use ($assessments) {
+            $user->assessments()->attach(
+                $assessments->random(rand(1,$assessments->count()))->pluck('id')->toArray()
+            );
+        });
+
         Module::factory(3)->create();
+
 
 //        foreach (Classroom::all() as $classroom) {
 //            $users = User::inRandomOrder()->take(rand(1, 3))->pluck('id');

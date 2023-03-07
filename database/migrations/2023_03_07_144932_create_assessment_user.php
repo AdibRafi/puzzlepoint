@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('mark');
-            $table->timestamps();
+        Schema::create('assessment_user', function (Blueprint $table) {
+            $table->foreignId('assessment_id')->constrained();
+            $table->foreignId('user_id')->constrained();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessments');
+        Schema::dropIfExists('assessment_user');
     }
 };

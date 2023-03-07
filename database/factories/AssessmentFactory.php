@@ -17,7 +17,8 @@ class AssessmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->text(20),
+            'mark' => $this->faker->numerify('##'),
         ];
     }
 }
