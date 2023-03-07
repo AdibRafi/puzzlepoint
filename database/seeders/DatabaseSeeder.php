@@ -10,6 +10,7 @@ use App\Models\Module;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +19,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->create([
+            'name' => 'adib',
+            'email' => 'adibtest@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('test1234'),
+            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'name' => 'test',
+            'email' => 'test@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('test1234'),
+            'remember_token' => Str::random(10),
+        ]);
         Classroom::factory(3)->create();
+
+        $classrooms = Classroom::all();
+
+        User::all()->each(function ($user) use ($classrooms) {
+            $user->classrooms()->attach(
+                $classrooms->random(rand(1, $classrooms->count()))->pluck('id')->toArray());
+        });
+
+
+
         Group::factory(3)->create();
         Module::factory(3)->create();
 
@@ -29,7 +54,6 @@ class DatabaseSeeder extends Seeder
 
 //        Question::factory(3)->create();
 //        Answer::factory(12)->create();
-
 
 
         // \App\Models\User::factory(10)->create();
