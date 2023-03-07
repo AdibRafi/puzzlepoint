@@ -1,5 +1,5 @@
 <template>
-    <Head title="Dashboard"></Head>
+    <Head title="Dashboard" />
     <MainLayout>
         <div class="w-screen">
             <div v-for="data in classroomData" key="data" class="flex justify-center">
