@@ -1,8 +1,6 @@
 <template>
     <MainLayout>
-        <div v-for="answer in answers">
-            <p>{{ answer.rightAns }}</p>
-        </div>
+
     </MainLayout>
 </template>
 
@@ -10,7 +8,7 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 
 defineProps({
-    answers: Object,
+    data: Object,
 })
 </script>
 

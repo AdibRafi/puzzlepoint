@@ -13,7 +13,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $answers = Question::find(3)->answers->all();
+        $answers = Question::find(3)->answers()->get();
 //        $answers = Question::all();
 //        $p =
 //        $answers = Question::all();

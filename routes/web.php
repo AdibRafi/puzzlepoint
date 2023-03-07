@@ -4,6 +4,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TestController;
 use App\Models\Question;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +44,7 @@ Route::middleware('auth')->group(function () {
 //    return view('test');
 //});
 
-Route::get('question', [QuestionController::class, 'index']);
+Route::get('test', [TestController::class, 'index']);
 
 //Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
