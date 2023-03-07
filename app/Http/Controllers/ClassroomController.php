@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -12,7 +13,11 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        //
+//        $classroomData = Classroom::all();
+        //todo: many to many relationship how to do?
+        $classroomData = User::find(1)->with('classrooms')->get();
+
+        return inertia('Dashboard',compact('classroomData'));
     }
 
     /**

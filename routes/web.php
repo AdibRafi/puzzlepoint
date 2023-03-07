@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
@@ -44,7 +45,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('question', [QuestionController::class, 'index']);
 
-Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+//Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 

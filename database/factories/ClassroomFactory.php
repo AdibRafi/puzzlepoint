@@ -17,7 +17,8 @@ class ClassroomFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->text(20),
+            'subject_code' => $this->faker->text(7),
         ];
     }
 }

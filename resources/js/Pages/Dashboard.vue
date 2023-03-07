@@ -2,11 +2,11 @@
     <Head title="Dashboard"></Head>
     <MainLayout>
         <div class="w-screen">
-            <div v-for="data in datas2" key="data" class="flex justify-center">
+            <div v-for="data in classroomData" key="data" class="flex justify-center">
                 <div class="card w-3/4 bg-base-300 shadow-xl m-4">
                     <div class="card-body">
                         <h2 class="card-title">{{ data.name }}</h2>
-                        <p>{{ data.code }}</p>
+                        <p>{{ data.subject_code }}</p>
                         <div class="card-actions justify-end">
                             <button class="btn btn-primary">Add Topic</button>
                         </div>
@@ -43,6 +43,10 @@
 <script setup>
 import {Head} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
+
+const props = defineProps({
+    classroomData: Object,
+})
 
 const datas2 = [
     {
