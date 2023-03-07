@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        //fixed user
         User::factory()->create([
             'name' => 'adib',
             'email' => 'adibtest@gmail.com',
@@ -33,18 +34,27 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('test1234'),
             'remember_token' => Str::random(10),
         ]);
-        Classroom::factory(3)->create();
 
+
+        Classroom::factory(3)->create();
         $classrooms = Classroom::all();
 
+        //attach user-classroom pivot
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->attach(
-                $classrooms->random(rand(1, $classrooms->count()))->pluck('id')->toArray());
+                $classrooms->random(rand(1, $classrooms->count()))->pluck('id')->toArray()
+            );
         });
 
-
-
         Group::factory(3)->create();
+        $groups = Group::all();
+
+        User::all()->each(function ($user) use ($groups) {
+            $user->groups()->attach(
+                $groups->random(rand(1, $groups->count()))->pluck('id')->toArray()
+            );
+        });
+
         Module::factory(3)->create();
 
 //        foreach (Classroom::all() as $classroom) {

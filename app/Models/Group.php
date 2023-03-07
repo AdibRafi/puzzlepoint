@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Group
@@ -24,9 +25,15 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['expert_group','jigsaw_group'];
+    protected $fillable = ['expert_group', 'jigsaw_group'];
 
-    public function modules(){
+    public function modules(): BelongsToMany
+    {
         return $this->belongsToMany(Module::class);
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 }
