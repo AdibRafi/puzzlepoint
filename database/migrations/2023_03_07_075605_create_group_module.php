@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groups', function (Blueprint $table) {
-            $table->id();
-            $table->string('expert_group');
-            $table->string('jigsaw_group');
-            $table->timestamps();
+        Schema::create('group_module', function (Blueprint $table) {
+            $table->foreignId('group_id')->constrained();
+            $table->foreignId('module_id')->constrained();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('group_module');
     }
 };

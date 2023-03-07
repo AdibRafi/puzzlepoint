@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Answer;
 use App\Models\Classroom;
+use App\Models\Group;
+use App\Models\Module;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -16,14 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->create([
-            'name' => 'adib',
-            'email' => 'adib@gmail.com',
-            'password' => '$2y$10$uzCgP.kRLWPHDgA.YcBtR.NkWeu7NB7BxF2jKh1n/icS/bAgukVC2',
-        ]);
-
         Classroom::factory(3)->create();
+        Group::factory(3)->create();
+        Module::factory(3)->create();
+
+//        foreach (Classroom::all() as $classroom) {
+//            $users = User::inRandomOrder()->take(rand(1, 3))->pluck('id');
+//            $classroom->user()->attach($users);
+//        }
 
 //        Question::factory(3)->create();
 //        Answer::factory(12)->create();
