@@ -5,6 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Assessment
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\AssessmentFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Assessment whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Assessment extends Model
 {
     use HasFactory;
