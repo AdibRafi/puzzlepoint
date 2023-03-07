@@ -2,11 +2,12 @@
     <Head title="Dashboard"></Head>
     <MainLayout>
         <div class="w-screen">
+            <p>{{classroomData}}</p>
             <div v-for="data in classroomData" key="data" class="flex justify-center">
                 <div class="card w-3/4 bg-base-300 shadow-xl m-4">
                     <div class="card-body">
                         <h2 class="card-title">{{ data.name }}</h2>
-                        <p>{{ data.subject_code }}</p>
+<!--                        <p>{{ // data.pivot.classrooms }}</p>-->
                         <div class="card-actions justify-end">
                             <button class="btn btn-primary">Add Topic</button>
                         </div>
