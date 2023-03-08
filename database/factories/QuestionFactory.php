@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Assessment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
+            'assessment_id' => Assessment::find(rand(1, Assessment::all()->count()))->id,
             'name' => $this->faker->text(20),
             'type' => $this->faker->randomElement(['check', 'radio'])
         ];

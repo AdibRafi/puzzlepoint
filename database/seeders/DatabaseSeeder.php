@@ -72,6 +72,8 @@ class DatabaseSeeder extends Seeder
         Module::factory(5)->create();
         Material::factory(5)->create();
         Attendance::factory(5)->create();
+        Question::factory(5)->create();
+        Answer::factory(5)->create();
 
 //        $materials = Material::all();
 
