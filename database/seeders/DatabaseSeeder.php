@@ -7,6 +7,7 @@ use App\Models\Answer;
 use App\Models\Assessment;
 use App\Models\Classroom;
 use App\Models\Group;
+use App\Models\Material;
 use App\Models\Module;
 use App\Models\Question;
 use App\Models\User;
@@ -66,6 +67,11 @@ class DatabaseSeeder extends Seeder
         });
 
         Module::factory(3)->create();
+        Material::factory(4)->create();
+
+//        $materials = Material::all();
+
+//        Material::all()->asso
 
 
 //        foreach (Classroom::all() as $classroom) {
