@@ -31,4 +31,9 @@ class Material extends Model
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
 }

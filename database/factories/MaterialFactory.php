@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Classroom;
 use App\Models\Material;
+use App\Models\Module;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,7 @@ class MaterialFactory extends Factory
             'name' => $this->faker->text(20),
             'file_path' => $this->faker->filePath(),
             'classroom_id' => Classroom::find(rand(1,Classroom::all()->count()))->id,
+            'module_id' => Module::find(rand(1, Module::all()->count()))->id,
         ];
     }
 }
