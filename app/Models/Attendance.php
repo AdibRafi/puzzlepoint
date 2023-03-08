@@ -31,4 +31,9 @@ class Attendance extends Model
     {
         return $this->belongsTo(Topic::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
