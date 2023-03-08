@@ -43,4 +43,9 @@ class Classroom extends Model
     {
         return $this->hasMany(Material::class);
     }
+
+    public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class);
+    }
 }

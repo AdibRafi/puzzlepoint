@@ -5,11 +5,13 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Answer;
 use App\Models\Assessment;
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Material;
 use App\Models\Module;
 use App\Models\Question;
+use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Str;
@@ -48,7 +50,7 @@ class DatabaseSeeder extends Seeder
             );
         });
 
-        Group::factory(3)->create();
+        Group::factory(5)->create();
         $groups = Group::all();
 
         User::all()->each(function ($user) use ($groups) {
@@ -57,7 +59,8 @@ class DatabaseSeeder extends Seeder
             );
         });
 
-        Assessment::factory(3)->create();
+        Topic::factory(5)->create();
+        Assessment::factory(5)->create();
         $assessments = Assessment::all();
 
         User::all()->each(function ($user) use ($assessments) {
@@ -66,8 +69,9 @@ class DatabaseSeeder extends Seeder
             );
         });
 
-        Module::factory(3)->create();
-        Material::factory(4)->create();
+        Module::factory(5)->create();
+        Material::factory(5)->create();
+        Attendance::factory(5)->create();
 
 //        $materials = Material::all();
 

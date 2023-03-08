@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('user_classroom');
         Schema::create('classroom_user', function (Blueprint $table) {
             $table->foreignId('classroom_id')->constrained();
             $table->foreignId('user_id')->constrained();

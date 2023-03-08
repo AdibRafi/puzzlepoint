@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Topic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class AssessmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
             'name' => $this->faker->text(20),
             'mark' => $this->faker->numerify('##'),
         ];
