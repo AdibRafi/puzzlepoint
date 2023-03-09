@@ -48,9 +48,13 @@ Route::get('test', [TestController::class, 'index']);
 
 //Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::resource('classroom', ClassroomController::class);
+
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
 Route::group(['prefix' => 'LecturerSide'], function () {
 

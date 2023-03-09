@@ -18,40 +18,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-//        $classroomData = Classroom::all();
-//        $classroomData = Classroom::find(2)->users->load('classrooms')->all();
-
-
-//        $classroomData = User::find(1)->classrooms()->first();
-
-        //todo: because user is Auth, then find way to m2m
-//        $classroomData = Group::find(1)->modules()->get();
         $classroomData = auth()->user()->classrooms()->get();
-//        $user = auth()->user();
-//        $user->classrooms;
-//        dd($data);
-//        $classroomData = auth()->user()->classrooms;
-//        $classroomData = User::with('classrooms')->find(Auth::id())->get();
-
-
-//        $classroomData = User::find(Auth::id())->classrooms()->get();
-//        print_r(Auth::id());
-
-
-//        $classroomData = User::find(1)->classrooms()->get();
-//        $classroomData = User::find(1)->classrooms->all();
-//        print_r($classroomData);
-//        $classroomData = Classroom::where('id');
-//        $classroomData = User::find(1)->classrooms()->get();
-//        $classroomData = User::insertGetId([
-//           'user_id' => $user
-//        ]);
-//        print_r($classroomData);
-
-
-//        $classroomData = Classroom::with('user')->get();
-//        $classroomData = User::find(1)->classrooms()->get();
-//        $classroomData = User::find(1)->with('classrooms')->get();
 
         return inertia('Lecturer/Classroom/Index', compact('classroomData'));
     }
@@ -69,19 +36,9 @@ class ClassroomController extends Controller
      */
     public function store(StoreClassroomRequest $request)
     {
-
-//        $classroom = new Classroom([$this->create($request->validated())]);
-//        $user = auth()->user();
-
-//        $user->classrooms()->attach($classroom);
-
         $classroom = Classroom::create($request->validated());
         $id = $classroom->id;
         auth()->user()->classrooms()->attach($id);
-
-
-//        auth()->user()->classrooms()->sync(auth()->user()->id);
-//        dd($id);
 
         return redirect()->route('classroom.index')
             ->with('alertMessage', 'Classroom created successfully');
