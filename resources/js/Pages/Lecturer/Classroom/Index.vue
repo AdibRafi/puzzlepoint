@@ -13,6 +13,7 @@
                         <h2 class="card-title">{{ data.name }}</h2>
                         <p>{{ data.subject_code }}</p>
                         <div class="card-actions justify-end">
+                            <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
                             <button class="btn btn-primary">Add Topic</button>
                         </div>
                     </div>

@@ -100,15 +100,17 @@ class ClassroomController extends Controller
      */
     public function edit(Classroom $classroom)
     {
-        //
+        return inertia('Lecturer/Classroom/Edit', compact('classroom'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(StoreClassroomRequest $request, Classroom $classroom)
     {
-        //
+        $classroom->update($request->validated());
+        return redirect()->route('classroom.index')
+            ->with('alertMessage', 'Classroom update successfully');
     }
 
     /**
