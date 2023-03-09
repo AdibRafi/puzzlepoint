@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClassroomRequest;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Module;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 
 class ClassroomController extends Controller
 {
@@ -51,7 +53,7 @@ class ClassroomController extends Controller
 //        $classroomData = User::find(1)->classrooms()->get();
 //        $classroomData = User::find(1)->with('classrooms')->get();
 
-        return inertia('Dashboard', compact('classroomData'));
+        return inertia('Lecturer/Classroom/Index', compact('classroomData'));
     }
 
     /**
@@ -59,15 +61,30 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Lecturer/Classroom/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreClassroomRequest $request)
     {
-        //
+
+//        $classroom = new Classroom([$this->create($request->validated())]);
+//        $user = auth()->user();
+
+//        $user->classrooms()->attach($classroom);
+
+        $classroom = Classroom::create($request->validated());
+        $id = $classroom->id;
+        auth()->user()->classrooms()->attach($id);
+
+
+//        auth()->user()->classrooms()->sync(auth()->user()->id);
+//        dd($id);
+
+        return redirect()->route('classroom.index')
+            ->with('alertMessage', 'Classroom created successfully');
     }
 
     /**
