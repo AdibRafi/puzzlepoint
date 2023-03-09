@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('classroom_user', function (Blueprint $table) {
-            $table->foreignId('classroom_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->unsignedBigInteger('classroom_id');
+            $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
 
 //            $table->unsignedBigInteger('classroom_id');

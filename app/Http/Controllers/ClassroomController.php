@@ -118,6 +118,11 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        //
+        //todo:need to find ways to detach users (because FK)
+        $classroom->users()->detach();
+        $classroom->delete();
+
+        return redirect()->route('classroom.index')
+            ->with('message', 'Classroom deleted successfully');
     }
 }

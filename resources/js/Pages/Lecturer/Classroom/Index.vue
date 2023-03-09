@@ -1,5 +1,5 @@
 <template>
-    <Head title="Dashboard" />
+    <Head title="Dashboard"/>
     <MainLayout>
         <div class="w-screen">
             <div class="flex justify-end my-2 mx-6">
@@ -13,6 +13,8 @@
                         <h2 class="card-title">{{ data.name }}</h2>
                         <p>{{ data.subject_code }}</p>
                         <div class="card-actions justify-end">
+                            <button @click="destroy(data.id)" type="button" class="btn btn-warning">Delete Class
+                            </button>
                             <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
                             <button class="btn btn-primary">Add Topic</button>
                         </div>
@@ -47,12 +49,18 @@
 
 
 <script setup>
-import {Head, Link} from "@inertiajs/vue3";
+import {Head, Link, router} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 
 const props = defineProps({
     classroomData: Object,
 })
+
+const destroy = (id) => {
+    if (confirm('Are you sure to delete?')) {
+        router.delete(route('classroom.destroy', id))
+    }
+}
 
 const datas2 = [
     {
