@@ -15,9 +15,9 @@ return new class extends Migration {
 
             $table->id();
             $table->unsignedBigInteger('classroom_id');
-            $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
+            $table->foreign('classroom_id')->references('id')->on('classrooms')->cascadeOnDelete();
             $table->unsignedBigInteger('module_id');
-            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+            $table->foreign('module_id')->references('id')->on('modules')->cascadeOnDelete();
             $table->string('name');
             $table->string('file_path');
             $table->timestamps();

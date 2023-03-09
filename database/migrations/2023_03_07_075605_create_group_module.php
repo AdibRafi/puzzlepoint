@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('group_module', function (Blueprint $table) {
-            $table->foreignId('group_id')->constrained();
-            $table->foreignId('module_id')->constrained();
+            $table->unsignedBigInteger('group_id');
+            $table->foreign('group_id')->references('id')->on('groups')->cascadeOnDelete();
+            $table->unsignedBigInteger('module_id');
+            $table->foreign('module_id')->references('id')->on('modules')->cascadeOnDelete();
         });
     }
 
