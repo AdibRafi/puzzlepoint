@@ -1,4 +1,5 @@
 <template>
+    <Head title="Topic"/>
     <MainLayout>
         <ul class="steps w-96">
             <li class="step step-primary">Topic</li>
@@ -6,48 +7,54 @@
             <li class="step step">Options</li>
             <li class="step step">Verify</li>
         </ul>
-        <div class="card w-96 bg-base-100 shadow-xl my-4">
-            <div class="card-body">
-                <h2 class="card-title">Add Topic</h2>
-                <input-form label-name="Topic Name"></input-form>
-                <span class="block font-medium text-gray-700 text-sm mt-4">Number of Modules</span>
-                <input type="range" min="0" max="100" value="25" class="mt-2 range range-primary w-80"
-                       step="25"/>
-                <div class="w-full flex justify-between text-xs px-2 w-80">
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                    <span>6</span>
-                </div>
-                <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
-                    <input-form class="my-2" label-name="Maximum Time for Expert Session"></input-form>
-                </div>
-                <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
-                    <input-form class="my-2" label-name="Maximum Time for Jigsaw Session"></input-form>
-                </div>
-                <input-form class="my-2" label-name="Date"></input-form>
-                <div class="card-actions justify-end my-2">
-                    <button class="btn btn-primary">Proceed</button>
+        <form @submit.prevent="form.post(route('topic.store'));">
+            <div class="card w-96 bg-base-100 shadow-xl my-4">
+                <div class="card-body">
+                    <h2 class="card-title">Add Topic</h2>
+                    <input-form label-name="Topic Name" v-model="form.topicName"/>
+                    <span class="block font-medium text-gray-700 text-sm mt-4">Number of Modules</span>
+                    <input type="range" min="0" max="100" class="mt-2 range range-primary w-80"
+                           step="25" v-model="form.noOfModule"/>
+                    <div class="w-full flex justify-between text-xs px-2 w-80">
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                    </div>
+                    <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
+                        <input-form class="my-2" label-name="Maximum Time for Expert Session"
+                                    v-model="form.timeExpert"/>
+                    </div>
+                    <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
+                        <input-form class="my-2" label-name="Maximum Time for Jigsaw Session"
+                                    v-model="form.timeJigsaw"/>
+                    </div>
+                    <input-form class="my-2" label-name="Date" input-type="date" v-model="form.date"/>
+                    <div class="card-actions justify-end my-2">
+                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Proceed</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </MainLayout>
 </template>
 
 <script setup>
-import axios from 'axios';
-import {ref} from 'vue';
 import InputForm from "@/Components/inputForm.vue";
-import SubmitButton from "@/Components/submitButton.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+import {Head, useForm} from "@inertiajs/vue3";
 
-const name = ref('')
-const description = ref('')
 
-const clickTest = () => {
-    // axios.post
-}
+const form = useForm({
+    'topicName': '',
+    'noOfModule': "25",
+    'timeExpert': '',
+    'timeJigsaw': '',
+    'date': '',
+})
+
+
 </script>
 
 <!--archive-->

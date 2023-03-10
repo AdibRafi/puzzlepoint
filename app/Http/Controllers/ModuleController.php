@@ -20,7 +20,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Lecturer/CreateTopic/Module');
     }
 
     /**

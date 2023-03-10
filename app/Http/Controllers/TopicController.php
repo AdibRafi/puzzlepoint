@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTopicRequest;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,15 @@ class TopicController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTopicRequest $request)
     {
-        //
+        $topic = Topic::create($request->validated());
+        $id = $topic->id;
+        $topic->save();
+
+        Topic::find($id)->classroom()->associate($topic);
+
+        return redirect()->route('module.create');
     }
 
     /**
