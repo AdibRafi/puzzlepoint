@@ -8,7 +8,7 @@
                 <ul tabindex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li>
-                        <Link :href="route('dashboard')">Home</Link>
+                        <Link :href="route('classroom.index')">Home</Link>
                     </li>
                     <li>
                         <Link :href="route('lect.create.topic')">CreateTopic</Link>
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="navbar-center">
-            <Link :href="route('dashboard')" class="btn btn-ghost normal-case text-xl">
+            <Link :href="route('classroom.index')" class="btn btn-ghost normal-case text-xl">
                 PuzzlePoint
             </Link>
         </div>

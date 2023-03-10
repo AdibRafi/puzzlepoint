@@ -16,7 +16,7 @@
                             <button @click="destroy(data.id)" type="button" class="btn btn-warning">Delete Class
                             </button>
                             <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
-                            <button class="btn btn-primary">Add Topic</button>
+                            <Link :href="route('topic.create')" class="btn btn-primary">Add Topic</Link>
                         </div>
                     </div>
                 </div>

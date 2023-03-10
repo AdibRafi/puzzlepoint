@@ -20,7 +20,7 @@ class TopicController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Lecturer/CreateTopic/Topic');
     }
 
     /**
