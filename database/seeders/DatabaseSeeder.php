@@ -14,6 +14,7 @@ use App\Models\Question;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\View\Factory;
 use Str;
 
 class DatabaseSeeder extends Seeder
@@ -29,6 +30,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'adibtest@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('test1234'),
+            'bio' => 'fakeBioForAdib',
+            'type' => 'lecturer',
             'remember_token' => Str::random(10),
         ]);
         User::factory()->create([
@@ -36,6 +39,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('test1234'),
+            'bio' => 'fakeBioForTest',
+            'type' => 'lecturer',
             'remember_token' => Str::random(10),
         ]);
 
