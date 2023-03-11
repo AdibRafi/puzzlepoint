@@ -7,7 +7,7 @@
             <li class="step step">Options</li>
             <li class="step step">Verify</li>
         </ul>
-        <div v-for="items in 4" class="m-4">
+        <div v-for="items in no_of_modules" class="m-4">
             <div class="card w-96 bg-base-100 shadow-xl">
                 <div class="card-body">
                     <h1 class="font-bold">Module {{ items }}</h1>
@@ -35,6 +35,12 @@
 import InputForm from "@/Components/inputForm.vue";
 import SubmitButton from "@/Components/submitButton.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+
+const props = defineProps({
+    topicData: Object,
+})
+
+const no_of_modules = parseInt(props.topicData.no_of_modules);
 
 </script>
 

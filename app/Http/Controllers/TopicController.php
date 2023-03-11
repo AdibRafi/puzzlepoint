@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use App\Models\Topic;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TopicController extends Controller
 {
@@ -23,8 +24,9 @@ class TopicController extends Controller
      */
     public function create(Request $request)
     {
+        //todo: kena encrypt
         $classroom_id = $request->input('classroom_id');
-        return inertia('Lecturer/CreateTopic/Topic',compact('classroom_id'));
+        return inertia('Lecturer/CreateTopic/Topic', compact('classroom_id'));
     }
 
     /**
@@ -48,9 +50,12 @@ class TopicController extends Controller
 
         $topic->save();
 
+        $topicData = [
+            'id' => $topic->id,
+            'no_of_modules' => $topic->no_of_modules
+        ];
 
-        //todo: find a way to pass in data about topic_id n no_of_modules
-        return inertia('Lecturer/CreateTopic/Module',compact($topic));
+        return redirect()->route('module.create',$topicData);
     }
 
     /**

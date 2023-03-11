@@ -18,9 +18,11 @@ class ModuleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return inertia('Lecturer/CreateTopic/Module');
+        //todo: kena encrypt
+        $topicData = $request->all();
+        return inertia('Lecturer/CreateTopic/Module',compact('topicData'));
     }
 
     /**
