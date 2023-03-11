@@ -65,7 +65,7 @@ Route::group(['prefix' => 'LecturerSide'], function () {
     //todo: rename create -> topic related stuff (with directory)
 //    Route::inertia('/CreateTopic', 'Lecturer/CreateTopic/Topic')->name('lect.create.topic');
 //    Route::inertia('/CreateModule', 'Lecturer/CreateTopic/Module')->name('lect.create.module');
-//    Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
+    Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
 //    Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/Verify')->name('lect.create.verify');
 //
 //    Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');

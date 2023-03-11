@@ -17,7 +17,7 @@
 <!--                        <Link :href="route('lect.create.module')">CreateModule</Link>-->
                     </li>
                     <li>
-<!--                        <Link :href="route('lect.create.option')">CreateOption</Link>-->
+                        <Link :href="route('lect.create.option')">CreateOption</Link>
                     </li>
                     <li>
 <!--                        <Link :href="route('lect.create.verify')">CreateVerify</Link>-->
