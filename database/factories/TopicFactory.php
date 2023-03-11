@@ -20,8 +20,10 @@ class TopicFactory extends Factory
         return [
             'classroom_id' => Classroom::find(rand(1, Classroom::all()->count()))->id,
             'name' => $this->faker->text(10),
-            'date' => $this->faker->date,
-            'time' => $this->faker->randomFloat(2,0,100),
+            'date_time' => $this->faker->dateTime,
+            'no_of_modules' => $this->faker->numberBetween(2, 6),
+            'max_time_expert' => $this->faker->numberBetween(1, 100),
+            'max_time_jigsaw' => $this->faker->numberBetween(1, 100),
             'status' => $this->faker->randomElement(['NotStart', 'Done', 'Ongoing'])
         ];
     }

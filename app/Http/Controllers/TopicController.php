@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTopicRequest;
+use App\Models\Classroom;
 use App\Models\Topic;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TopicController extends Controller
@@ -19,9 +21,10 @@ class TopicController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return inertia('Lecturer/CreateTopic/Topic');
+        $classroom_id = $request->input('classroom_id');
+        return inertia('Lecturer/CreateTopic/Topic',compact('classroom_id'));
     }
 
     /**
@@ -29,13 +32,25 @@ class TopicController extends Controller
      */
     public function store(StoreTopicRequest $request)
     {
-        $topic = Topic::create($request->validated());
-        $id = $topic->id;
+        //todo:check validate
+//        $request->validated();
+        $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
+
+        $classroom = Classroom::find($request->classroom_id);
+        $topic = new Topic();
+        $topic->name = $request->name;
+        $topic->no_of_modules = ($request->no_of_modules / 25) + 2;
+        $topic->max_time_expert = $request->max_time_expert;
+        $topic->max_time_jigsaw = $request->max_time_jigsaw;
+        $topic->date_time = $startedAt;
+        $topic->status = 'ongoing';
+        $topic->classroom()->associate($classroom);
+
         $topic->save();
 
-        Topic::find($id)->classroom()->associate($topic);
 
-        return redirect()->route('module.create');
+        //todo: find a way to pass in data about topic_id n no_of_modules
+        return inertia('Lecturer/CreateTopic/Module',compact($topic));
     }
 
     /**

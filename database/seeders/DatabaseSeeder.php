@@ -44,6 +44,8 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
+        User::factory(3)->create();
+
 
         Classroom::factory(3)->create();
         $classrooms = Classroom::all();

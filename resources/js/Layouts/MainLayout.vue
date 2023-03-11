@@ -8,22 +8,22 @@
                 <ul tabindex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li>
-                        <Link :href="route('classroom.index')">Home</Link>
+<!--                        <Link :href="route('classroom.index')">Home</Link>-->
                     </li>
                     <li>
-                        <Link :href="route('lect.create.topic')">CreateTopic</Link>
+<!--                        <Link :href="route('lect.create.topic')">CreateTopic</Link>-->
                     </li>
                     <li>
-                        <Link :href="route('lect.create.module')">CreateModule</Link>
+<!--                        <Link :href="route('lect.create.module')">CreateModule</Link>-->
                     </li>
                     <li>
-                        <Link :href="route('lect.create.option')">CreateOption</Link>
+<!--                        <Link :href="route('lect.create.option')">CreateOption</Link>-->
                     </li>
                     <li>
-                        <Link :href="route('lect.create.verify')">CreateVerify</Link>
+<!--                        <Link :href="route('lect.create.verify')">CreateVerify</Link>-->
                     </li>
                     <li>
-                        <Link :href="route('lect.assessment.create')">CreateAssessment</Link>
+<!--                        <Link :href="route('lect.assessment.create')">CreateAssessment</Link>-->
                     </li>
                     <li tabindex="0">
                         <a>
@@ -35,10 +35,10 @@
                         </a>
                         <ul class="p-2 bg-base-100">
                             <li>
-                                <Link :href="route('lect.session.expert')">Lecturer</Link>
+<!--                                <Link :href="route('lect.session.expert')">Lecturer</Link>-->
                             </li>
                             <li>
-                                <Link :href="route('stud.session.expert')">Student</Link>
+<!--                                <Link :href="route('stud.session.expert')">Student</Link>-->
                             </li>
                         </ul>
                     </li>

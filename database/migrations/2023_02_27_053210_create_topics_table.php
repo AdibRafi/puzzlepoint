@@ -16,8 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->foreign('classroom_id')->references('id')->on('classrooms')->cascadeOnDelete();
             $table->string('name');
-            $table->date('date');
-            $table->float('time', 5, 2);
+            $table->dateTime('date_time');
+            $table->integer('no_of_modules');
+            $table->integer('max_time_expert');
+            $table->integer('max_time_jigsaw');
             $table->string('status');
             $table->timestamps();
         });

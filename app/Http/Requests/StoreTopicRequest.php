@@ -24,11 +24,12 @@ class StoreTopicRequest extends FormRequest
 
         //todo: Validation rule digits requires at least 1 parameters.
         return [
-            'topicName' => ['required'],
-            'noOfModules' => ['required', 'digits'],
-            'timeExpert' => ['required', 'digits'],
-            'timeJigsaw' => ['required', 'digits'],
-            'date' => ['required', 'date'],
+            'name' => 'required',
+            'no_of_modules' => 'required|digits_between:2,6',
+            'max_time_expert' => 'required|digits_between:0,100',
+            'max_time_jigsaw' => 'required|digits_between:0,100',
+            //todo: validation for date_time
+//            'date_time' => 'required|date',
 
 
         ];

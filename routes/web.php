@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
@@ -50,8 +51,9 @@ Route::get('test', [TestController::class, 'index']);
 //Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::resource('classroom', ClassroomController::class);
 Route::resource('topic', TopicController::class);
+Route::resource('module', ModuleController::class);
 
-//Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
+Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -61,14 +63,14 @@ Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.d
 Route::group(['prefix' => 'LecturerSide'], function () {
 
     //todo: rename create -> topic related stuff (with directory)
-    Route::inertia('/CreateTopic', 'Lecturer/CreateTopic/Topic')->name('lect.create.topic');
-    Route::inertia('/CreateModule', 'Lecturer/CreateTopic/Module')->name('lect.create.module');
-    Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
-    Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/Verify')->name('lect.create.verify');
-
-    Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');
-
-    Route::inertia('/ExpertSession', 'Lecturer/Session/ExpertSession')->name('lect.session.expert');
+//    Route::inertia('/CreateTopic', 'Lecturer/CreateTopic/Topic')->name('lect.create.topic');
+//    Route::inertia('/CreateModule', 'Lecturer/CreateTopic/Module')->name('lect.create.module');
+//    Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
+//    Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/Verify')->name('lect.create.verify');
+//
+//    Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');
+//
+//    Route::inertia('/ExpertSession', 'Lecturer/Session/ExpertSession')->name('lect.session.expert');
 });
 
 Route::group(['prefix' => 'StudentSide'], function () {
