@@ -1,15 +1,13 @@
 <template>
     <Head title="Topic"/>
     <MainLayout>
+        <ul class="steps w-96">
+            <li class="step step-primary">Topic</li>
+            <li class="step step">Modules</li>
+            <li class="step step">Options</li>
+            <li class="step step">Verify</li>
+        </ul>
         <form @submit.prevent="form.post(route('topic.store'));">
-            <ul class="steps w-96">
-                <li class="step step-primary">Topic</li>
-                <li class="step step">Modules</li>
-                <li class="step step">Options</li>
-                <li class="step step">Verify</li>
-            </ul>
-            <!--        todo: cannot submit to topic.store/ cannot even send to any url-->
-            <!--        todo: try create Topic.vue baru then try-->
             <div class="card w-96 bg-base-100 shadow-xl my-4">
                 <div class="card-body">
                     <h2 class="card-title">Add Topic</h2>

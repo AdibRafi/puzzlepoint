@@ -22,7 +22,7 @@ class ModuleController extends Controller
     {
         //todo: kena encrypt
         $topicData = $request->all();
-        return inertia('Lecturer/CreateTopic/Module',compact('topicData'));
+        return inertia('Lecturer/CreateTopic/Module', compact('topicData'));
     }
 
     /**
@@ -30,7 +30,18 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $nameInput = $request->input('name');
+//        dd($nameInput[1]);
+
+        for ($i = 1; $i < $request->no_of_modules + 1; $i++) {
+            $module = new Module();
+            $module->topic()->associate($request->topic_id);
+            $module->name = $nameInput[$i];
+            $module->save();
+        }
+
+        return redirect()->route('classroom.index');
+//        dd($module[1]);
     }
 
     /**
