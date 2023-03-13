@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfileAController;
@@ -52,6 +54,9 @@ Route::get('test', [TestController::class, 'index']);
 Route::resource('classroom', ClassroomController::class);
 Route::resource('topic', TopicController::class);
 Route::resource('module', ModuleController::class);
+Route::resource('assessment', AssessmentController::class);
+Route::resource('answer', AnswerController::class);
+Route::resource('question', QuestionController::class);
 
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 

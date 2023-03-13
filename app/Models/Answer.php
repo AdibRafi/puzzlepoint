@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Answer
@@ -31,9 +32,10 @@ class Answer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'rightAns'];
+    protected $fillable = ['name', 'right_answer'];
 
-    public function question(){
+    public function question(): BelongsTo
+    {
         return $this->belongsTo(Question::class);
     }
 }

@@ -26,9 +26,10 @@ class QuestionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $assessment_id = $request->input('assessment_id');
+        return inertia('Question/Create',compact('assessment_id'));
     }
 
     /**
@@ -36,7 +37,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

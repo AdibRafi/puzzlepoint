@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreign('assessment_id')->references('id')->on('assessments')->cascadeOnDelete();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->integer('marks')->nullable();
         });
     }
 

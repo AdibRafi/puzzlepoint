@@ -19,8 +19,8 @@ class AssessmentFactory extends Factory
     {
         return [
             'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
-            'name' => $this->faker->text(20),
-            'mark' => $this->faker->numerify('##'),
+//            'name' => $this->faker->text(20),
+//            'mark' => $this->faker->numerify('##'),
         ];
     }
 }

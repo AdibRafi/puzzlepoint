@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessment;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class AssessmentController extends Controller
@@ -10,15 +11,19 @@ class AssessmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request,Assessment $assessment)
     {
-        //
+        $topicData = $request->input('topic_id');
+        $questionData = Assessment::find($request->input('topic_id'))->questions()->get();
+//        todo: make nullable in migration for name n mark
+
+        return inertia('Lecturer/Assessment/Index', compact('topicData', 'questionData', 'assessment'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }
@@ -28,7 +33,7 @@ class AssessmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -36,7 +41,7 @@ class AssessmentController extends Controller
      */
     public function show(Assessment $assessment)
     {
-        //
+        dd($assessment);
     }
 
     /**

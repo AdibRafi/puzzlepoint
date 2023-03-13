@@ -49,7 +49,10 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        //
+        $topic = $classroom->topics()->get();
+
+//        dd($topic);
+        return inertia('Lecturer/Classroom/Show', compact('classroom','topic'));
     }
 
     /**

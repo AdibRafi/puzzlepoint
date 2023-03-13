@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTopicRequest;
+use App\Models\Assessment;
 use App\Models\Classroom;
 use App\Models\Topic;
 use Carbon\Carbon;
@@ -49,6 +50,10 @@ class TopicController extends Controller
         $topic->classroom()->associate($classroom);
 
         $topic->save();
+
+        $t = new Assessment();
+        $t->topic()->associate($topic->id);
+        $t->save();
 
         $topicData = [
             'id' => $topic->id,
