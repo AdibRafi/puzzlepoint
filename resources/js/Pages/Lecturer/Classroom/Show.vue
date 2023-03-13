@@ -1,5 +1,5 @@
 <template>
-    <!--    todo: change to class name-->
+    <!--    todo: Head - change to class name-->
     <Head title="Show"/>
     <MainLayout>
         <div class="flex justify-center">
@@ -17,7 +17,6 @@
         </div>
         <div class="card w-96 bg-base-100 shadow-xl my-4">
             <div class="card-body">
-                <!--                todo: add number topic-->
                 <h2 class="card-title">You have {{ props.topic.length }} topic</h2>
                 <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
                     Add Topic

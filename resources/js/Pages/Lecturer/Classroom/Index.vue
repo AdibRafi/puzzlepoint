@@ -24,7 +24,6 @@
                     </div>
                 </div>
             </div>
-            <!--            todo: add display topic-->
             <div class="card w-11/12 bg-base-300 shadow-xl m-4">
                 <div class="card-body">
                     <h2 class="card-title">Demo Class</h2>
