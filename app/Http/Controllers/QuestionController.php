@@ -13,14 +13,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $answers = Question::find(3)->answers()->get();
-//        $answers = Question::all();
-//        $p =
-//        $answers = Question::all();
-
-//        dd($answers);
-
-        return inertia('Test', compact('answers'));
+        //
     }
 
     /**
@@ -29,7 +22,7 @@ class QuestionController extends Controller
     public function create(Request $request)
     {
         $assessment_id = $request->input('assessment_id');
-        return inertia('Question/Create',compact('assessment_id'));
+        return inertia('Question/Create', compact('assessment_id'));
     }
 
     /**
@@ -37,7 +30,24 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+
+        $assessment_id = $request->assessment_id;
+        //todo: validate request
+        $question = new Question();
+        $question->assessment()->associate($assessment_id);
+        $question->name = $request->question_name;
+        $question->type = $request->question_type;
+        $question->save();
+
+        $ansInput = $request->input('answer.name');
+        for ($i = 1; $i < count($request->input('answer.name')) + 1; $i++) {
+            $answer = new Answer();
+            $answer->question()->associate($question->id);
+            $answer->name = $ansInput[$i];
+            $answer->save();
+        }
+        return redirect()->route('question.create', compact('assessment_id'))
+            ->with('alertMessage', 'Added Question Successfully');
     }
 
     /**

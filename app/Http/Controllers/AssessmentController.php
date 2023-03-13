@@ -11,13 +11,14 @@ class AssessmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request,Assessment $assessment)
+    public function index(Request $request)
     {
         $topicData = $request->input('topic_id');
         $questionData = Assessment::find($request->input('topic_id'))->questions()->get();
-//        todo: make nullable in migration for name n mark
+        $assessmentData = Topic::find($topicData)->assessment()->first();
+//        dd($assessmentData);
 
-        return inertia('Lecturer/Assessment/Index', compact('topicData', 'questionData', 'assessment'));
+        return inertia('Lecturer/Assessment/Index', compact('topicData', 'questionData', 'assessmentData'));
     }
 
     /**

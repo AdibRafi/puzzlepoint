@@ -6,10 +6,10 @@
                 <h2 class="card-title">Assessment</h2>
             </div>
             <div class="flex flex-col">
-                <p>{{props.assessment}}</p>
+                <p>{{props.assessmentData}}</p>
                 <div class="divider">Question</div>
                 <div class="card-actions justify-center">
-                    <Link :href="route('question.create',{assessment_id:props.assessment})" class="btn btn-primary">Create</Link>
+                    <Link :href="route('question.create',{assessment_id:props.assessmentData.id})" class="btn btn-primary">Create</Link>
                     <button class="btn btn-primary">Edit/Delete</button>
                 </div>
                 <div class="divider">Assessment</div>
@@ -161,7 +161,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
-import {onUpdated, ref} from "vue";
+import {onMounted, onUpdated, ref} from "vue";
 import InputForm from "@/Components/inputForm.vue";
 import AnswerForm from "@/Components/answerForm.vue";
 
@@ -191,18 +191,16 @@ const exampleData = {
     }
 }
 
-onUpdated(function () {
-    console.log(test.value)
-})
-
 const checkAnsNumber = ref(1);
 
 const props = defineProps({
     topicData: Object,
     questionData: Object,
-    assessment: Object,
-
+    assessmentData: Object,
 });
+
+console.log(props.assessmentData.id)
+
 
 const quesForm = useForm({
     topic_id: props.topicData.topic_id,
