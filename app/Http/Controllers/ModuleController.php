@@ -24,7 +24,7 @@ class ModuleController extends Controller
     {
         //todo: kena encrypt
         $topicData = $request->all();
-        $topicModal = Topic::find($request->id);
+        $topicModal = Topic::find($request->topic_id);
         return inertia('Lecturer/CreateTopic/Module', compact('topicData', 'topicModal'));
     }
 

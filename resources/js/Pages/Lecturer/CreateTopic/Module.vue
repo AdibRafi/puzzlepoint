@@ -8,7 +8,6 @@
             <li class="step step">Options</li>
             <li class="step step">Verify</li>
         </ul>
-        <p>{{ props.topicModal }}</p>
         <form @submit.prevent="form.post(route('module.store'));">
             <div v-for="items in no_of_modules" class="m-4">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -56,7 +55,7 @@ const props = defineProps({
 
 const form = useForm({
     no_of_modules: no_of_modules,
-    topic_id: props.topicData.id,
+    topic_id: props.topicModal.id,
     name: {},
     learning_objectives: {
         1: '',
