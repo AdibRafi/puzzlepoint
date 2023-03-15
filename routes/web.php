@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\OptionController;
 use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
@@ -57,6 +58,8 @@ Route::resource('module', ModuleController::class);
 Route::resource('assessment', AssessmentController::class);
 Route::resource('answer', AnswerController::class);
 Route::resource('question', QuestionController::class);
+Route::resource('option', OptionController::class);
+
 
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
