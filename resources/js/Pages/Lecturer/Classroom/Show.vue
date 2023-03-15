@@ -35,6 +35,19 @@
                     <p>jigsaw time = {{ data.max_time_jigsaw }}</p>
                     <p>status = {{ data.status }}</p>
                     <div class="card-actions justify-end">
+                        <Link
+                            :href="route('module.create',{
+                                topic_id: data.id,
+                                no_of_modules:data.no_of_modules
+                            })"
+                            class="btn btn-primary">Module
+                        </Link>
+                        <Link :href="route('option.create',{
+                            topic_id:data.id,
+                            no_of_modules:data.no_of_modules
+                        })" class="btn btn-primary">Option
+                        </Link>
+
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">Add
                             Assessment
                         </Link>

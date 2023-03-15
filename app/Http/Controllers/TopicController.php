@@ -39,6 +39,7 @@ class TopicController extends Controller
 //        $request->validated();
         $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
 
+        //todo: fix why no_of_modules is not correct for 2 n 6
         $classroom = Classroom::find($request->classroom_id);
         $topic = new Topic();
         $topic->name = $request->name;
@@ -46,8 +47,9 @@ class TopicController extends Controller
         $topic->max_time_expert = $request->max_time_expert;
         $topic->max_time_jigsaw = $request->max_time_jigsaw;
         $topic->date_time = $startedAt;
-        $topic->status = 'ongoing';
+        $topic->status = 'onModule';
         $topic->classroom()->associate($classroom);
+//        dd($topic);
 
         $topic->save();
 
@@ -93,5 +95,10 @@ class TopicController extends Controller
     public function destroy(Topic $topic)
     {
         //
+    }
+
+    public function option(Request $request)
+    {
+
     }
 }

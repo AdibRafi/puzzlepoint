@@ -8,6 +8,7 @@
             <li class="step step">Options</li>
             <li class="step step">Verify</li>
         </ul>
+        <p>{{ props.topicModal }}</p>
         <form @submit.prevent="form.post(route('module.store'));">
             <div v-for="items in no_of_modules" class="m-4">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -18,6 +19,7 @@
                         <InputForm label-name="Module Name" v-model="form.name[items]"/>
                         <InputForm label-name="Learning Objectives (Optional)"
                                    v-model="form.learning_objectives[items]"/>
+
                         <div class="card-actions justify-end mt-5">
                             <input type="file"
                                    class="file-input file-input-bordered file-input-primary w-full max-w-xs">
@@ -44,16 +46,26 @@ import {Head, useForm} from "@inertiajs/vue3";
 
 const no_of_modules = parseInt(props.topicData.no_of_modules);
 
+
 const props = defineProps({
     topicData: Object,
+    topicModal: Object,
 })
 //todo: file upload?????
+
 
 const form = useForm({
     no_of_modules: no_of_modules,
     topic_id: props.topicData.id,
     name: {},
-    learning_objectives: {},
+    learning_objectives: {
+        1: '',
+        2: '',
+        3: '',
+        4: '',
+        5: '',
+        6: '',
+    },
 });
 
 </script>

@@ -34,6 +34,29 @@ class DatabaseSeeder extends Seeder
             'type' => 'lecturer',
             'remember_token' => Str::random(10),
         ]);
+        Classroom::factory()->create([
+            'name' => 'classroomTest',
+            'subject_code' => 'codeTest'
+        ]);
+
+        User::find(1)->classrooms()->attach(1);
+
+        Topic::factory()->create([
+            'classroom_id' => 1,
+            'name' => 'topicTest',
+            'date_time' => now(),
+            'no_of_modules' => 4,
+            'max_time_expert' => 30,
+            'max_time_jigsaw' => 60,
+            'status' => 'onOption',
+        ]);
+
+        Module::factory(4)->create([
+            'topic_id' => 1,
+            'name' => 'moduleTest'
+        ]);
+
+
         User::factory()->create([
             'name' => 'test',
             'email' => 'test@gmail.com',
@@ -72,7 +95,7 @@ class DatabaseSeeder extends Seeder
 
         User::all()->each(function ($user) use ($assessments) {
             $user->assessments()->attach(
-                $assessments->random(rand(1,$assessments->count()))->pluck('id')->toArray()
+                $assessments->random(rand(1, $assessments->count()))->pluck('id')->toArray()
             );
         });
 

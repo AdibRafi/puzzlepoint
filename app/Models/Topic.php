@@ -50,4 +50,9 @@ class Topic extends Model
         return $this->hasOne(Assessment::class);
     }
 
+    public function option(): HasOne
+    {
+        return $this->hasOne(Option::class);
+    }
+
 }

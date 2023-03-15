@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\Topic;
 use Illuminate\Http\Request;
+use function Sodium\add;
 
 class ModuleController extends Controller
 {
@@ -18,11 +20,12 @@ class ModuleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request) //topic_id & no_of_modules
     {
         //todo: kena encrypt
         $topicData = $request->all();
-        return inertia('Lecturer/CreateTopic/Module', compact('topicData'));
+        $topicModal = Topic::find($request->id);
+        return inertia('Lecturer/CreateTopic/Module', compact('topicData', 'topicModal'));
     }
 
     /**
@@ -31,16 +34,23 @@ class ModuleController extends Controller
     public function store(Request $request)
     {
         $nameInput = $request->input('name');
-//        dd($nameInput[1]);
+        $topic_id = $request->topic_id;
+        $no_of_modules = $request->no_of_modules;
+        $learningObjectivesInput = $request->input('learning_objectives');
 
-        for ($i = 1; $i < $request->no_of_modules + 1; $i++) {
+//        dd($learningObjectivesInput);
+
+        for ($i = 1; $i < $no_of_modules + 1; $i++) {
             $module = new Module();
-            $module->topic()->associate($request->topic_id);
+            $module->topic()->associate($topic_id);
             $module->name = $nameInput[$i];
+            $module->learning_objectives = $learningObjectivesInput[$i];
             $module->save();
         }
+        Topic::find($request->topic_id)->update(['status' => 'onOption']);
 
-        return redirect()->route('classroom.index');
+
+        return redirect()->route('option.create', compact('topic_id', 'no_of_modules'));
 //        dd($module[1]);
     }
 

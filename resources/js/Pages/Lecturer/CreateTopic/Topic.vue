@@ -33,7 +33,7 @@
                     <input-form class="my-2" label-name="Date" input-type="datetime-local" v-model="form.date_time"/>
                     <div class="card-actions justify-end my-2">
                         <Link :href="route('classroom.index')" class="btn btn-accent">Back</Link>
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Save Classroom
+                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Save Topic
                         </button>
                     </div>
                 </div>

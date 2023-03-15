@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('max_time_expert');
             $table->integer('max_time_jigsaw');
             $table->string('status');
+            $table->string('option_group')->nullable();
+            $table->string('option_time')->nullable();
             $table->timestamps();
         });
     }
