@@ -50,6 +50,7 @@ class OptionController extends Controller
             }
         }
         $option->save();
+        $topicModal->update(['status' => 'onVerify']);
 
         return inertia('Lecturer/CreateTopic/Verify');
     }
