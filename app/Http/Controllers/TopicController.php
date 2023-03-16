@@ -97,8 +97,9 @@ class TopicController extends Controller
         //
     }
 
-    public function option(Request $request)
+    public function verify(Request $request) //topic_id
     {
-
+        $topicModal = Topic::find($request->input('topic_id'));
+        return inertia('Lecturer/CreateTopic/Verify',compact('topicModal'));
     }
 }

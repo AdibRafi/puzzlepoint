@@ -60,6 +60,7 @@ Route::resource('answer', AnswerController::class);
 Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
 
+Route::get('verify', [TopicController::class, 'verify'])->name('topic.verify');
 
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
@@ -70,15 +71,7 @@ Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.d
 
 Route::group(['prefix' => 'LecturerSide'], function () {
 
-    //todo: rename create -> topic related stuff (with directory)
-//    Route::inertia('/CreateTopic', 'Lecturer/CreateTopic/Topic')->name('lect.create.topic');
-//    Route::inertia('/CreateModule', 'Lecturer/CreateTopic/Module')->name('lect.create.module');
     Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
-//    Route::inertia('/CreateVerify', 'Lecturer/CreateTopic/Verify')->name('lect.create.verify');
-//
-//    Route::inertia('/CreateAssessment', 'Lecturer/Assessment/CreateAssessment')->name('lect.assessment.create');
-//
-//    Route::inertia('/ExpertSession', 'Lecturer/Session/ExpertSession')->name('lect.session.expert');
 });
 
 Route::group(['prefix' => 'StudentSide'], function () {

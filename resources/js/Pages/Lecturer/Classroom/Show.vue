@@ -47,6 +47,11 @@
                             no_of_modules:data.no_of_modules
                         })" class="btn btn-primary">Option
                         </Link>
+                        <Link :href="route('topic.verify',{
+                            topic_id: data.id
+                        })" class="btn btn-primary">
+                            Verify
+                        </Link>
 
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">Add
                             Assessment

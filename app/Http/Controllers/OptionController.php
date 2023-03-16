@@ -44,6 +44,7 @@ class OptionController extends Controller
             for ($i = 1; $i < $topicModal->no_of_modules + 1; $i++) {
                 $option->setAttribute('tm' . $i, $time);
             }
+            //todo: calculate and store it inside db
         } elseif ($request->timeMethod === 'uneven') {
             for ($i = 1; $i < $topicModal->no_of_modules + 1; $i++) {
                 $option->setAttribute('tm' . $i, $request->tm[$i]);
@@ -52,7 +53,7 @@ class OptionController extends Controller
         $option->save();
         $topicModal->update(['status' => 'onVerify']);
 
-        return inertia('Lecturer/CreateTopic/Verify');
+        return inertia('Lecturer/CreateTopic/Verify',compact('topicModal'));
     }
 
     /**
