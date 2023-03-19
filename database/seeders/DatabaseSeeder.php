@@ -39,7 +39,13 @@ class DatabaseSeeder extends Seeder
             'subject_code' => 'codeTest'
         ]);
 
-        User::find(1)->classrooms()->attach(1);
+        $classrooms = Classroom::all();
+        User::factory(20)->create();
+        User::all()->each(function ($user) use ($classrooms) {
+            $user->classrooms()->attach(
+                $classrooms->random(1)->pluck('id')->toArray()
+            );
+        });
 
         Topic::factory()->create([
             'classroom_id' => 1,
@@ -71,11 +77,11 @@ class DatabaseSeeder extends Seeder
 
 
         Classroom::factory(3)->create();
-        $classrooms = Classroom::all();
 
+        $classrooms = Classroom::all();
         //attach user-classroom pivot
         User::all()->each(function ($user) use ($classrooms) {
-            $user->classrooms()->attach(
+            $user->classrooms()->syncWithoutDetaching(
                 $classrooms->random(rand(1, $classrooms->count()))->pluck('id')->toArray()
             );
         });
