@@ -61,6 +61,7 @@ Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
 
 Route::get('verify', [TopicController::class, 'verify'])->name('topic.verify');
+Route::post('verify', [TopicController::class, 'storeVerify'])->name('topic.storeVerify');
 
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 

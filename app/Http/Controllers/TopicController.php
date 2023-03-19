@@ -62,7 +62,7 @@ class TopicController extends Controller
             'no_of_modules' => $topic->no_of_modules
         ];
 
-        return redirect()->route('module.create',$topicData);
+        return redirect()->route('module.create', $topicData);
     }
 
     /**
@@ -100,6 +100,12 @@ class TopicController extends Controller
     public function verify(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        return inertia('Lecturer/CreateTopic/Verify',compact('topicModal'));
+        return inertia('Lecturer/CreateTopic/Verify', compact('topicModal'));
+    }
+
+    public function storeVerify(Request $request) //topic_id
+    {
+        $classroom = Classroom::find($request->input('topic_id'));
+        return redirect()->route('classroom.show', $classroom)->with('alertMessage', 'topic successfully created');
     }
 }

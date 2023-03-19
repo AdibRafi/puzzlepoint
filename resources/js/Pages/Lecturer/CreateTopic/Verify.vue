@@ -65,13 +65,15 @@
             </div>
         </div>
 
-        <div class="card w-96 bg-base-100 shadow-xl my-2 mb-4">
-            <div class="card-body">
-                <div class="card-actions justify-center my-2">
-                    <button class="btn btn-primary">Publish</button>
+        <form @submit.prevent="form.post(route('topic.storeVerify'))">
+            <div class="card w-96 bg-base-100 shadow-xl my-2 mb-4">
+                <div class="card-body">
+                    <div class="card-actions justify-center my-2">
+                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Publish</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </MainLayout>
 </template>
 
@@ -79,7 +81,15 @@
 import {ref} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import InputForm from "@/Components/inputForm.vue";
+import {useForm} from "@inertiajs/vue3";
 
+const props = defineProps({
+    topicModal: Object,
+})
+
+const form = useForm({
+    topic_id: props.topicModal.id,
+})
 
 const names = ref(['test1', 'test2', 'test3', 'test4']);
 const dataForExpert = [{
