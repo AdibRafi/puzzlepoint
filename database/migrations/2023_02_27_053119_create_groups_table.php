@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->string('expert_group');
-            $table->string('jigsaw_group');
+            $table->string('expert_group')->nullable();
+            $table->string('jigsaw_group')->nullable();
             $table->timestamps();
         });
     }

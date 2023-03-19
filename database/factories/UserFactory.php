@@ -26,6 +26,8 @@ class UserFactory extends Factory
             'bio' => $this->faker->paragraph(1),
             'type' => 'student',
             'remember_token' => Str::random(10),
+            'gender' => $this->faker->randomElement(['male', 'female']),
+
         ];
     }
 

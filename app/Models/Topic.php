@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Topic
@@ -53,6 +55,16 @@ class Topic extends Model
     public function option(): HasOne
     {
         return $this->hasOne(Option::class);
+    }
+
+    public function getUsers(): Collection
+    {
+        //todo: check if this right query
+        return $this->classroom()->with(['users' => function ($query) {
+            $query->where('users.id', '!=', $this->id); //don't want to include self
+            $query->where('users.type', '=', 'student');
+        }])->get()->pluck('users')->flatten();
+
     }
 
 }

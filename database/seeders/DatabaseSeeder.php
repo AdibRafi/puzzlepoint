@@ -28,11 +28,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'adib',
             'email' => 'adibtest@gmail.com',
-            'email_verified_at' => now(),
             'password' => bcrypt('test1234'),
-            'bio' => 'fakeBioForAdib',
             'type' => 'lecturer',
-            'remember_token' => Str::random(10),
         ]);
         Classroom::factory()->create([
             'name' => 'classroomTest',
@@ -66,11 +63,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'test',
             'email' => 'test@gmail.com',
-            'email_verified_at' => now(),
             'password' => bcrypt('test1234'),
-            'bio' => 'fakeBioForTest',
             'type' => 'lecturer',
-            'remember_token' => Str::random(10),
         ]);
 
         User::factory(3)->create();
@@ -82,7 +76,7 @@ class DatabaseSeeder extends Seeder
         //attach user-classroom pivot
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->syncWithoutDetaching(
-                $classrooms->random(rand(1, $classrooms->count()))->pluck('id')->toArray()
+                $classrooms->random(rand(2, $classrooms->count()))->pluck('id')->toArray()
             );
         });
 
