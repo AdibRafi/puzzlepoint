@@ -1,4 +1,5 @@
 <template>
+    <Head title="Option"/>
     <MainLayout>
         <ul class="steps w-96">
             <li class="step step-primary">Topic</li>
@@ -76,7 +77,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import InputForm from "@/Components/inputForm.vue";
-import {useForm} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 
 const no_of_modules = parseInt(props.topicData.no_of_modules);
 
