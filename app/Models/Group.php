@@ -27,9 +27,10 @@ class Group extends Model
 
     protected $fillable = ['expert_group', 'jigsaw_group'];
 
+    //todo: maybe change to one to one
     public function modules(): BelongsToMany
     {
-        return $this->belongsToMany(Module::class);
+        return $this->belongsToMany(Module::class)->withPivot('group_type');
     }
 
     public function users(): BelongsToMany

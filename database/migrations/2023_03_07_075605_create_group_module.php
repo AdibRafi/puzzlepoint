@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreign('group_id')->references('id')->on('groups')->cascadeOnDelete();
             $table->unsignedBigInteger('module_id');
             $table->foreign('module_id')->references('id')->on('modules')->cascadeOnDelete();
+            $table->string('group_type');
         });
     }
 

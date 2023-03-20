@@ -35,15 +35,16 @@ class OptionController extends Controller
      */
     public function store(Request $request) //topic_id / groupMethod / timeMethod / tm{}
     {
+        dd($request);
         $topicModal = Topic::find($request->topic_id);
         $groupDistribution = $request->groupMethod;
         //todo: create group modal first then distribute users
         $groupModal = $topicModal->modules();
         //todo: group distribution here
-        $topicModal->modules()->each(function ($modules) use ($groups) {
-            $modules->groups()->attach(1);
-        });
-        dd($topicModal->getUsers());
+//        $topicModal->modules()->each(function ($modules) use ($groups) {
+//            $modules->groups()->attach(1);
+//        });
+//        dd($topicModal->getUsers());
         for ($i = 1; $i < count($topicModal->getUsers()) + 1; $i++) {
             $group = new Group();
         }

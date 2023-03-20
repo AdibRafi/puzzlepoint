@@ -25,6 +25,9 @@
                     <li>
 <!--                        <Link :href="route('lect.assessment.create')">CreateAssessment</Link>-->
                     </li>
+                    <li>
+                        <Link :href="route('test.index')">Test</Link>
+                    </li>
                     <li tabindex="0">
                         <a>
                             SESSION

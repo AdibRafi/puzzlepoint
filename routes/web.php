@@ -49,7 +49,8 @@ Route::middleware('auth')->group(function () {
 //    return view('test');
 //});
 
-Route::get('test', [TestController::class, 'index']);
+Route::get('test', [TestController::class, 'index'])->name('test.index');
+Route::post('test', [TestController::class, 'store'])->name('test.store');
 
 //Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::resource('classroom', ClassroomController::class);

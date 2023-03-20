@@ -83,11 +83,11 @@ class DatabaseSeeder extends Seeder
         Group::factory(5)->create();
         $groups = Group::all();
 
-        User::all()->each(function ($user) use ($groups) {
-            $user->groups()->attach(
-                $groups->random(rand(1, $groups->count()))->pluck('id')->toArray()
-            );
-        });
+//        User::all()->each(function ($user) use ($groups) {
+//            $user->groups()->attach(
+//                $groups->random(rand(1, $groups->count()))->pluck('id')->toArray()
+//            );
+//        });
 
         Topic::factory(5)->create();
         Assessment::factory(5)->create();
