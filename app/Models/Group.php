@@ -29,7 +29,7 @@ class Group extends Model
     protected $fillable = ['name', 'group_type'];
 
     //todo: maybe change to one to one
-    public function modules(): HasOne
+    public function module(): HasOne
     {
         return $this->hasOne(Module::class);
     }
