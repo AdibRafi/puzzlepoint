@@ -41,7 +41,7 @@
 <!--                                <Link :href="route('lect.session.expert')">Lecturer</Link>-->
                             </li>
                             <li>
-                                <Link :href="route('stud.session.expert')">Student</Link>
+                                <Link :href="route('student.expert')">Student Expert</Link>
                             </li>
                         </ul>
                     </li>

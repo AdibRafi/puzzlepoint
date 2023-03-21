@@ -8,6 +8,7 @@ use App\Http\Controllers\OptionController;
 use App\Http\Controllers\ProfileAController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TopicController;
 use App\Models\Question;
@@ -70,6 +71,9 @@ Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+Route::group(['prefix' => 'session'], function () {
+    Route::get('expert', [SessionController::class, 'studentExpert'])->name('student.expert');
+});
 
 Route::group(['prefix' => 'LecturerSide'], function () {
 
