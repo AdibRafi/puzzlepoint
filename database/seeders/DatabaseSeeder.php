@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
             );
         });
 
-        Group::factory(5)->create();
+//        Group::factory(5)->create();
         $groups = Group::all();
 
 //        User::all()->each(function ($user) use ($groups) {

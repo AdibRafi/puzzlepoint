@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('id')->on('groups')->cascadeOnDelete();
             $table->string('name');
             $table->string('learning_objectives')->nullable();
             $table->timestamps();

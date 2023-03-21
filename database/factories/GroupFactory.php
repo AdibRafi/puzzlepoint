@@ -17,8 +17,7 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'expert_group' => $this->faker->text(10),
-            'jigsaw_group' => $this->faker->text(10),
+            'name' => $this->faker->text(10),
         ];
     }
 }

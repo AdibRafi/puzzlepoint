@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Group
@@ -25,12 +26,12 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['expert_group', 'jigsaw_group'];
+    protected $fillable = ['name', 'group_type'];
 
     //todo: maybe change to one to one
-    public function modules(): BelongsToMany
+    public function modules(): HasOne
     {
-        return $this->belongsToMany(Module::class)->withPivot('group_type');
+        return $this->hasOne(Module::class);
     }
 
     public function users(): BelongsToMany

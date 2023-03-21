@@ -29,9 +29,9 @@ class Module extends Model
 
     protected $fillable = ['name'];
 
-    public function groups(): BelongsToMany
+    public function group(): BelongsTo
     {
-        return $this->belongsToMany(Group::class)->withPivot('group_type');
+        return $this->belongsTo(Group::class);
     }
 
     public function materials(): HasMany
