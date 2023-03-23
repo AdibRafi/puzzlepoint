@@ -73,6 +73,7 @@ Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.d
 
 Route::group(['prefix' => 'session'], function () {
     Route::get('expert', [SessionController::class, 'studentExpert'])->name('student.expert');
+    Route::get('jigsaw', [SessionController::class, 'studentJigsaw'])->name('student.jigsaw');
 });
 
 Route::group(['prefix' => 'LecturerSide'], function () {

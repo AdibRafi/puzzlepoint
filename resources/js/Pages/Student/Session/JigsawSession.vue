@@ -2,7 +2,7 @@
     <MainLayout>
         <div class="card w-96 bg-base-100 shadow-xl">
             <div class="card-body">
-                <h2 class="card-title justify-center text-2xl">Expert Session</h2>
+                <h2 class="card-title justify-center text-2xl">Jigsaw Session</h2>
             </div>
         </div>
         <div class="card w-96 bg-base-100 shadow-xl my-4">
