@@ -33,10 +33,11 @@ class TestController extends Controller
         //distribution logic
         $usersId = $topicModal->getUsers()->pluck('id')->shuffle();
 //        dd(count($usersId));
+//        dd($topicModal->id);
+//        dd($modulesId);
 
 
         //START JG logic
-        $test = Module::find(1)->groups()->wherePivot('group_type', '=', 'jigsaw')->pluck('group_id');
 
 //        $test = Group::find(21)->users()->pluck('id');
 
@@ -47,22 +48,27 @@ class TestController extends Controller
         //todo: check on how to insert database for jigsaw group link with module
         for ($i = 0; $i < $totalGroup; $i++) {
             $group = new Group();
-            $group->jigsaw_group = 'jigsaw' . $i;
+            $group->name = 'jigsaw' . $i;
+            $group->group_type = 'jigsaw';
+            $group->topic()->associate($topicModal->id);
             $group->save();
-            for ($j = 0; $j < count($modulesId); $j++) {
-                $group->modules()->attach($modulesId[$j], ['group_type' => 'jigsaw']);
-            }
+
             $group->users()->attach($a[$i]);
         }
+
         for ($i = 0; $i < count($a[0]); $i++) {
             $group = new Group();
-            $group->expert_group = 'expert' . $i;
+            $group->name = 'expert' . $i;
+            $group->group_type = 'expert';
+            $group->topic()->associate($topicModal->id);
+            $group->module()->associate($modulesId[$i]);
+//            Module::find($modulesId[$i])->group()->associate($group->id);
             $group->save();
-            $group->modules()->attach($modulesId[$i], ['group_type' => 'expert']);
             for ($j = 0; $j < count($a); $j++) {
                 $group->users()->attach($a[$j][$i]);
             }
         }
+//            $group->modules()->attach($modulesId[$i], ['group_type' => 'expert']);
 //        dd($usersId);
         $r = User::find(1)->groups()->pluck('id');
         dd($r);

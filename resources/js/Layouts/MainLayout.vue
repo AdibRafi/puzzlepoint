@@ -28,6 +28,9 @@
                     <li>
                         <Link :href="route('test.index')">Test</Link>
                     </li>
+                    <li>
+                        <Link :href="route('student.expert',{topic_id: 1})">Student Expert</Link>
+                    </li>
                     <li tabindex="0">
                         <a>
                             SESSION
@@ -39,9 +42,6 @@
                         <ul class="p-2 bg-base-100">
                             <li>
 <!--                                <Link :href="route('lect.session.expert')">Lecturer</Link>-->
-                            </li>
-                            <li>
-                                <Link :href="route('student.expert')">Student Expert</Link>
                             </li>
                         </ul>
                     </li>

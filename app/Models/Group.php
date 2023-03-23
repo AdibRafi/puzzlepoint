@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -29,13 +30,20 @@ class Group extends Model
     protected $fillable = ['name', 'group_type'];
 
     //todo: maybe change to one to one
-    public function module(): HasOne
+    public function module(): BelongsTo
     {
-        return $this->hasOne(Module::class);
+        return $this->belongsTo(Module::class);
     }
 
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
+    }
+
+
 }

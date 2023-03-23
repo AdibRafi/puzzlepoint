@@ -57,6 +57,11 @@ class Topic extends Model
         return $this->hasOne(Option::class);
     }
 
+    public function groups(): HasMany
+    {
+        return $this->hasMany(Group::class);
+    }
+
     public function getUsers(): Collection
     {
         //todo: check if this right query
@@ -64,7 +69,6 @@ class Topic extends Model
             $query->where('users.id', '!=', $this->id); //don't want to include self
             $query->where('users.type', '=', 'student');
         }])->get()->pluck('users')->flatten();
-
     }
 
 }

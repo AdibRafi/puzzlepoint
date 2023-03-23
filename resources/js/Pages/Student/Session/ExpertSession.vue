@@ -13,6 +13,7 @@
                     <p>Student 2</p>
                     <p>Student 3</p>
                     <p>Student 4</p>
+                    <p>{{props.groupModal}}</p>
                 </div>
             </div>
         </div>
@@ -23,8 +24,12 @@
 </template>
 
 <script setup>
-
 import MainLayout from "@/Layouts/MainLayout.vue";
+
+const props = defineProps({
+    topicModal: Object,
+    groupModal: Object,
+})
 </script>
 
 <style scoped>
