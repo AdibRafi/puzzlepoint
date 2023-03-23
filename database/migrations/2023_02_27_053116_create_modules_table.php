@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
             $table->string('name');
             $table->string('learning_objectives')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }
