@@ -2,7 +2,7 @@
     <Head title="Dashboard"/>
     <MainLayout>
         <div class="w-screen">
-            <div class="flex justify-end my-2 mx-6">
+            <div v-if="$page.props.user.type === 'lecturer'" class="flex justify-end my-2 mx-6">
                 <Link :href="route('classroom.create')">
                     <button class="btn btn-primary">Add Class</button>
                 </Link>
@@ -13,12 +13,14 @@
                         <h2 class="card-title">{{ data.name }}</h2>
                         <p>{{ data.subject_code }}</p>
                         <div class="card-actions justify-end">
-                            <button @click="destroy(data.id)" type="button" class="btn btn-warning">Delete Class
-                            </button>
-                            <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
-                            <Link :href="route('topic.create',{classroom_id:data.id})" class="btn btn-primary">Add
-                                Topic
-                            </Link>
+                            <div v-if="$page.props.user.type === 'lecturer'">
+                                <button @click="destroy(data.id)" type="button" class="btn btn-warning">Delete Class
+                                </button>
+                                <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
+                                <Link :href="route('topic.create',{classroom_id:data.id})" class="btn btn-primary">Add
+                                    Topic
+                                </Link>
+                            </div>
                             <Link :href="route('classroom.show',data.id)" class="btn btn-primary">Enter</Link>
                         </div>
                     </div>

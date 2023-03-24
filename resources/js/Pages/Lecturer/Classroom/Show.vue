@@ -8,14 +8,14 @@
             <div class="card-body">
                 <h2 class="card-title">{{ props.classroom.name }}</h2>
                 <p>{{ props.classroom.subject_code }}</p>
-                <div class="card-actions justify-end my-4">
+                <div v-if="$page.props.user.type === 'lecturer'" class="card-actions justify-end my-4">
                     <button @click="destroy(props.classroom.id)" type="button" class="btn btn-warning">Delete Class
                     </button>
                     <Link :href="route('classroom.edit',props.classroom.id)" class="btn btn-accent">Edit Class</Link>
                 </div>
             </div>
         </div>
-        <div class="card w-96 bg-base-100 shadow-xl my-4">
+        <div v-if="$page.props.user.type === 'lecturer'" class="card w-96 bg-base-100 shadow-xl my-4">
             <div class="card-body">
                 <h2 class="card-title">You have {{ props.topic.length }} topic</h2>
                 <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
@@ -35,40 +35,43 @@
                     <p>jigsaw time = {{ data.max_time_jigsaw }}</p>
                     <p>status = {{ data.status }}</p>
                     <div class="card-actions justify-end">
-                        <div v-if="data.status === 'onModule'">
-                            <Link
-                                :href="route('module.create',{
+                        <div v-if="$page.props.user.type ==='lecturer'">
+
+                            <div v-if="data.status === 'onModule'">
+                                <Link
+                                    :href="route('module.create',{
                                 topic_id: data.id,
                                 no_of_modules:data.no_of_modules
                             })"
-                                class="btn btn-primary">Module
-                            </Link>
-                        </div>
-                        <div v-else-if="data.status === 'onOption'">
-                            <Link :href="route('option.create',{
+                                    class="btn btn-primary">Module
+                                </Link>
+                            </div>
+                            <div v-else-if="data.status === 'onOption'">
+                                <Link :href="route('option.create',{
                             topic_id:data.id,
                             no_of_modules:data.no_of_modules
                         })" class="btn btn-primary">Option
-                            </Link>
-                        </div>
-                        <div v-else-if="data.status === 'onVerify'">
-                            <Link :href="route('topic.verify',{
+                                </Link>
+                            </div>
+                            <div v-else-if="data.status === 'onVerify'">
+                                <Link :href="route('topic.verify',{
                             topic_id: data.id
                         })" class="btn btn-primary">
-                                Verify
+                                    Verify
+                                </Link>
+                            </div>
+                            <div v-else-if="data.status === 'onReady'">
+                                <Link :href="route('')" class="btn btn-primary">Start</Link>
+                            </div>
+                            <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">Add
+                                Assessment
                             </Link>
                         </div>
-                        <div v-else-if="data.status === 'onReady'">
-                            <Link :href="route('')" class="btn btn-primary">Start</Link>
-                        </div>
-                        <div>
+                        <div v-if="$page.props.user.type === 'student'">
                             <Link :href="route('student.expert',{topic_id: data.id})" class="btn btn-secondary">student
                                 start session
                             </Link>
                         </div>
-                        <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">Add
-                            Assessment
-                        </Link>
                     </div>
                 </div>
             </div>
@@ -92,24 +95,5 @@ const destroy = (id) => {
     }
 }
 
-const datas2 = [
-    {
-        name: 'Class1',
-        code: 'TGD1202'
-    },
-    {
-        name: 'Class2',
-        code: 'TCP1302'
-    },
-    {
-        name: 'Class3',
-        code: 'TMU2231'
-    },
-    {
-        name: 'Class4',
-        code: 'TSP3301'
-    }
-
-]
 </script>
 
