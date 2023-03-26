@@ -13,14 +13,6 @@
                         <h2 class="card-title">{{ data.name }}</h2>
                         <p>{{ data.subject_code }}</p>
                         <div class="card-actions justify-end">
-                            <div v-if="$page.props.user.type === 'lecturer'">
-                                <button @click="destroy(data.id)" type="button" class="btn btn-warning">Delete Class
-                                </button>
-                                <Link :href="route('classroom.edit',data.id)" class="btn btn-accent">Edit Class</Link>
-                                <Link :href="route('topic.create',{classroom_id:data.id})" class="btn btn-primary">Add
-                                    Topic
-                                </Link>
-                            </div>
                             <Link :href="route('classroom.show',data.id)" class="btn btn-primary">Enter</Link>
                         </div>
                     </div>

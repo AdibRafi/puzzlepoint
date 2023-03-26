@@ -63,7 +63,7 @@
                             <div v-else-if="data.status === 'onReady'">
                                 <Link :href="route('')" class="btn btn-primary">Start</Link>
                             </div>
-                            <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">Add
+                            <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">
                                 Assessment
                             </Link>
                         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessment;
+use App\Models\Question;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -13,20 +14,28 @@ class AssessmentController extends Controller
      */
     public function index(Request $request)
     {
-        $topicData = $request->input('topic_id');
-        $questionData = Assessment::find($request->input('topic_id'))->questions()->get();
-        $assessmentData = Topic::find($topicData)->assessment()->first();
+        $topicModal = Topic::find($request->input('topic_id'));
+        if ($topicModal->assessment()->exists()) {
+            $assessmentModal = $topicModal->assessment()->first();
+            $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
+//            dd($questionModal);
+            return inertia('Lecturer/Assessment/Index', compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
+        } else {
+            $assessmentModal = new Assessment();
+            $assessmentModal->topic()->associate($topicModal->id);
+            $assessmentModal->save();
+            return inertia('Lecturer/Assessment/Index', compact('assessmentModal','topicModal'));
+        }
 //        dd($assessmentData);
 
-        return inertia('Lecturer/Assessment/Index', compact('topicData', 'questionData', 'assessmentData'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request) //topic_id
     {
-        //
+
     }
 
     /**
