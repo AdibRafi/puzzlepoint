@@ -16,7 +16,7 @@ class SessionController extends Controller
         $topicModal = Topic::find($topic_id);
         $groupModal = Group::whereHas('users', function (Builder $query) use ($groupType, $topicModal) {
             $query->where('user_id', Auth::id());
-            $query->where('group_type', '=', $groupType);
+            $query->where('type', '=', $groupType);
             $query->where('topic_id', '=', $topicModal->id);
         })->first();
         $userModal = Group::find($groupModal->id)->users()->get();
@@ -45,7 +45,7 @@ class SessionController extends Controller
     public function lecturerExpert(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('group_type','=','expert')->get();
+        $groupUserModal = $topicModal->groups()->with('users')->where('type','=','expert')->get();
 
         return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal'));
     }
@@ -53,7 +53,7 @@ class SessionController extends Controller
     public function lecturerJigsaw(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('group_type','=','jigsaw')->get();
+        $groupUserModal = $topicModal->groups()->with('users')->where('type','=','jigsaw')->get();
 
         return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal'));
     }

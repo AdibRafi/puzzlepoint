@@ -40,6 +40,9 @@
                     <li>
                         <Link :href="route('lecturer.jigsaw',{topic_id: 1})">Lecturer Jigsaw</Link>
                     </li>
+                    <li>
+                        <Link :href="route('display.group',{topic_id: 1})">Display Group</Link>
+                    </li>
                     <!--                    <li tabindex="0">-->
                     <!--                        <a>-->
                     <!--                            SESSION-->

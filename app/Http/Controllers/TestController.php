@@ -45,11 +45,13 @@ class TestController extends Controller
 
         //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
         $a = $usersId->split($totalGroup); //if student = 20, 4x5
+
+
         //todo: check on how to insert database for jigsaw group link with module
         for ($i = 0; $i < $totalGroup; $i++) {
             $group = new Group();
             $group->name = 'jigsaw' . $i;
-            $group->group_type = 'jigsaw';
+            $group->type = 'jigsaw';
             $group->topic()->associate($topicModal->id);
             $group->save();
 
@@ -59,7 +61,7 @@ class TestController extends Controller
         for ($i = 0; $i < count($a[0]); $i++) {
             $group = new Group();
             $group->name = 'expert' . $i;
-            $group->group_type = 'expert';
+            $group->type = 'expert';
             $group->topic()->associate($topicModal->id);
             $group->module()->associate($modulesId[$i]);
 //            Module::find($modulesId[$i])->group()->associate($group->id);
@@ -80,5 +82,14 @@ class TestController extends Controller
 
         dd($usersId);
         return redirect()->route('test.index');
+    }
+
+    public function displayGroup(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $expertGroupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'expert')->get();
+        $jigsawGroupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'jigsaw')->get();
+
+        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal'));
     }
 }

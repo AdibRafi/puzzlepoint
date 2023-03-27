@@ -78,6 +78,8 @@ Route::group(['prefix' => 'session'], function () {
     Route::get('lecturerJigsaw', [SessionController::class, 'lecturerJigsaw'])->name('lecturer.jigsaw');
 });
 
+Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
+
 Route::group(['prefix' => 'LecturerSide'], function () {
 
     Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');

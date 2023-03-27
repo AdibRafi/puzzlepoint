@@ -27,7 +27,7 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'group_type'];
+    protected $fillable = ['name', 'type'];
 
     //todo: maybe change to one to one
     public function module(): BelongsTo
