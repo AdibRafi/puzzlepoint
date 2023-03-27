@@ -41,4 +41,20 @@ class SessionController extends Controller
 
         return inertia('Student/Session/JigsawSession', compact('topicModal', 'groupModal', 'userModal'));
     }
+
+    public function lecturerExpert(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $groupUserModal = $topicModal->groups()->with('users')->where('group_type','=','expert')->get();
+
+        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal'));
+    }
+
+    public function lecturerJigsaw(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $groupUserModal = $topicModal->groups()->with('users')->where('group_type','=','jigsaw')->get();
+
+        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal'));
+    }
 }

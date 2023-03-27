@@ -72,8 +72,10 @@ Route::patch('profile', [ProfileController::class, 'update'])->name('profile.upd
 Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::group(['prefix' => 'session'], function () {
-    Route::get('expert', [SessionController::class, 'studentExpert'])->name('student.expert');
-    Route::get('jigsaw', [SessionController::class, 'studentJigsaw'])->name('student.jigsaw');
+    Route::get('studentExpert', [SessionController::class, 'studentExpert'])->name('student.expert');
+    Route::get('studentJigsaw', [SessionController::class, 'studentJigsaw'])->name('student.jigsaw');
+    Route::get('lecturerExpert', [SessionController::class, 'lecturerExpert'])->name('lecturer.expert');
+    Route::get('lecturerJigsaw', [SessionController::class, 'lecturerJigsaw'])->name('lecturer.jigsaw');
 });
 
 Route::group(['prefix' => 'LecturerSide'], function () {

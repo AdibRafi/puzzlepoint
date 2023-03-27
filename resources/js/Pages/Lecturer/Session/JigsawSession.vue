@@ -2,10 +2,10 @@
     <MainLayout>
         <div class="card w-96 bg-base-100 shadow-xl">
             <div class="card-body">
-                <h2 class="card-title justify-center text-2xl">Expert Session</h2>
+                <h2 class="card-title justify-center text-2xl">Jigsaw Session</h2>
             </div>
         </div>
-        <TimerDisplay :minute-time="props.topicModal.max_time_expert"/>
+        <TimerDisplay :minute-time="props.topicModal.max_time_jigsaw"/>
         <div class="card w-96 bg-base-100 shadow-xl my-4">
             <div class="card-body">
                 <div class="card-actions flex justify-end">

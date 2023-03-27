@@ -34,6 +34,12 @@
                     <li>
                         <Link :href="route('student.jigsaw',{topic_id: 1})">Student Jigsaw</Link>
                     </li>
+                    <li>
+                        <Link :href="route('lecturer.expert',{topic_id: 1})">Lecturer Expert</Link>
+                    </li>
+                    <li>
+                        <Link :href="route('lecturer.jigsaw',{topic_id: 1})">Lecturer Jigsaw</Link>
+                    </li>
                     <!--                    <li tabindex="0">-->
                     <!--                        <a>-->
                     <!--                            SESSION-->
