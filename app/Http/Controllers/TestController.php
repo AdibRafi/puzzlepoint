@@ -42,6 +42,7 @@ class TestController extends Controller
 //        $test = Group::find(21)->users()->pluck('id');
 
         (int)$totalGroup = floor(count($usersId) / $topicModal->no_of_modules);
+        (int)
 
         //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
         $a = $usersId->split($totalGroup); //if student = 20, 4x5
