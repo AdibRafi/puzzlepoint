@@ -42,10 +42,19 @@ class TestController extends Controller
 //        $test = Group::find(21)->users()->pluck('id');
 
         (int)$totalGroup = floor(count($usersId) / $topicModal->no_of_modules);
-        (int)
+        (int)$totalRemainder = count($usersId) % $topicModal->no_of_modules;
+        if ($totalRemainder !== 0) {
+            $remainderIdJ = $usersId->shift($totalRemainder);
+            $remainderIdE = clone $remainderIdJ;
+        }
+        else{
+            $remainderIdJ = null;
+            $remainderIdE = null;
+        }
+
 
         //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
-        $a = $usersId->split($totalGroup); //if student = 20, 4x5
+        $splitUserId = $usersId->split($totalGroup);
 
 
         //todo: check on how to insert database for jigsaw group link with module
@@ -56,10 +65,13 @@ class TestController extends Controller
             $group->topic()->associate($topicModal->id);
             $group->save();
 
-            $group->users()->attach($a[$i]);
+            $group->users()->attach($splitUserId[$i]);
+            if ($remainderIdJ !== null) {
+                $group->users()->attach($remainderIdJ->pop());
+            }
         }
 
-        for ($i = 0; $i < count($a[0]); $i++) {
+        for ($i = 0; $i < count($splitUserId[0]); $i++) {
             $group = new Group();
             $group->name = 'expert' . $i;
             $group->type = 'expert';
@@ -67,8 +79,11 @@ class TestController extends Controller
             $group->module()->associate($modulesId[$i]);
 //            Module::find($modulesId[$i])->group()->associate($group->id);
             $group->save();
-            for ($j = 0; $j < count($a); $j++) {
-                $group->users()->attach($a[$j][$i]);
+            for ($j = 0; $j < count($splitUserId); $j++) {
+                $group->users()->attach($splitUserId[$j][$i]);
+            }
+            if ($remainderIdE !== null) {
+                $group->users()->attach($remainderIdE->pop());
             }
         }
 //            $group->modules()->attach($modulesId[$i], ['group_type' => 'expert']);

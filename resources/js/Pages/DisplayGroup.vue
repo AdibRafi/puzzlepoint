@@ -1,4 +1,5 @@
 <template>
+    <Head title="Display Group"/>
     <MainLayout>
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
@@ -45,7 +46,7 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {useForm} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
     topicModal: Object,
