@@ -32,13 +32,13 @@ class GroupSeeder extends Seeder
             'classroom_id' => 1,
             'name' => 'topicTest',
             'date_time' => now(),
-            'no_of_modules' => 4,
+            'no_of_modules' => 2,
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
             'status' => 'onOption',
         ]);
 
-        Module::factory(4)->create([
+        Module::factory(2)->create([
             'topic_id' => 1,
             'name' => 'moduleTest'
         ]);
@@ -58,7 +58,7 @@ class GroupSeeder extends Seeder
             );
         });
 
-        User::factory(23)->create();
+        User::factory(20)->create();
 
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->syncWithoutDetaching(

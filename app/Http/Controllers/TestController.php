@@ -20,9 +20,6 @@ class TestController extends Controller
 //        $data = auth()->user()->attendances()->get();
         $data = auth()->user();
 
-//        $data = Assessment::find(1)->questions()->get();
-//        $data = Question::find(3)->assessment()->get();
-
         return inertia('Test', compact('data'));
     }
 
@@ -30,6 +27,7 @@ class TestController extends Controller
     {
         $topicModal = Topic::find($request->input('topic_id'));
         $modulesId = $topicModal->modules()->pluck('id');
+        $numOfModules = $topicModal->no_of_modules;
         //distribution logic
         $usersId = $topicModal->getUsers()->pluck('id')->shuffle();
 //        dd(count($usersId));
@@ -39,22 +37,26 @@ class TestController extends Controller
 
         //START JG logic
 
-//        $test = Group::find(21)->users()->pluck('id');
 
-        (int)$totalGroup = floor(count($usersId) / $topicModal->no_of_modules);
-        (int)$totalRemainder = count($usersId) % $topicModal->no_of_modules;
-        if ($totalRemainder !== 0) {
-            $remainderIdJ = $usersId->shift($totalRemainder);
-            $remainderIdE = clone $remainderIdJ;
+        (int)$totalGroup = floor(count($usersId) / $numOfModules);
+        if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+            $numOfModules *= 2;
+            $totalGroup /= 2;
+            $modulesId = $modulesId->merge($modulesId);
+
         }
-        else{
+        $totalRemainder = count($usersId) % $numOfModules;
+        if ($totalRemainder !== 0) {
+            $remainderIdJ = $usersId->take($totalRemainder);
+            $remainderIdE = clone $remainderIdJ;
+        } else {
             $remainderIdJ = null;
             $remainderIdE = null;
         }
 
-
         //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
-        $splitUserId = $usersId->split($totalGroup);
+        $splitUserIdJ = $usersId->split($totalGroup);
+        $splitUserIdE = clone $splitUserIdJ;
 
 
         //todo: check on how to insert database for jigsaw group link with module
@@ -65,13 +67,15 @@ class TestController extends Controller
             $group->topic()->associate($topicModal->id);
             $group->save();
 
-            $group->users()->attach($splitUserId[$i]);
+            if ($splitUserIdJ !== null) {
+                $group->users()->attach($splitUserIdJ->pop());
+            }
             if ($remainderIdJ !== null) {
                 $group->users()->attach($remainderIdJ->pop());
             }
         }
 
-        for ($i = 0; $i < count($splitUserId[0]); $i++) {
+        for ($i = 0; $i < $numOfModules; $i++) {
             $group = new Group();
             $group->name = 'expert' . $i;
             $group->type = 'expert';
@@ -79,8 +83,10 @@ class TestController extends Controller
             $group->module()->associate($modulesId[$i]);
 //            Module::find($modulesId[$i])->group()->associate($group->id);
             $group->save();
-            for ($j = 0; $j < count($splitUserId); $j++) {
-                $group->users()->attach($splitUserId[$j][$i]);
+            for ($j = 0; $j < count($splitUserIdE); $j++) {
+                if ($splitUserIdE !== null) {
+                    $group->users()->attach($splitUserIdE[$j]->pop());
+                }
             }
             if ($remainderIdE !== null) {
                 $group->users()->attach($remainderIdE->pop());
