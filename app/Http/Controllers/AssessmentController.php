@@ -15,6 +15,7 @@ class AssessmentController extends Controller
     public function index(Request $request)
     {
         $topicModal = Topic::find($request->input('topic_id'));
+//        dd($topicModal->assessment()->exists());
         if ($topicModal->assessment()->exists()) {
             $assessmentModal = $topicModal->assessment()->first();
             $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();

@@ -26,12 +26,15 @@
                 <h2 class="card-title justify-center">List of Question</h2>
             </div>
         </div>
-        <div v-for="quesData in questionModal" class="card w-96 bg-base-100  shadow-xl my-4">
+        <div v-for="quesData in questionAnswerModal" class="card w-96 bg-base-100  shadow-xl my-4">
             <div class="card-body">
                 <p>type : {{quesData.type}}</p>
                 <h2 class="card-title">{{quesData.name}}</h2>
                 <div v-for="ansData in quesData.answers">
                     {{ansData.name}}
+                </div>
+                <div class="card-actions">
+                    <Link :href="route('question.edit',quesData.id)" class="btn btn-accent">Edit question</Link>
                 </div>
             </div>
         </div>
