@@ -45,21 +45,21 @@ class TestController extends Controller
             $modulesId = $modulesId->merge($modulesId);
 
         }
+        //todo: check if remainder need (because using pop())
         $totalRemainder = count($usersId) % $numOfModules;
-        if ($totalRemainder !== 0) {
-            $remainderIdJ = $usersId->take($totalRemainder);
-            $remainderIdE = clone $remainderIdJ;
-        } else {
-            $remainderIdJ = null;
-            $remainderIdE = null;
-        }
+//        if ($totalRemainder !== 0) {
+//            $remainderIdJ = $usersId->take($totalRemainder);
+//            $remainderIdE = clone $remainderIdJ;
+//        } else {
+//            $remainderIdJ = null;
+//            $remainderIdE = null;
+//        }
 
         //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
         $splitUserIdJ = $usersId->split($totalGroup);
         $splitUserIdE = clone $splitUserIdJ;
 
 
-        //todo: check on how to insert database for jigsaw group link with module
         for ($i = 0; $i < $totalGroup; $i++) {
             $group = new Group();
             $group->name = 'jigsaw' . $i;
@@ -70,9 +70,9 @@ class TestController extends Controller
             if ($splitUserIdJ !== null) {
                 $group->users()->attach($splitUserIdJ->pop());
             }
-            if ($remainderIdJ !== null) {
-                $group->users()->attach($remainderIdJ->pop());
-            }
+//            if ($remainderIdJ !== null) {
+//                $group->users()->attach($remainderIdJ->pop());
+//            }
         }
 
         for ($i = 0; $i < $numOfModules; $i++) {
@@ -81,19 +81,16 @@ class TestController extends Controller
             $group->type = 'expert';
             $group->topic()->associate($topicModal->id);
             $group->module()->associate($modulesId[$i]);
-//            Module::find($modulesId[$i])->group()->associate($group->id);
             $group->save();
             for ($j = 0; $j < count($splitUserIdE); $j++) {
                 if ($splitUserIdE !== null) {
                     $group->users()->attach($splitUserIdE[$j]->pop());
                 }
             }
-            if ($remainderIdE !== null) {
-                $group->users()->attach($remainderIdE->pop());
-            }
+//            if ($remainderIdE !== null) {
+//                $group->users()->attach($remainderIdE->pop());
+//            }
         }
-//            $group->modules()->attach($modulesId[$i], ['group_type' => 'expert']);
-//        dd($usersId);
         $r = User::find(1)->groups()->pluck('id');
         dd($r);
 //        dd(Group::find(10)->modules()->wherePivot('group_type', '=', 'expert')->get());
