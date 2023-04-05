@@ -6,7 +6,7 @@
                 <h2 class="card-title">Assessment</h2>
             </div>
             <div class="flex flex-col">
-                <p>{{ props.assessmentData }}</p>
+                <p>{{ props.assessmentModal }}</p>
                 <div class="divider">Question</div>
                 <div class="card-actions justify-center">
                     <Link :href="route('question.create',{assessment_id:props.assessmentModal.id})"
@@ -34,7 +34,7 @@
                     {{ansData.name}}
                 </div>
                 <div class="card-actions">
-                    <Link :href="route('question.edit',quesData.id)" class="btn btn-accent">Edit question</Link>
+                    <Link :href="route('question.edit',quesData)" class="btn btn-accent">Edit question</Link>
                 </div>
             </div>
         </div>

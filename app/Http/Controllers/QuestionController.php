@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Assessment;
 use App\Models\Question;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class QuestionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request) //assessment_id
     {
         $assessment_id = $request->input('assessment_id');
         return inertia('Question/Create', compact('assessment_id'));
@@ -63,7 +64,9 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        return inertia('Question/Edit',compact('question'));
+        $assessment_id = $question->assessment()->pluck('id')->first();
+        $questionAnswerModal = $question->with('answers')->first();
+        return inertia('Question/Edit',compact('assessment_id','questionAnswerModal'));
     }
 
     /**
