@@ -12,7 +12,7 @@ class AssessmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
 //        dd($topicModal->assessment()->exists());

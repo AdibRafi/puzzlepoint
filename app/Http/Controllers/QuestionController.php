@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Assessment;
 use App\Models\Question;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -40,6 +41,7 @@ class QuestionController extends Controller
         $question->type = $request->question_type;
         $question->save();
 
+        //todo need to add right_answer
         $ansInput = $request->input('answer.name');
         for ($i = 1; $i < count($request->input('answer.name')) + 1; $i++) {
             $answer = new Answer();
@@ -72,9 +74,29 @@ class QuestionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request, Question $question) //question_name, question_type, answers { name, right_answer}
     {
-        //
+        //todo: do validated using QuestionStoreRequest (need to create)
+        $question->update([
+            'name' => $request->input('question_name'),
+            'type' => $request->input('question_type')
+        ]);
+
+        $question->answers()->delete();
+        //todo: need to add right_answer
+        $ansInput = $request->input('answer.name');
+        for ($i = 1; $i < count($request->input('answer.name')) + 1; $i++) {
+            $answer = new Answer();
+            $answer->question()->associate($question->id);
+            $answer->name = $ansInput[$i];
+            $answer->save();
+        }
+
+        $assessment_id = $question->assessment()->first()->id;
+        $topic_id = Assessment::find($assessment_id)->topic()->first()->id;
+
+        return redirect()->route('assessment.index',compact('topic_id'))
+            ->with('alertMessage', 'Update Question Successfully');
     }
 
     /**
