@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
 Route::get('test', [TestController::class, 'index'])->name('test.index');
 Route::post('test', [TestController::class, 'store'])->name('test.store');
 
+
 //Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 Route::resource('classroom', ClassroomController::class);
 Route::resource('topic', TopicController::class);
@@ -79,6 +80,7 @@ Route::group(['prefix' => 'session'], function () {
 });
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
+Route::get('displayGroupM',[TestController::class,'displayGroupModified'])->name('display.modifiedGroup');
 
 Route::group(['prefix' => 'LecturerSide'], function () {
 

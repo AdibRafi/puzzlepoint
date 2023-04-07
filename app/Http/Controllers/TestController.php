@@ -119,8 +119,17 @@ class TestController extends Controller
         $topicModal = Topic::find($request->input('topic_id'));
         $expertGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
         $jigsawGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
+        $absentStudentModal = $topicModal->getAbsentStudents();
 
 
-        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal'));
+        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal','absentStudentModal'));
+    }
+
+    public function displayGroupModified(Request $request)//topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $absentStudentModal = $topicModal->getAbsentStudents();
+        dd($absentStudentModal);
+
     }
 }

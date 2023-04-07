@@ -71,4 +71,19 @@ class Topic extends Model
         }])->get()->pluck('users')->flatten();
     }
 
+    public function getAbsentStudents()
+    {
+        $a = $this->classroom()->with(['users' => function ($query) {
+            $query->where('users.type', '=', 'student');
+        }])->get()->pluck('users')->flatten()->pluck('id');
+
+        $b = $this->attendances()->with('user')->where('attend_status', '=', 'absent')->get()->pluck('user')->flatten()->pluck('id');
+
+        $c = $a->merge($b)->duplicates()->values();
+
+        $d = User::find($c);
+
+        return $d;
+    }
+
 }

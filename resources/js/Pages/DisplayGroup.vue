@@ -8,6 +8,8 @@
                         <h2 class="card-title">Press to generate group</h2>
                         <div class="card-actions justify-end">
                             <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>
+                            <Link class="btn btn-secondary" :href="route('display.modifiedGroup',{topic_id:1})">Modified
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -22,12 +24,21 @@
             </div>
         </div>
         <div class="flex flex-wrap">
+            <div class="card w-96 bg-base-100 shadow-xl m-2">
+                <div class="card-body">
+                    <h2 class="card-title">Absent</h2>
+                    <div v-for="userData in props.absentStudentModal">
+                        <p class="text-red-600">{{userData.name}}</p>
+                    </div>
+                </div>
+            </div>
             <div v-for="groupData in props.expertGroupUserModal" class="card w-96 bg-base-100 shadow-xl m-2">
                 <div class="card-body">
                     <h2 class="card-title">{{ groupData.name }}</h2>
                     <p>number = {{ groupData.users.length }}</p>
                     <div v-for="userData in groupData.users">
-                        <p>{{ userData.name }} - {{userData.attendances[0].attend_status}}</p>
+                        <p v-if="userData.attendances[0].attend_status === 'absent'" class="text-red-600">{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
+                        <p v-else>{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
                     </div>
                 </div>
             </div>
@@ -36,7 +47,8 @@
                     <h2 class="card-title">{{ groupData.name }}</h2>
                     <p>number = {{ groupData.users.length }}</p>
                     <div v-for="userData in groupData.users">
-                        <p>{{ userData.name }} - {{userData.attendances[0].attend_status}}</p>
+                        <p v-if="userData.attendances[0].attend_status === 'absent'" class="text-red-600">{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
+                        <p v-else>{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
                     </div>
                 </div>
             </div>
@@ -46,12 +58,13 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
     topicModal: Object,
     expertGroupUserModal: Object,
     jigsawGroupUserModal: Object,
+    absentStudentModal: Object,
 
 })
 
