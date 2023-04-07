@@ -27,7 +27,7 @@
                     <h2 class="card-title">{{ groupData.name }}</h2>
                     <p>number = {{ groupData.users.length }}</p>
                     <div v-for="userData in groupData.users">
-                        <p>{{ userData.name }}</p>
+                        <p>{{ userData.name }} - {{userData.attendances[0].attend_status}}</p>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <h2 class="card-title">{{ groupData.name }}</h2>
                     <p>number = {{ groupData.users.length }}</p>
                     <div v-for="userData in groupData.users">
-                        <p>{{ userData.name }}</p>
+                        <p>{{ userData.name }} - {{userData.attendances[0].attend_status}}</p>
                     </div>
                 </div>
             </div>

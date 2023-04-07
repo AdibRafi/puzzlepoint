@@ -91,6 +91,17 @@ class TestController extends Controller
 //                $group->users()->attach($remainderIdE->pop());
 //            }
         }
+        // FOR TESTING ATTENDANCE PURPOSE
+
+        for ($i = 0; $i < count(Topic::find(1)->getUsers()); $i++) {
+            $attendance = new Attendance();
+            $attendance->user()->associate($usersId[$i]);
+            $attendance->topic()->associate($topicModal->id);
+            $attendance->date = date('Y/m/d');
+            $attendance->attend_status = 'present';
+            $attendance->save();
+        }
+
         $r = User::find(1)->groups()->pluck('id');
         dd($r);
 //        dd(Group::find(10)->modules()->wherePivot('group_type', '=', 'expert')->get());
@@ -106,8 +117,9 @@ class TestController extends Controller
     public function displayGroup(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $expertGroupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'expert')->get();
-        $jigsawGroupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'jigsaw')->get();
+        $expertGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
+        $jigsawGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
+
 
         return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal'));
     }
