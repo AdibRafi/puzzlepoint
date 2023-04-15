@@ -58,7 +58,12 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import {Head, Link, router, useForm} from "@inertiajs/vue3";
+import '../bootstrap';
+
+router.on('start', (e) => {
+    router.reload();
+});
 
 const props = defineProps({
     topicModal: Object,

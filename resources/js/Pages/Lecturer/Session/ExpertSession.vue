@@ -3,6 +3,7 @@
         <div class="card w-96 bg-base-100 shadow-xl">
             <div class="card-body">
                 <h2 class="card-title justify-center text-2xl">Expert Session</h2>
+                <Link :href="route('pusher.test')" class="btn btn-accent">PUSH</Link>
             </div>
         </div>
         <TimerDisplay :minute-time="props.topicModal.max_time_expert"/>
@@ -31,16 +32,23 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import TimerDisplay from "@/Components/timerDisplay.vue";
 import LecturerDisplayGroup from "@/Components/lecturerDisplayGroup.vue";
+import '../../../bootstrap';
+import {Link} from "@inertiajs/vue3";
+// import {onMounted} from "vue";
+
 
 const props = defineProps({
     topicModal: Object,
     groupUserModal: Object,
 })
 
+
+// window.Echo.channel("attendance-expert-channel").listen('.event', (e) => {
+//     console.log('wow dpt');
+// })
 
 </script>
 

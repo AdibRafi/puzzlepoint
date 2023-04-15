@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AttendanceExpert;
 use App\Models\Group;
 use App\Models\Topic;
 use App\Models\User;
@@ -45,7 +46,7 @@ class SessionController extends Controller
     public function lecturerExpert(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('type','=','expert')->get();
+        $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'expert')->get();
 
         return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal'));
     }
@@ -53,8 +54,13 @@ class SessionController extends Controller
     public function lecturerJigsaw(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('type','=','jigsaw')->get();
+        $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'jigsaw')->get();
 
         return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal'));
+    }
+
+    public function expertPusher()
+    {
+        broadcast(new AttendanceExpert('ok dpt'));
     }
 }

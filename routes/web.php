@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\AttendanceExpert;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ClassroomController;
@@ -59,9 +60,18 @@ Route::resource('classroom', ClassroomController::class);
 Route::resource('topic', TopicController::class);
 Route::resource('module', ModuleController::class);
 Route::resource('assessment', AssessmentController::class);
-Route::resource('answer', AnswerController::class);
 Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
+
+Route::get('/pusher', [SessionController::class,'expertPusher'])->name('pusher.test');
+
+Route::get('/event', function () {
+    event(new AttendanceExpert('hello world'));
+});
+
+Route::get('listen', function () {
+    return \inertia('Test');
+});
 
 Route::get('verify', [TopicController::class, 'verify'])->name('topic.verify');
 Route::post('verify', [TopicController::class, 'storeVerify'])->name('topic.storeVerify');

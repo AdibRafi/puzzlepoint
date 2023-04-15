@@ -30,6 +30,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, useForm} from "@inertiajs/vue3";
+import {onMounted} from "vue";
 
 const tmDummy = {
     '1': '15',
@@ -48,6 +49,14 @@ const form = useForm({
     timeMethod: 'even',
     tm: tmDummy,
 });
+
+onMounted(() => {
+    console.log('mounted')
+});
+
+window.Echo.channel("attendance-expert-channel").listen('AttendanceExpert', (e) => {
+    console.log(e);
+})
 </script>
 
 <style scoped>

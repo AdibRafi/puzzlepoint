@@ -12,6 +12,7 @@ use App\Models\Question;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TestController extends Controller
 {
@@ -120,6 +121,7 @@ class TestController extends Controller
         $expertGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
         $jigsawGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
         $absentStudentModal = $topicModal->getAbsentStudents();
+        
 
 
         return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal','absentStudentModal'));
