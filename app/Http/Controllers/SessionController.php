@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AttendanceExpert;
+use App\Models\Attendance;
 use App\Models\Group;
 use App\Models\Topic;
 use App\Models\User;
@@ -47,20 +48,38 @@ class SessionController extends Controller
     {
         $topicModal = Topic::find($request->input('topic_id'));
         $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'expert')->get();
+        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal'));
+        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal','absentStudentModal'));
     }
 
     public function lecturerJigsaw(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
         $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'jigsaw')->get();
+        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal'));
+        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal','absentStudentModal'));
     }
 
-    public function expertPusher()
+    public function sendExpertPusher(Request $request)
     {
         broadcast(new AttendanceExpert('ok dpt'));
+    }
+
+    public function fetchExpertAbsentStudent(Request $request) //topic_id
+    {
+//        dd($request->all());
+        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
+//        $topic_id = $request->input('topic_id');
+//        return redirect()->route('lecturer.jigsaw',compact());
+//            ->route('lecturer.expert',compact('topic_id'));
+//        return Topic::find($request->input('topic_id'))->getAbsentStudents();
+    }
+
+    public function fetchExpertPusher()
+    {
+        return Topic::find(1)->getAbsentStudents()->first();
+//            Topic::find(1)->attendances()->where('attend_status','=','absent')->get();
     }
 }

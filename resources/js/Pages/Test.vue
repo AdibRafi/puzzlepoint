@@ -12,6 +12,15 @@
                 </div>
             </div>
         </form>
+        <form @submit.prevent="form2.post(route('send.expert'));">
+            <div class="card w-96 bg-red-200 shadow-xl my-4">
+                <div class="card-body">
+                    <div class="card-actions justify-end">
+                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast</button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <div class="card w-96 bg-base-100 shadow-xl my-6">
             <div class="card-body">
                 <h2 class="card-title">{{ props.data }}</h2>
@@ -50,13 +59,15 @@ const form = useForm({
     tm: tmDummy,
 });
 
+const form2 = useForm({
+    topic_id: 1,
+
+})
+
 onMounted(() => {
     console.log('mounted')
 });
 
-window.Echo.channel("attendance-expert-channel").listen('AttendanceExpert', (e) => {
-    console.log(e);
-})
 </script>
 
 <style scoped>
