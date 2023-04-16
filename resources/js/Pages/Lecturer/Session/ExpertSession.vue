@@ -57,8 +57,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    console.log('mounted')
-    router.post(route('fetch.absent.expertStudent', {topic_id: 1}));
+    console.log('mounted');
     // axios.get("/fetchAbsentStudentE").then((response)=>{
     //     datas.value = response.data;
     // })
@@ -67,9 +66,10 @@ onMounted(() => {
 window.Echo.channel("attendance-expert-channel")
     .listen('AttendanceExpert', (e) => {
         console.log(e);
-        axios.get("/fetchAbsentStudentE").then((response) => {
-            datas.value = response.data;
-        })
+        router.reload();
+        // axios.get("/fetchAbsentStudentE").then((response) => {
+        //     datas.value = response.data;
+        // })
     })
 
 </script>

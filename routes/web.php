@@ -66,7 +66,7 @@ Route::resource('option', OptionController::class);
 Route::get('/pusher', [SessionController::class,'fetchExpertPusher'])->name('fetch.expert');
 Route::post('/pusher', [SessionController::class, 'sendExpertPusher'])->name('send.expert');
 
-Route::post('/fetchAbsentStudentE', [SessionController::class, 'fetchExpertAbsentStudent'])->name('fetch.absent.expertStudent');
+//Route::post('/fetchAbsentStudentE', [SessionController::class, 'fetchExpertAbsentStudent'])->name('fetch.absent.expertStudent');
 
 Route::get('/event', function () {
     event(new AttendanceExpert('hello world'));

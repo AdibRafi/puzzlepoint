@@ -62,9 +62,21 @@ class SessionController extends Controller
         return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal','absentStudentModal'));
     }
 
-    public function sendExpertPusher(Request $request)
+    public function sendExpertPusher(Request $request) //topic_id
     {
-        broadcast(new AttendanceExpert('ok dpt'));
+        $a = Topic::find($request->input('topic_id'))->attendances()->get();
+        $b = Auth::user()->attendances()->get();
+        $c = collect();
+        $c = $c->merge($a)->merge($b)->duplicates()->values();
+
+        foreach ($c as $value) {
+            $value->update([
+                'attend_status' => 'present'
+            ]);
+        }
+//        dd('nice');
+
+        broadcast(new AttendanceExpert('done tukar'));
     }
 
     public function fetchExpertAbsentStudent(Request $request) //topic_id

@@ -12,11 +12,12 @@
                 </div>
             </div>
         </form>
-        <form @submit.prevent="form2.post(route('send.expert'));">
+        <form @submit.prevent="form2.post(route('send.expert',{topic_id:1}));">
             <div class="card w-96 bg-red-200 shadow-xl my-4">
                 <div class="card-body">
                     <div class="card-actions justify-end">
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast</button>
+                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast
+                        </button>
                     </div>
                 </div>
             </div>
