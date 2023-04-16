@@ -35,7 +35,7 @@
                 <p class="text-red-500"></p>
             </div>
         </div>
-        <LecturerDisplayGroup :group-user-modal="props.groupUserModal"/>
+        <LecturerDisplayGroup :group-user-attend-modal="props.groupUserAttendModal"/>
     </MainLayout>
 </template>
 
@@ -52,7 +52,7 @@ const datas = ref([]);
 
 const props = defineProps({
     topicModal: Object,
-    groupUserModal: Object,
+    groupUserAttendModal: Object,
     absentStudentModal: Object,
 })
 

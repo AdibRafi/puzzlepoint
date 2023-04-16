@@ -47,19 +47,19 @@ class SessionController extends Controller
     public function lecturerExpert(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'expert')->get();
+        $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
         $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserModal','absentStudentModal'));
+        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserAttendModal','absentStudentModal'));
     }
 
     public function lecturerJigsaw(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserModal = $topicModal->groups()->with('users')->where('type', '=', 'jigsaw')->get();
+        $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
         $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserModal','absentStudentModal'));
+        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserAttendModal','absentStudentModal'));
     }
 
     public function sendExpertPusher(Request $request) //topic_id
