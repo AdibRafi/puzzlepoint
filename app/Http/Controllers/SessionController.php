@@ -79,19 +79,19 @@ class SessionController extends Controller
         broadcast(new AttendanceExpert('done tukar'));
     }
 
-    public function fetchExpertAbsentStudent(Request $request) //topic_id
-    {
-//        dd($request->all());
-        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
-//        $topic_id = $request->input('topic_id');
-//        return redirect()->route('lecturer.jigsaw',compact());
-//            ->route('lecturer.expert',compact('topic_id'));
-//        return Topic::find($request->input('topic_id'))->getAbsentStudents();
-    }
-
-    public function fetchExpertPusher()
-    {
-        return Topic::find(1)->getAbsentStudents()->first();
-//            Topic::find(1)->attendances()->where('attend_status','=','absent')->get();
-    }
+//    public function fetchExpertAbsentStudent(Request $request) //topic_id
+//    {
+////        dd($request->all());
+//        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
+////        $topic_id = $request->input('topic_id');
+////        return redirect()->route('lecturer.jigsaw',compact());
+////            ->route('lecturer.expert',compact('topic_id'));
+////        return Topic::find($request->input('topic_id'))->getAbsentStudents();
+//    }
+//
+//    public function fetchExpertPusher()
+//    {
+//        return Topic::find(1)->getAbsentStudents()->first();
+////            Topic::find(1)->attendances()->where('attend_status','=','absent')->get();
+//    }
 }

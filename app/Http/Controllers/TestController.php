@@ -13,6 +13,7 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use phpDocumentor\Reflection\Types\Collection;
 
 class TestController extends Controller
 {
@@ -121,16 +122,49 @@ class TestController extends Controller
         $expertGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
         $jigsawGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
         $absentStudentModal = $topicModal->getAbsentStudents();
-        
 
 
-        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal','absentStudentModal'));
+        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal', 'absentStudentModal'));
     }
 
     public function displayGroupModified(Request $request)//topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
         $absentStudentModal = $topicModal->getAbsentStudents();
+
+        $groupModalWithAbsentStudent = $topicModal->groups()
+            ->where('type', '=', 'jigsaw')
+            ->whereHas('users', function ($query) {
+                $query->whereHas('attendances', function ($query) {
+                    $query->where('attend_status', '=', 'absent');
+                });
+            })->get();
+
+
+        $groupModal = $topicModal->groups()
+            ->where('type', '=', 'jigsaw')->get();
+
+        $groupModal = $groupModal->reject(function ($value, $key) use ($groupModalWithAbsentStudent) {
+            return $groupModalWithAbsentStudent->contains($value);
+        })->flatten();
+
+        $studentWithAbsentModal = $groupModalWithAbsentStudent->pluck('users')->flatten();
+
+        for ($i = 0; $i < count($studentWithAbsentModal); $i++) {
+            $group = Group::find($groupModal[$i]->id);
+            $group->users()->attach($studentWithAbsentModal[$i]);
+        }
+
+//        foreach ($studentWithAbsentModal as $value) {
+//            $groupId = $groupModal->random()->id;
+//            $group = Group::find($groupId);
+//            $group->users()->attach($value);
+//        }
+        Group::destroy($groupModalWithAbsentStudent);
+
+
+        dd($groupModal);
+        dd($groupModalWithAbsentStudent);
         dd($absentStudentModal);
 
     }

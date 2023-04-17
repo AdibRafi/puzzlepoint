@@ -63,7 +63,7 @@ Route::resource('assessment', AssessmentController::class);
 Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
 
-Route::get('/pusher', [SessionController::class,'fetchExpertPusher'])->name('fetch.expert');
+//Route::get('/pusher', [SessionController::class,'fetchExpertPusher'])->name('fetch.expert');
 Route::post('/pusher', [SessionController::class, 'sendExpertPusher'])->name('send.expert');
 
 //Route::post('/fetchAbsentStudentE', [SessionController::class, 'fetchExpertAbsentStudent'])->name('fetch.absent.expertStudent');
