@@ -1,5 +1,6 @@
 <template>
     <MainLayout>
+        <!--todo:Redo-->
         <ul class="steps w-96">
             <li class="step step-primary">Topic</li>
             <li class="step step-primary">Modules</li>

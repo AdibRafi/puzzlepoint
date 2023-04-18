@@ -24,9 +24,8 @@ class ModuleController extends Controller
     public function create(Request $request) //topic_id & no_of_modules
     {
         //todo: kena encrypt
-        $topicData = $request->all();
-        $topicModal = Topic::find($request->topic_id);
-        return inertia('Lecturer/CreateTopic/Module', compact('topicData', 'topicModal'));
+        $topicModal = Topic::find($request->input('id'));
+        return inertia('Lecturer/CreateTopic/Module', compact( 'topicModal'));
     }
 
     /**
@@ -51,7 +50,7 @@ class ModuleController extends Controller
         Topic::find($request->topic_id)->update(['status' => 'onOption']);
 
 
-        return redirect()->route('option.create', compact('topic_id', 'no_of_modules'));
+        return redirect()->route('option.create', compact('topic_id'));
 //        dd($module[1]);
     }
 

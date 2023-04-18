@@ -8,36 +8,55 @@
             <li class="step step">Verify</li>
         </ul>
         <form @submit.prevent="form.post(route('topic.store'));">
-            <div class="card w-96 bg-base-100 shadow-xl my-4">
-                <div class="card-body">
-                    <h2 class="card-title">Add Topic</h2>
-                    <input-form label-name="Topic Name" v-model="form.name"/>
-                    <span class="block font-medium text-gray-700 text-sm mt-4">Number of Modules</span>
-                    <input type="range" min="0" max="100" class="mt-2 range range-primary w-80"
-                           step="25" v-model="form.no_of_module"/>
-                    <div class="w-full flex justify-between text-xs px-2 w-80">
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
-                    </div>
-                    <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
-                        <input-form class="my-2" label-name="Maximum Time for Expert Session"
-                                    v-model="form.max_time_expert"/>
-                    </div>
-                    <div class="tooltip tooltip-right tooltip-primary" data-tip="Advisable to put a bit less time">
-                        <input-form class="my-2" label-name="Maximum Time for Jigsaw Session"
-                                    v-model="form.max_time_jigsaw"/>
-                    </div>
-                    <input-form class="my-2" label-name="Date" input-type="datetime-local" v-model="form.date_time"/>
-                    <div class="card-actions justify-end my-2">
-                        <Link :href="route('classroom.index')" class="btn btn-accent">Back</Link>
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Save Topic
+            <Card title="Add Topic">
+                <InputForm label-name="Topic Name" v-model="form.name"/>
+
+                <span class="block font-medium text-gray-700 text-sm mt-4">Number of Modules</span>
+                <input type="range" min="0" max="100" class="mt-2 range range-primary w-80"
+                       step="25" v-model="form.no_of_module"/>
+                <div class="w-full flex justify-between text-xs px-2 ">
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    <span>6</span>
+                </div>
+
+                <div class="tooltip tooltip-right tooltip-primary"
+                     data-tip="Advisable to put a bit less time">
+                    <InputForm label-name="Maximum Time for Expert Session"
+                               v-model="form.max_time_expert"/>
+                </div>
+                <div class="tooltip tooltip-right tooltip-primary"
+                     data-tip="Advisable to put a bit less time">
+                    <InputForm label-name="Maximum Time for Jigsaw Session"
+                               v-model="form.max_time_jigsaw"/>
+                </div>
+                <div class="form-control w-full max-w-xs">
+                    <label class="label">
+                        <span class="label-text">Transition Time</span>
+                    </label>
+                    <!--todo: v-model the select button-->
+                    <select class="select select-bordered select-primary">
+                        <option disabled selected>Pick one</option>
+                        <option>2 Minutes</option>
+                        <option>3 Minutes</option>
+                        <option>4 Minutes</option>
+                        <option>5 Minutes</option>
+                    </select>
+                </div>
+                <InputForm label-name="Date" input-type="datetime-local"
+                           v-model="form.date_time"/>
+                <template #actions>
+                    <div class="mt-2">
+                        <Link :href="route('classroom.index')"
+                              class="btn btn-accent">Back</Link>
+                        <button type="submit" :disabled="form.processing"
+                                class="btn btn-primary mx-2">Save Topic
                         </button>
                     </div>
-                </div>
-            </div>
+                </template>
+            </Card>
         </form>
     </MainLayout>
 </template>
@@ -46,6 +65,7 @@
 import InputForm from "@/Components/inputForm.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
+import Card from "@/Components/Card.vue";
 
 const props = defineProps({
     classroom_id: Number,

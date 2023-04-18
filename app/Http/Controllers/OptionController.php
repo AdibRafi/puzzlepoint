@@ -25,9 +25,9 @@ class OptionController extends Controller
     public function create(Request $request) //topic_id
     {
         $topicId = $request->input('topic_id');
-        $topicData = Topic::find($topicId);
+        $topicModal = Topic::find($topicId);
 
-        return inertia('Lecturer/CreateTopic/Option', compact('topicData'));
+        return inertia('Lecturer/CreateTopic/Option', compact('topicModal'));
     }
 
     /**
