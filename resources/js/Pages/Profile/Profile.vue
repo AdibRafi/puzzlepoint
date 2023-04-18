@@ -1,39 +1,29 @@
 <template>
-    <Head title="Profile"></Head>
+    <Head title="Profile" />
     <MainLayout>
-        <form @submit.prevent="form.patch(route('profile.update'))" class="flex flex-col items-center">
-            <div class="card w-1/2 bg-base-100 shadow-xl p-6">
-                <h2 class="card-title ">Profile Information</h2>
+        <form @submit.prevent="form.patch(route('profile.update'))">
+            <Card title="Profile Information">
                 <p>Update your account's profile information and email address</p>
-                <div class="card-actions">
-                    <div class="form-control w-full max-w-xs">
-                        <div class="mt-4">
-                            <InputForm label-name="Name" v-model="form.name"/>
-                        </div>
-                        <div class="mt-4">
-                            <InputForm label-name="Email Address" v-model="form.email"/>
-                        </div>
-                        <div class="mt-4">
-                            <label class="label">
-                                <span class="label-text text-gray-700 w-3/4">Bio</span>
-                            </label>
-                            <textarea class="textarea textarea-bordered w-full textarea-primary"
-                                      placeholder="Bio"></textarea>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn btn-primary w-1/2">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card w-1/2 bg-base-100 shadow-xl p-6 my-6">
-                <h2 class="card-title ">Delete Account</h2>
-                <p>Once your account is deleted, all of its resources and data will be permanently deleted. Before
-                    deleting your account, please download any data or information that you wish to retain.</p>
-                <div class="card-actions my-4">
+                <InputForm label-name="Name" v-model="form.name"/>
+                <InputForm label-name="Email Address" v-model="form.email"/>
+<!--                todo: perlu bio?-->
+<!--                <div class="mt-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text text-gray-700 w-3/4">Bio</span>-->
+<!--                    </label>-->
+<!--                    <textarea class="textarea textarea-bordered w-full textarea-primary"-->
+<!--                              placeholder="Bio"></textarea>-->
+<!--                </div>-->
+                <template #actions>
+                    <button class="btn btn-primary">Save</button>
+                </template>
+            </Card>
+            <Card title="Delete Account" class="my-4">
+                <p>Once your account id deleted, all of its resources and data will be permanently deleted. Before deleteing your account, please download any data or information that you wish to retain</p>
+                <template #actions>
                     <button @click="destroy(form.id)" type="button" class="btn btn-warning">Delete</button>
-                </div>
-            </div>
+                </template>
+            </Card>
 
 
             <!--        todo: (x priority) if nk buat update password thing-->
@@ -71,6 +61,7 @@ import {onMounted, ref} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, router, useForm, usePage} from "@inertiajs/vue3";
 import InputForm from "@/Components/inputForm.vue";
+import Card from "@/Components/Card.vue";
 
 
 const user = usePage().props.auth.user;
