@@ -18,7 +18,7 @@
             </Card>
         </div>
         <!--        TOPIC-->
-        <div v-for="data in props.topic" :key="data">
+        <div v-for="data in props.topic" :key="data" class="my-4">
             <Card :title="data.name">
                 <p>{{ data.date_time }}</p>
                 <!--todo: change to actual modules names-->

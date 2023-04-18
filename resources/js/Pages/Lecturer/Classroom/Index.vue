@@ -10,7 +10,7 @@
                 </template>
             </Card>
         </div>
-        <div v-for="data in classroomData" key="data" class="flex justify-center">
+        <div v-for="data in classroomData" :key="data">
             <Card :title="data.name">
                 <p>{{ data.subject_code }}</p>
                 <template #actions>
