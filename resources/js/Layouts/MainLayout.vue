@@ -87,7 +87,8 @@
     <div class="font-sans text-gray-900 antialiased">
         <div class="pt-6 bg-gray-100 justify-center rounded-xl min-h-screen">
             <div class="flex flex-col items-center p-6">
-                <div v-if="$page.props.message.alertMessage" class="alert alert-success shadow-lg">
+                <div v-if="$page.props.message.alertMessage"
+                     class="alert alert-success w-96 shadow-lg mb-4">
                     <div>
                         <font-awesome-icon icon="fa-regular fa-circle-check"/>
                         <span>{{ $page.props.message.alertMessage }}</span>
