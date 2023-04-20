@@ -20,7 +20,7 @@ class ClassroomController extends Controller
     {
         $classroomData = auth()->user()->classrooms()->get();
 
-        return inertia('Lecturer/Classroom/Index', compact('classroomData'));
+        return inertia('Classroom/Index', compact('classroomData'));
     }
 
     /**
@@ -28,7 +28,7 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        return inertia('Lecturer/Classroom/Create');
+        return inertia('Classroom/Create');
     }
 
     /**
@@ -53,7 +53,7 @@ class ClassroomController extends Controller
 //        $assessment = $topic->
 
 //        dd($topic);
-        return inertia('Lecturer/Classroom/Show', compact('classroom','topic'));
+        return inertia('Classroom/Show', compact('classroom','topic'));
     }
 
     /**
@@ -61,7 +61,7 @@ class ClassroomController extends Controller
      */
     public function edit(Classroom $classroom)
     {
-        return inertia('Lecturer/Classroom/Edit', compact('classroom'));
+        return inertia('Classroom/Edit', compact('classroom'));
     }
 
     /**

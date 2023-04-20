@@ -1,7 +1,7 @@
 <template>
     <Head title="Dashboard"/>
     <MainLayout>
-        <div v-if="$page.props.user.type === 'lecturer'" class="my-2 mx-6 mb-4">
+        <div v-if="$page.props.user.type === 'lecturer'" class="my-4">
             <Card :title="'Total Classroom = ' + props.classroomData.length">
                 <template #actions>
                     <Link :href="route('classroom.create')">
