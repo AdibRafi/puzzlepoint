@@ -27,7 +27,7 @@ class OptionController extends Controller
         $topicId = $request->input('topic_id');
         $topicModal = Topic::find($topicId);
 
-        return inertia('Lecturer/CreateTopic/Option', compact('topicModal'));
+        return inertia('Option/Create', compact('topicModal'));
     }
 
     /**
@@ -69,7 +69,7 @@ class OptionController extends Controller
         $option->save();
         $topicModal->update(['status' => 'onVerify']);
 
-        return inertia('Lecturer/CreateTopic/Verify',compact('topicModal'));
+        return inertia('Lecturer/CreateTopic/Verify', compact('topicModal'));
     }
 
     /**
@@ -102,5 +102,35 @@ class OptionController extends Controller
     public function destroy(Option $option)
     {
         //
+    }
+
+    public function editIndex(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $optionModal = $topicModal->option()->first();
+        return inertia('Option/Edit', compact('topicModal', 'optionModal'));
+    }
+
+    public function updateIndex(Request $request)
+        //topic_id, groupMethod, timeMethod, tm{}
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $option = $topicModal->option()->first();
+        $option->update([
+            'group_distribution' => $request->input('groupMethod'),
+            'time_method' => $request->input('timeMethod'),
+            'tm1' => $request->input('tm')[0],
+            'tm2' => $request->input('tm')[1],
+            'tm3' => $request->input('tm')[2],
+            'tm4' => $request->input('tm')[3],
+            'tm5' => $request->input('tm')[4],
+            'tm6' => $request->input('tm')[5],
+        ]);
+
+        $classroomModal = $topicModal->classroom()->first();
+        $classroomId = $classroomModal->id;
+
+        return redirect()->route('classroom.show', $classroomId)
+            ->with('alertMessage', 'Option update successfully');
     }
 }

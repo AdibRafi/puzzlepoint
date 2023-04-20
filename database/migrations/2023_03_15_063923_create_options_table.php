@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
             $table->string('group_distribution');
+            $table->string('time_method');
             $table->string('tm1')->nullable();
             $table->string('tm2')->nullable();
             $table->string('tm3')->nullable();

@@ -111,6 +111,7 @@ class ModuleController extends Controller
         $classroomModal = Topic::find($request->input('topic_id'))->classroom()->first();
         $classroomId = $classroomModal->id;
 
-        return redirect()->route('classroom.show',$classroomId);
+        return redirect()->route('classroom.show',$classroomId)
+            ->with('alertMessage', 'Module update successfully');
     }
 }

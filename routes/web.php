@@ -56,6 +56,9 @@ Route::post('test', [TestController::class, 'store'])->name('test.store');
 
 Route::get('/module/editIndex', [ModuleController::class, 'editIndex'])->name('module.editIndex');
 Route::post('/module/editIndex', [ModuleController::class, 'updateIndex'])->name('module.updateIndex');
+Route::get('/option/editIndex', [OptionController::class, 'editIndex'])->name('option.editIndex');
+Route::post('/option/editIndex', [OptionController::class, 'updateIndex'])->name('option.updateIndex');
+
 Route::resource('classroom', ClassroomController::class);
 Route::resource('topic', TopicController::class);
 Route::resource('module', ModuleController::class);
