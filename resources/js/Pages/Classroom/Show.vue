@@ -25,33 +25,27 @@
                 <p>No. of Modules = {{ data.no_of_modules }}</p>
                 <p>expert time = {{ data.max_time_expert }}</p>
                 <p>jigsaw time = {{ data.max_time_jigsaw }}</p>
-                <!--                todo: do dropdown for module option etc-->
+                <!--todo: do dropdown for module option etc-->
                 <template #actions>
                     <div v-if="$page.props.user.type ==='lecturer'">
-                        <div v-if="data.status === 'onModule'">
-                            <Link
-                                :href="route('module.create',{
+                        <div class="dropdown dropdown-hover">
+                            <label tabindex="0" class="btn m-1">Edit</label>
+                            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                <li>
+                                    <Link :href="route('module.create',{
                                 topic_id: data.id,
-                                no_of_modules:data.no_of_modules
-                            })"
-                                class="btn btn-primary">Module
-                            </Link>
+                            })">Module
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link :href="route('option.create',{
+                                topic_id:data.id,
+                            })">Option
+                                    </Link>
+                                </li>
+                            </ul>
                         </div>
-                        <div v-else-if="data.status === 'onOption'">
-                            <Link :href="route('option.create',{
-                            topic_id:data.id,
-                            no_of_modules:data.no_of_modules
-                        })" class="btn btn-primary">Option
-                            </Link>
-                        </div>
-                        <div v-else-if="data.status === 'onVerify'">
-                            <Link :href="route('topic.verify',{
-                            topic_id: data.id
-                        })" class="btn btn-primary">
-                                Verify
-                            </Link>
-                        </div>
-                        <div v-else-if="data.status === 'onReady'">
+                        <div v-if="data.status === 'onReady'">
                             <Link :href="route('')" class="btn btn-primary">Start</Link>
                         </div>
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">

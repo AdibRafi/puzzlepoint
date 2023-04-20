@@ -15,19 +15,16 @@ class AssessmentController extends Controller
     public function index(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-//        dd($topicModal->assessment()->exists());
         if ($topicModal->assessment()->exists()) {
             $assessmentModal = $topicModal->assessment()->first();
             $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
-//            dd($questionModal);
-            return inertia('Lecturer/Assessment/Index', compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
+            return inertia('Assessment/Index', compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
         } else {
             $assessmentModal = new Assessment();
             $assessmentModal->topic()->associate($topicModal->id);
             $assessmentModal->save();
-            return inertia('Lecturer/Assessment/Index', compact('assessmentModal','topicModal'));
+            return inertia('Assessment/Index', compact('assessmentModal','topicModal'));
         }
-//        dd($assessmentData);
 
     }
 
