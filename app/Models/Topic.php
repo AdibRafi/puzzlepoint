@@ -66,7 +66,7 @@ class Topic extends Model
     {
         //todo: check if this right query
         return $this->classroom()->with(['users' => function ($query) {
-            $query->where('users.id', '!=', $this->id); //don't want to include self
+//            $query->where('users.id', '!=', $this->id); //don't want to include self
             $query->where('users.type', '=', 'student');
         }])->get()->pluck('users')->flatten();
     }
@@ -78,6 +78,21 @@ class Topic extends Model
         }])->get()->pluck('users')->flatten()->pluck('id');
 
         $b = $this->attendances()->with('user')->where('attend_status', '=', 'absent')->get()->pluck('user')->flatten()->pluck('id');
+
+        $c = $a->merge($b)->duplicates()->values();
+
+        $d = User::find($c);
+
+        return $d;
+    }
+
+    public function getAttendStudents()
+    {
+        $a = $this->classroom()->with(['users' => function ($query) {
+            $query->where('users.type', '=', 'student');
+        }])->get()->pluck('users')->flatten()->pluck('id');
+
+        $b = $this->attendances()->with('user')->where('attend_status', '=', 'present')->get()->pluck('user')->flatten()->pluck('id');
 
         $c = $a->merge($b)->duplicates()->values();
 

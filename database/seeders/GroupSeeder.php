@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Module;
+use App\Models\Option;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -35,7 +37,15 @@ class GroupSeeder extends Seeder
             'no_of_modules' => 2,
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
-            'status' => 'onOption',
+            'status' => 'onReady',
+        ]);
+
+        Option::factory()->create([
+            'topic_id' => 1,
+            'group_distribution' => 'none',
+            'time_method' => 'even',
+            'tm1' => '30',
+            'tm2' => '30'
         ]);
 
         Module::factory(2)->create([
@@ -65,5 +75,16 @@ class GroupSeeder extends Seeder
                 $classrooms->pluck('id')->toArray()
             );
         });
+
+        $topicModal = Topic::find(1);
+        $usersId = $topicModal->getUsers()->pluck('id');
+        for ($i = 0; $i < count(Topic::find(1)->getUsers()); $i++) {
+            $attendance = new Attendance();
+            $attendance->user()->associate($usersId[$i]);
+            $attendance->topic()->associate($topicModal->id);
+            $attendance->date = date('Y/m/d');
+            $attendance->attend_status = 'present';
+            $attendance->save();
+        }
     }
 }

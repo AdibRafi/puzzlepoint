@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AttendanceExpert;
+use App\Events\StudentAttendance;
 use App\Models\Attendance;
 use App\Models\Group;
 use App\Models\Topic;
@@ -13,6 +13,23 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function index(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $topicModuleModal = $topicModal->with('modules')->first();
+        $studentAttendModal = $topicModal->getAttendStudents();
+        $studentAbsentModal = $topicModal->getAbsentStudents();
+
+        return inertia('Session/Index', compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal'));
+
+    }
+
+    public function expertSession(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        dd($topicModal);
+    }
+
     private function initiateModal($topic_id, $groupType)
     {
         $topicModal = Topic::find($topic_id);
@@ -50,7 +67,7 @@ class SessionController extends Controller
         $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
         $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserAttendModal','absentStudentModal'));
+        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserAttendModal', 'absentStudentModal'));
     }
 
     public function lecturerJigsaw(Request $request) //topic_id
@@ -59,7 +76,7 @@ class SessionController extends Controller
         $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
         $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
 
-        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserAttendModal','absentStudentModal'));
+        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserAttendModal', 'absentStudentModal'));
     }
 
     public function sendExpertPusher(Request $request) //topic_id
@@ -76,7 +93,7 @@ class SessionController extends Controller
         }
 //        dd('nice');
 
-        broadcast(new AttendanceExpert('done tukar'));
+        broadcast(new StudentAttendance('done tukar'));
     }
 
 //    public function fetchExpertAbsentStudent(Request $request) //topic_id

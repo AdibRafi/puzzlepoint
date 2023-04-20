@@ -11,14 +11,14 @@
             </template>
         </Card>
         <div v-if="$page.props.user.type === 'lecturer'" class="card w-96 bg-base-100 shadow-xl my-4">
-            <Card :title="'You have '+props.topic.length + ' topic'">
+            <Card :title="'You have '+props.topicModal.length + ' topic'">
                 <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
                     Add Topic
                 </Link>
             </Card>
         </div>
         <!--        TOPIC-->
-        <div v-for="data in props.topic" :key="data" class="my-4">
+        <div v-for="data in props.topicModal" :key="data" class="my-4">
             <Card :title="data.name">
                 <p>{{ data.date_time }}</p>
                 <!--todo: change to actual modules names-->
@@ -43,7 +43,8 @@
                             </ul>
                         </div>
                         <div v-if="data.status === 'onReady'">
-                            <Link :href="route('')" class="btn btn-primary">Start</Link>
+                            <Link :href="route('session.index',{topic_id: data.id})" class="btn btn-primary">Start
+                            </Link>
                         </div>
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">
                             Assessment
@@ -67,10 +68,10 @@ import Card from "@/Components/Card.vue";
 
 const props = defineProps({
     classroom: Object,
-    topic: Object,
+    topicModal: Object,
 })
 
-console.log(props.topic.length);
+// console.log(props.topicModal.length);
 const destroy = (id) => {
     if (confirm('Are you sure to delete?')) {
         router.delete(route('classroom.destroy', id))

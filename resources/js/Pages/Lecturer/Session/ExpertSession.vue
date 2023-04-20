@@ -63,8 +63,8 @@ onMounted(() => {
     // })
 })
 
-window.Echo.channel("attendance-expert-channel")
-    .listen('AttendanceExpert', (e) => {
+window.Echo.channel("student-attendance-channel")
+    .listen('StudentAttendance', (e) => {
         console.log(e);
         router.reload();
         // axios.get("/fetchAbsentStudentE").then((response) => {

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AttendanceExpert implements ShouldBroadcast
+class StudentAttendance implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -31,6 +31,6 @@ class AttendanceExpert implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new Channel('attendance-expert-channel');
+        return new Channel('student-attendance-channel');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\AttendanceExpert;
+use App\Events\StudentAttendance;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ClassroomController;
@@ -73,7 +73,7 @@ Route::post('/pusher', [SessionController::class, 'sendExpertPusher'])->name('se
 //Route::post('/fetchAbsentStudentE', [SessionController::class, 'fetchExpertAbsentStudent'])->name('fetch.absent.expertStudent');
 
 Route::get('/event', function () {
-    event(new AttendanceExpert('hello world'));
+    event(new StudentAttendance('hello world'));
 });
 
 Route::get('listen', function () {
@@ -94,6 +94,8 @@ Route::group(['prefix' => 'session'], function () {
     Route::get('studentJigsaw', [SessionController::class, 'studentJigsaw'])->name('student.jigsaw');
     Route::get('lecturerExpert', [SessionController::class, 'lecturerExpert'])->name('lecturer.expert');
     Route::get('lecturerJigsaw', [SessionController::class, 'lecturerJigsaw'])->name('lecturer.jigsaw');
+    Route::get('start', [SessionController::class, 'index'])->name('session.index');
+    Route::get('expert', [SessionController::class, 'expertSession'])->name('session.expert');
 });
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
