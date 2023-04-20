@@ -50,9 +50,6 @@ class ClassroomController extends Controller
     public function show(Classroom $classroom)
     {
         $topic = $classroom->topics()->get();
-//        $assessment = $topic->
-
-//        dd($topic);
         return inertia('Classroom/Show', compact('classroom','topic'));
     }
 

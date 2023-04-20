@@ -13,10 +13,10 @@
                 <p>name = {{ form.name }}</p>
                 <p>learn obj = {{ form.learning_objectives }}</p>
             </Card>
-            <div v-for="items in no_of_modules" class="my-4">
+            <div v-for="items in props.topicModal.no_of_modules" class="my-4">
                 <Card :title="'Module ' + items">
                     <InputForm label-name="Module Name" v-model="form.name[items]"/>
-                    <InputForm label-name="Learning Objectives (Optional"
+                    <InputForm label-name="Learning Objectives (Optional)"
                                v-model="form.learning_objectives[items]"/>
                     <template #actions>
                         <input type="file"
@@ -47,12 +47,10 @@ const props = defineProps({
 })
 
 
-const no_of_modules = parseInt(props.topicModal.no_of_modules);
 //todo: file upload?????
 
 
 const form = useForm({
-    no_of_modules: no_of_modules,
     topic_id: props.topicModal.id,
     name: {},
     learning_objectives: {

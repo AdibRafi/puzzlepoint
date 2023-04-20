@@ -28,7 +28,7 @@ class Module extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'learning_objectives', 'file_path'];
 
     public function group(): HasOne
     {

@@ -25,7 +25,7 @@ class ModuleController extends Controller
     {
         //todo: kena encrypt
         $topicModal = Topic::find($request->input('topic_id'));
-        return inertia('Lecturer/CreateTopic/Module', compact( 'topicModal'));
+        return inertia('Module/Create', compact('topicModal'));
     }
 
     /**
@@ -65,9 +65,9 @@ class ModuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Module $module)
+    public function edit(Module $module) //topic_id
     {
-        //
+
     }
 
     /**
@@ -84,5 +84,33 @@ class ModuleController extends Controller
     public function destroy(Module $module)
     {
         //
+    }
+
+    public function editIndex(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $moduleModal = $topicModal->modules()->get();
+        return inertia('Module/Edit', compact('topicModal', 'moduleModal'));
+    }
+
+    public function updateIndex(Request $request)
+        //topic_id, module_id[], name{}, learning_objectives{}
+    {
+        $moduleId = $request->input('module_id');
+        $name = $request->input('name');
+        $learningObjectives = $request->input('learning_objectives');
+
+        for ($i = 0; $i < count($moduleId); $i++) {
+            $module = Module::find($moduleId[$i]);
+            $module->update([
+                'name' => $name[$i],
+                'learning_objectives' => $learningObjectives[$i],
+            ]);
+        }
+
+        $classroomModal = Topic::find($request->input('topic_id'))->classroom()->first();
+        $classroomId = $classroomModal->id;
+
+        return redirect()->route('classroom.show',$classroomId);
     }
 }
