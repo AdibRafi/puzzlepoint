@@ -45,7 +45,6 @@ class TestController extends Controller
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
-
         }
         //todo: check if remainder need (because using pop())
         $totalRemainder = count($usersId) % $numOfModules;
@@ -124,7 +123,7 @@ class TestController extends Controller
         $absentStudentModal = $topicModal->getAbsentStudents();
 
 
-        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'jigsawGroupUserModal', 'absentStudentModal'));
+        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'absentStudentModal', 'jigsawGroupUserModal'));
     }
 
     public function displayGroupModified(Request $request)//topic_id

@@ -13,12 +13,20 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    public function index(Request $request) //topic_id
+    private function initiateTopicModuleStudentModal($topic_id)
     {
-        $topicModal = Topic::find($request->input('topic_id'));
+        $topicModal = Topic::find($topic_id);
         $topicModuleModal = $topicModal->with('modules')->first();
         $studentAttendModal = $topicModal->getAttendStudents();
         $studentAbsentModal = $topicModal->getAbsentStudents();
+
+        return [$topicModuleModal, $studentAttendModal, $studentAbsentModal];
+    }
+
+    public function index(Request $request) //topic_id
+    {
+        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
+            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
         return inertia('Session/Index', compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal'));
 
@@ -26,8 +34,58 @@ class SessionController extends Controller
 
     public function expertSession(Request $request) //topic_id
     {
-        $topicModal = Topic::find($request->input('topic_id'));
-        dd($topicModal);
+        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
+            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+
+
+        $studentAttendModal = $studentAttendModal->shuffle();
+        $numOfModules = $topicModuleModal->no_of_modules;
+        $modulesId = $topicModuleModal->modules->pluck('id');
+
+        (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
+
+        if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+            $numOfModules *= 2;
+            $totalGroup /= 2;
+            $modulesId = $modulesId->merge($modulesId);
+        }
+
+        $splitUserIdJ = $studentAttendModal->split($totalGroup);
+        $splitUserIdE = clone $splitUserIdJ;
+
+
+        for ($i = 0; $i < $totalGroup; $i++) {
+            if ($splitUserIdJ !== null) {
+                $group = new Group();
+                $group->name = 'jigsaw' . $i;
+                $group->type = 'jigsaw';
+                $group->topic()->associate($topicModuleModal->id);
+                $group->save();
+
+                $group->users()->attach($splitUserIdJ->pop());
+            }
+        }
+
+        for ($j = 0; $j < $numOfModules; $j++) {
+            if ($splitUserIdE !== null) {
+                $group = new Group();
+                $group->name = 'expert' . $j;
+                $group->type = 'expert';
+                $group->topic()->associate($topicModuleModal->id);
+                $group->module()->associate($modulesId[$j]);
+                $group->save();
+                for ($k = 0; $k < count($splitUserIdE); $k++) {
+                    $group->users()->attach($splitUserIdE[$k]->pop());
+                }
+            }
+        }
+
+        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
+            ->where('type', '=', 'expert')->get();
+
+
+        return inertia('Session/Expert',
+            compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal','expertGroupUserModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
