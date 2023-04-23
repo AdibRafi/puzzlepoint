@@ -34,10 +34,12 @@ class GroupSeeder extends Seeder
             'classroom_id' => 1,
             'name' => 'topicTest',
             'date_time' => now(),
-            'no_of_modules' => 2,
+            'no_of_modules' => 4,
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
             'status' => 'onReady',
+            'expert_form_group' => 0,
+            'jigsaw_form_group' => 0,
         ]);
 
         Option::factory()->create([
@@ -48,7 +50,7 @@ class GroupSeeder extends Seeder
             'tm2' => '30'
         ]);
 
-        Module::factory(2)->create([
+        Module::factory(4)->create([
             'topic_id' => 1,
             'name' => 'moduleTest'
         ]);

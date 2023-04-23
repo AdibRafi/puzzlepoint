@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('max_time_expert');
             $table->integer('max_time_jigsaw');
             $table->string('status');
+            $table->boolean('expert_form_group');
+            $table->boolean('jigsaw_form_group');
             $table->timestamps();
         });
     }

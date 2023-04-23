@@ -29,7 +29,7 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date_time', 'no_of_modules', 'max_time_expert', 'max_time_jigsaw', 'status'];
+    protected $fillable = ['name', 'date_time', 'no_of_modules', 'max_time_expert', 'max_time_jigsaw', 'status', 'expert_form_group', 'jigsaw_form_group'];
 
 
     public function classroom(): BelongsTo
