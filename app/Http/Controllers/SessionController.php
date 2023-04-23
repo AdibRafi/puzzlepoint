@@ -133,7 +133,7 @@ class SessionController extends Controller
 
 
         //todo: find a way to get expert -> jigsaw group
-        return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal'));
+        return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal','studentAbsentModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
