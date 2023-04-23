@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('no_of_modules');
             $table->integer('max_time_expert');
             $table->integer('max_time_jigsaw');
+            $table->integer('transition_time');
             $table->string('status');
             $table->boolean('expert_form_group');
             $table->boolean('jigsaw_form_group');

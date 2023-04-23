@@ -37,12 +37,16 @@
                         <span class="label-text">Transition Time</span>
                     </label>
                     <!--todo: v-model the select button-->
-                    <select class="select select-bordered select-primary">
-                        <option disabled selected>Pick one</option>
-                        <option>2 Minutes</option>
-                        <option>3 Minutes</option>
-                        <option>4 Minutes</option>
-                        <option>5 Minutes</option>
+                    <select class="select select-bordered select-primary"
+                    v-model="form.transition_time">
+                        <option disabled selected>Select One</option>
+                        <option v-for="option in options" :key="options.value">
+                            {{option.name}}
+                        </option>
+<!--                        <option value="2">2 Minutes</option>-->
+<!--                        <option value="3">3 Minutes</option>-->
+<!--                        <option value="4">4 Minutes</option>-->
+<!--                        <option value="5">5 Minutes</option>-->
                     </select>
                 </div>
                 <InputForm label-name="Date" input-type="datetime-local"
@@ -58,6 +62,9 @@
                 </template>
             </Card>
         </form>
+        <Card title="DEVELOPER" class="my-4">
+            <p>{{form.transition_time}}</p>
+        </Card>
     </MainLayout>
 </template>
 
@@ -66,6 +73,13 @@ import InputForm from "@/Components/inputForm.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
+
+const options = [
+    {name:'2 minutes', value: 2},
+    {name:'3 minutes', value: 3},
+    {name:'4 minutes', value: 4},
+    {name:'5 minutes', value: 5},
+]
 
 const props = defineProps({
     classroom_id: Number,
@@ -76,6 +90,7 @@ const form = useForm({
     no_of_modules: "25",
     max_time_expert: '',
     max_time_jigsaw: '',
+    transition_time: 0,
     date_time: '',
     classroom_id: props.classroom_id,
 });

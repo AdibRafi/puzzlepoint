@@ -24,6 +24,7 @@ class TopicFactory extends Factory
             'no_of_modules' => $this->faker->numberBetween(2, 6),
             'max_time_expert' => $this->faker->numberBetween(1, 100),
             'max_time_jigsaw' => $this->faker->numberBetween(1, 100),
+            'transition_time' => $this->faker->numberBetween(2, 5),
             'status' => $this->faker->randomElement(['onModule', 'onOption', 'onVerify']),
             'expert_form_group' => $this->faker->boolean,
             'jigsaw_form_group' => $this->faker->boolean,

@@ -27,7 +27,7 @@ class TopicController extends Controller
     {
         //todo: kena encrypt
         $classroom_id = $request->input('classroom_id');
-        return inertia('Lecturer/CreateTopic/Topic', compact('classroom_id'));
+        return inertia('Topic/Create', compact('classroom_id'));
     }
 
     /**
