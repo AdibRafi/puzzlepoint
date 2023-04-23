@@ -53,8 +53,8 @@ class SessionController extends Controller
                 $modulesId = $modulesId->merge($modulesId);
             }
 
-            $splitUserIdJ = $studentAttendModal->split($totalGroup);
-            $splitUserIdE = clone $splitUserIdJ;
+            $splitUserIdE = $studentAttendModal->split($numOfModules);
+//            dd($splitUserIdE);
 
 //            if ($topicModuleModal->jigsaw_form_group === 0) {
 //                for ($i = 0; $i < $totalGroup; $i++) {
@@ -80,9 +80,8 @@ class SessionController extends Controller
                         $group->topic()->associate($topicModuleModal->id);
                         $group->module()->associate($modulesId[$j]);
                         $group->save();
-                        for ($k = 0; $k < count($splitUserIdE); $k++) {
-                            $group->users()->attach($splitUserIdE[$k]->pop());
-                        }
+
+                        $group->users()->attach($splitUserIdE->pop());
                     }
                 }
                 $topicModuleModal->update(['expert_form_group' => 1]);
@@ -106,13 +105,13 @@ class SessionController extends Controller
         $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
 
         $splitUser = $expertUserModal->split(count($expertGroupModal));
-//        dd(count($splitUser[0]));
+//        dd($splitUser[0]);
         $loopForSplitUser = count($splitUser[0]);
 
         //todo: deal with remainder
         if ($topicModuleModal->jigsaw_form_group === 0) {
             for ($j = 0; $j < $loopForSplitUser; $j++) {
-                if ($splitUser[0] !== null) {
+                if ($splitUser !== null) {
                     $group = new Group();
                     $group->name = 'jigsaw' . $j;
                     $group->type = 'jigsaw';
