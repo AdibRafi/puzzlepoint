@@ -96,6 +96,7 @@ Route::group(['prefix' => 'session'], function () {
     Route::get('lecturerJigsaw', [SessionController::class, 'lecturerJigsaw'])->name('lecturer.jigsaw');
     Route::get('start', [SessionController::class, 'index'])->name('session.index');
     Route::get('expert', [SessionController::class, 'expertSession'])->name('session.expert');
+    Route::get('jigsaw', [SessionController::class, 'jigsawSession'])->name('session.jigsaw');
 });
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');

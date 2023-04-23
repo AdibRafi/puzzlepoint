@@ -84,8 +84,25 @@ class SessionController extends Controller
             ->where('type', '=', 'expert')->get();
 
 
+
+
         return inertia('Session/Expert',
-            compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal','expertGroupUserModal'));
+            compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
+    }
+
+    public function jigsawSession(Request $request) //topic_id
+    {
+        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
+            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+
+        $expertGroupUserModal = Topic::find($request->input('topic_id'))->groups()->where('type','=','expert')->with('users')->get();
+
+        $jigsawGroup = collect();
+
+
+        //todo: find a way to get expert -> jigsaw group
+        dd($expertGroupUserModal->pluck('users')->flatten());
+        return inertia('Session/Jigsaw', compact('expertGroupUserModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
