@@ -56,21 +56,20 @@ class SessionController extends Controller
             $splitUserIdJ = $studentAttendModal->split($totalGroup);
             $splitUserIdE = clone $splitUserIdJ;
 
-
-            if ($topicModuleModal->jigsaw_form_group === 0) {
-                for ($i = 0; $i < $totalGroup; $i++) {
-                    if ($splitUserIdJ !== null) {
-                        $group = new Group();
-                        $group->name = 'jigsaw' . $i;
-                        $group->type = 'jigsaw';
-                        $group->topic()->associate($topicModuleModal->id);
-                        $group->save();
-
-                        $group->users()->attach($splitUserIdJ->pop());
-                    }
-                }
-                $topicModuleModal->update(['jigsaw_form_group' => 1]);
-            }
+//            if ($topicModuleModal->jigsaw_form_group === 0) {
+//                for ($i = 0; $i < $totalGroup; $i++) {
+//                    if ($splitUserIdJ !== null) {
+//                        $group = new Group();
+//                        $group->name = 'jigsaw' . $i;
+//                        $group->type = 'jigsaw';
+//                        $group->topic()->associate($topicModuleModal->id);
+//                        $group->save();
+//
+//                        $group->users()->attach($splitUserIdJ->pop());
+//                    }
+//                }
+//                $topicModuleModal->update(['jigsaw_form_group' => 1]);
+//            }
 
             if ($topicModuleModal->expert_form_group === 0) {
                 for ($j = 0; $j < $numOfModules; $j++) {
@@ -103,14 +102,38 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        $expertGroupUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get();
+        $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->get();
+        $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
 
-        $jigsawGroup = collect();
+        $splitUser = $expertUserModal->split(count($expertGroupModal));
+//        dd(count($splitUser[0]));
+        $loopForSplitUser = count($splitUser[0]);
+
+        //todo: deal with remainder
+        if ($topicModuleModal->jigsaw_form_group === 0) {
+            for ($j = 0; $j < $loopForSplitUser; $j++) {
+                if ($splitUser[0] !== null) {
+                    $group = new Group();
+                    $group->name = 'jigsaw' . $j;
+                    $group->type = 'jigsaw';
+                    $group->topic()->associate($topicModuleModal->id);
+                    $group->save();
+                    for ($k = 0; $k < count($splitUser); $k++) {
+                        $group->users()->attach($splitUser[$k]->pop());
+                    }
+                }
+                else{
+                    dd($splitUser[$j]);
+                }
+            }
+            $topicModuleModal->update(['jigsaw_form_group' => 1]);
+        }
+
+        $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
 
 
         //todo: find a way to get expert -> jigsaw group
-        dd($expertGroupUserModal->pluck('users')->flatten());
-        return inertia('Session/Jigsaw', compact('expertGroupUserModal'));
+        return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
