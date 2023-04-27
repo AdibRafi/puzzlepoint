@@ -54,7 +54,7 @@ class SessionController extends Controller
                 $modulesId = $modulesId->merge($modulesId);
             }
 
-            $splitUserIdE = $studentAttendModal->split($totalGroup);
+            $splitUserIdE = $studentAttendModal->split($numOfModules);
 //            dd($splitUserIdE);
 
 //            if ($topicModuleModal->jigsaw_form_group === 0) {
@@ -72,7 +72,7 @@ class SessionController extends Controller
 //                $topicModuleModal->update(['jigsaw_form_group' => 1]);
 //            }
 
-//            dd(count($splitUserIdE[0]));
+//            dd($splitUserIdE);
             if ($topicModuleModal->expert_form_group === 0) {
                 for ($j = 0; $j < $numOfModules; $j++) {
                     $group = new Group();
@@ -82,14 +82,15 @@ class SessionController extends Controller
                     $group->module()->associate($modulesId[$j]);
                     $group->save();
 
-                    for ($i = 0; $i < count($splitUserIdE); $i++) {
-                        if (count($splitUserIdE[$i]) === $numOfModules) {
-                            $group->users()->attach($splitUserIdE[$i]->pop());
-                        } else {
-                            $group->users()->attach($splitUserIdE[$i]->pop());
-                            $group->users()->attach($splitUserIdE[$i]->pop());
-                        }
-                    }
+                    $group->users()->attach($splitUserIdE->pop());
+//                    for ($i = 0; $i < count($splitUserIdE); $i++) {
+//                        if (count($splitUserIdE[$i]) === $numOfModules) {
+//                            $group->users()->attach($splitUserIdE[$i]->pop());
+//                        } else {
+//                            $group->users()->attach($splitUserIdE[$i]->pop());
+//                            $group->users()->attach($splitUserIdE[$i]->pop());
+//                        }
+//                    }
                 }
                 $topicModuleModal->update(['expert_form_group' => 1]);
             }
@@ -109,9 +110,20 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->get();
+        $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->with('users')->withCount('users')->get();
         $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
 
+        $remainderUser = collect();
+        $lessGroup = $expertGroupModal[0]->users_count;
+        for ($i = 0; $i < count($expertGroupModal); $i++) {
+            if ($expertGroupModal[$i]->users_count > $lessGroup) {
+                $user = $expertGroupModal[$i]->users()->get()->pop();
+                $remainderUser->push($user);
+                $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
+                    return $value->id == $user->id;
+                });
+            }
+        }
 
         $numOfModules = $topicModuleModal->no_of_modules;
         $modulesId = $topicModuleModal->modules->pluck('id');
@@ -123,8 +135,7 @@ class SessionController extends Controller
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
         }
-        $splitUser = $expertUserModal->split($totalGroup);
-//        dd($expertUserModal);
+        $splitUser = $expertUserModal->split($numOfModules);
 
         //todo: deal with remainder
         if ($topicModuleModal->jigsaw_form_group === 0) {
@@ -135,11 +146,12 @@ class SessionController extends Controller
                     $group->type = 'jigsaw';
                     $group->topic()->associate($topicModuleModal->id);
                     $group->save();
-                    for ($k = 0; $k < count($splitUser); $k++) {
+                    for ($k = 0; $k < $numOfModules; $k++) {
                         $group->users()->attach($splitUser[$k]->pop());
                     }
-                } else {
-                    dd($splitUser[$j]);
+                    if ($remainderUser !== null) {
+                        $group->users()->attach($remainderUser->pop());
+                    }
                 }
             }
             $topicModuleModal->update(['jigsaw_form_group' => 1]);
