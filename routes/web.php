@@ -99,6 +99,7 @@ Route::group(['prefix' => 'session'], function () {
     Route::get('jigsaw', [SessionController::class, 'lecturerJigsawSession'])->name('lecturer.session.jigsaw');
     Route::get('student/start', [SessionController::class, 'studentSessionIndex'])->name('student.session.index');
     Route::get('student/expert', [SessionController::class, 'studentExpertSession'])->name('student.session.expert');
+    Route::get('student/jigsaw', [SessionController::class, 'studentJigsawSession'])->name('student.session.jigsaw');
 });
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');

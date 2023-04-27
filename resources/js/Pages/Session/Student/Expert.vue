@@ -9,7 +9,7 @@
         </Card>
         <TimerDisplay
             :initiate-minute="props.topicModal.max_time_expert"
-            :initiate-transition-minute="props.topicModal.transition_time" />
+            :initiate-transition-minute="props.topicModal.transition_time"/>
         <Card title="Your Group Members">
             <p v-for="userData in props.groupUserModal.users" :key="userData">{{ userData.name }}</p>
         </Card>
@@ -24,8 +24,8 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import '../../../bootstrap'
-import {ref} from "vue";
 import TimerDisplay from "@/Components/TimerDisplay.vue";
+import {router} from "@inertiajs/vue3";
 
 const props = defineProps({
     topicModal: Object,
@@ -33,27 +33,11 @@ const props = defineProps({
     moduleModal: Object,
 })
 
-const minuteCounter = ref(props.topicModal.max_time_expert);
-const secondCounter = ref(0);
-const transitionMinuteCounter = ref(props.topicModal.transition_time);
-const transitionSecondCounter = ref(0);
-
-setInterval(() => {
-    if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
-        if (secondCounter.value > 0) {
-            secondCounter.value--;
-        } else {
-            secondCounter.value = 59;
-            minuteCounter.value--;
+window.Echo.channel('move-session-channel')
+    .listen('MoveSession', (e) => {
+        if (e.message === 'goJigsaw') {
+            router.get(route('student.session.jigsaw', {topic_id: props.topicModal.id }))
         }
-    } else {
-        if (transitionSecondCounter.value > 0) {
-            transitionSecondCounter.value--;
-        } else {
-            transitionSecondCounter.value = 59;
-            transitionMinuteCounter.value--;
-        }
-    }
-}, 1000)
+    })
 
 </script>

@@ -124,7 +124,7 @@ class SessionController extends Controller
             $modulesId = $modulesId->merge($modulesId);
         }
         $splitUser = $expertUserModal->split($totalGroup);
-        dd($expertUserModal);
+//        dd($expertUserModal);
 
         //todo: deal with remainder
         if ($topicModuleModal->jigsaw_form_group === 0) {
@@ -148,6 +148,7 @@ class SessionController extends Controller
         $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
 
 
+        broadcast(new MoveSession('goJigsaw'));
         //todo: find a way to get expert -> jigsaw group
         return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
@@ -194,7 +195,16 @@ class SessionController extends Controller
         $moduleModal = $groupUserModal->module()->first();
 
         return inertia('Session/Student/Expert',
-            compact('topicModal', 'groupUserModal','moduleModal'));
+            compact('topicModal', 'groupUserModal', 'moduleModal'));
+    }
+
+    public function studentJigsawSession(Request $request)
+    {
+        list($topicModal, $groupUserModal) =
+            $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
+
+        return inertia('Session/Student/Jigsaw',
+            compact('topicModal', 'groupUserModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
