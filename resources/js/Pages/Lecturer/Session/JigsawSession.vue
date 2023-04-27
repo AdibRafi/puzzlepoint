@@ -33,7 +33,7 @@
 <script setup>
 import {onMounted} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
-import TimerDisplay from "@/Components/timerDisplay.vue";
+import TimerDisplay from "@/Components/timerDisplayArchive.vue";
 import LecturerDisplayGroup from "@/Components/lecturerDisplayGroup.vue";
 
 const props = defineProps({

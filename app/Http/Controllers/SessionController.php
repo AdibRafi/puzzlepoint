@@ -152,6 +152,18 @@ class SessionController extends Controller
         return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
 
+    private function initiateStudentSessionModal($topic_id, $groupType)
+    {
+        $topicModal = Topic::find($topic_id);
+        $groupUserModal = Group::whereHas('users', function ($query) use ($topicModal) {
+            $query->where('user_id', Auth::id());
+            $query->where('topic_id', '=', $topicModal->id);
+        })->where('type', '=', $groupType)->with('users')->first();
+
+//        $userModal = Group::find($groupModal->id)->users()->get();
+        return [$topicModal, $groupUserModal];
+    }
+
     public function studentSessionIndex(Request $request) //topic_id
     {
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
@@ -176,20 +188,22 @@ class SessionController extends Controller
 
     public function studentExpertSession(Request $request) //topic_id
     {
-        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
-            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+        list($topicModal, $groupUserModal) =
+            $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
 
-        return inertia('Session/Student/Expert', compact('topicModuleModal'));
+        $moduleModal = $groupUserModal->module()->first();
+
+        return inertia('Session/Student/Expert',
+            compact('topicModal', 'groupUserModal','moduleModal'));
     }
 
     private function initiateModal($topic_id, $groupType)
     {
         $topicModal = Topic::find($topic_id);
-        $groupModal = Group::whereHas('users', function (Builder $query) use ($groupType, $topicModal) {
+        $groupModal = Group::whereHas('users', function ($query) use ($groupType, $topicModal) {
             $query->where('user_id', Auth::id());
-            $query->where('type', '=', $groupType);
             $query->where('topic_id', '=', $topicModal->id);
-        })->first();
+        })->where('type', '=', $groupType)->first();
         $userModal = Group::find($groupModal->id)->users()->get();
         return [$topicModal, $groupModal, $userModal];
 

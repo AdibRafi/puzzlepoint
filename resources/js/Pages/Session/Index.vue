@@ -4,7 +4,7 @@
             <!--            <p>{{ props.studentAbsentModal }}</p>-->
         </Card>
         <div v-if="$page.props.user.type ==='student'">
-            <Card title="You have enter a session" class="my-2">
+            <Card title="You have enter a session">
                 Please wait for your lecturer to start the session
                 <div class="divider">Topic</div>
                 <p>Title: {{ props.topicModuleModal.name }}</p>
@@ -16,7 +16,7 @@
             </Card>
         </div>
         <div v-if="$page.props.user.type === 'lecturer'">
-            <Card :title="props.topicModuleModal.name" class="my-4">
+            <Card :title="props.topicModuleModal.name">
                 <p>Module: </p>
                 <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">
                     {{ moduleData.name }}
@@ -25,12 +25,11 @@
                 <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>
                 <p>Total Student = {{ props.studentAttendModal.length + props.studentAbsentModal.length }}</p>
             </Card>
-            <Card :title="'Absent, '+props.studentAbsentModal.length+' students'" class="my-4">
+            <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">
                 <p v-for="userData in props.studentAbsentModal" :key="userData"
                    class="text-red-500">{{ userData.name }}</p>
             </Card>
-            <Card :title="'Present, '+props.studentAttendModal.length+' students'"
-                  class="my-4">
+            <Card :title="'Present, '+props.studentAttendModal.length+' students'">
                 <p v-for="userData in props.studentAttendModal" :key="userData">
                     {{ userData.name }}
                 </p>
@@ -72,7 +71,3 @@ window.Echo.channel('move-session-channel')
         console.log(e);
     });
 </script>
-
-<style scoped>
-
-</style>

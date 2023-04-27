@@ -4,21 +4,21 @@
         <Card title="DEVELOPER">
             <button class="btn btn-primary" @click="buttonTest">Reload</button>
         </Card>
-        <Card title="Expert Session" class="my-4">
+        <Card title="Expert Session">
             <p>{{ props.topicModuleModal.name }}</p>
         </Card>
-        <Card title="Timer" class="my-4">
+        <Card title="Timer">
             <p>Normal</p>
             <p class="justify-center flex text-2xl">{{ minuteCounter }}:{{ secondCounter }}</p>
             <p>Transition</p>
             <p class="justify-center flex text-2xl">{{ transitionMinuteCounter }}:{{ transitionSecondCounter }}</p>
         </Card>
-        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'" class="my-4">
+        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">
             <p v-for="userData in props.studentAbsentModal" :key="userData"
                class="text-red-500">{{ userData.name }}</p>
         </Card>
         <div v-for="groupData in props.expertGroupUserModal">
-            <Card :title="groupData.name" class="my-4">
+            <Card :title="groupData.name">
                 <div v-for="userData in groupData.users">
                     <p>{{ userData.name }}</p>
                 </div>

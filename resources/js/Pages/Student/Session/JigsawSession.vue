@@ -27,7 +27,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {onMounted, ref} from "vue";
-import TimerDisplay from "@/Components/timerDisplay.vue";
+import TimerDisplay from "@/Components/timerDisplayArchive.vue";
 
 const props = defineProps({
     topicModal: Object,
