@@ -1,5 +1,5 @@
 <template>
-    <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card w-96 bg-base-100 shadow-xl my-4">
         <div class="card-body">
             <h2 class="card-title">{{ props.title }}</h2>
             <slot/>
