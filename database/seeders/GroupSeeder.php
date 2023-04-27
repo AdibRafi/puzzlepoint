@@ -70,7 +70,7 @@ class GroupSeeder extends Seeder
             );
         });
 
-        User::factory(21)->create();
+        User::factory(20)->create();
 
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->syncWithoutDetaching(

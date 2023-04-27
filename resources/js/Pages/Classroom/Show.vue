@@ -43,7 +43,7 @@
                             </ul>
                         </div>
                         <div v-if="data.status === 'onReady'">
-                            <Link :href="route('session.index',{topic_id: data.id})" class="btn btn-primary">Start
+                            <Link :href="route('lecturer.session.index',{topic_id: data.id})" class="btn btn-primary">Start
                             </Link>
                         </div>
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">
@@ -51,7 +51,7 @@
                         </Link>
                     </div>
                     <div v-if="$page.props.user.type === 'student'">
-                        <Link :href="route('student.expert',{topic_id: data.id})" class="btn btn-secondary">student
+                        <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">student
                             start session
                         </Link>
                     </div>

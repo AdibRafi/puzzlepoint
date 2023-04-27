@@ -90,13 +90,15 @@ Route::patch('profile', [ProfileController::class, 'update'])->name('profile.upd
 Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::group(['prefix' => 'session'], function () {
-    Route::get('studentExpert', [SessionController::class, 'studentExpert'])->name('student.expert');
-    Route::get('studentJigsaw', [SessionController::class, 'studentJigsaw'])->name('student.jigsaw');
-    Route::get('lecturerExpert', [SessionController::class, 'lecturerExpert'])->name('lecturer.expert');
-    Route::get('lecturerJigsaw', [SessionController::class, 'lecturerJigsaw'])->name('lecturer.jigsaw');
-    Route::get('start', [SessionController::class, 'index'])->name('session.index');
-    Route::get('expert', [SessionController::class, 'expertSession'])->name('session.expert');
-    Route::get('jigsaw', [SessionController::class, 'jigsawSession'])->name('session.jigsaw');
+    Route::get('studentExpert', [SessionController::class, 'AstudentExpert'])->name('student.expert');
+    Route::get('studentJigsaw', [SessionController::class, 'AstudentJigsaw'])->name('student.jigsaw');
+    Route::get('lecturerExpert', [SessionController::class, 'AlecturerExpert'])->name('lecturer.expert');
+    Route::get('lecturerJigsaw', [SessionController::class, 'AlecturerJigsaw'])->name('lecturer.jigsaw');
+    Route::get('start', [SessionController::class, 'lecturerIndexSession'])->name('lecturer.session.index');
+    Route::get('expert', [SessionController::class, 'lecturerExpertSession'])->name('lecturer.session.expert');
+    Route::get('jigsaw', [SessionController::class, 'lecturerJigsawSession'])->name('lecturer.session.jigsaw');
+    Route::get('student/start', [SessionController::class, 'studentSessionIndex'])->name('student.session.index');
+    Route::get('student/expert', [SessionController::class, 'studentExpertSession'])->name('student.session.expert');
 });
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');

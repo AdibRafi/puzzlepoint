@@ -25,7 +25,7 @@
             </Card>
         </div>
         <Card>
-            <Link :href="route('session.jigsaw',
+            <Link :href="route('lecturer.session.jigsaw',
             {topic_id:props.topicModuleModal.id})"
                   class="btn btn-primary">
                 Next to Jigsaw
