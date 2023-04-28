@@ -94,6 +94,13 @@
                         <span>{{ $page.props.message.alertMessage }}</span>
                     </div>
                 </div>
+                <div v-if="$page.props.message.warningMessage"
+                     class="alert alert-warning w-96 shadow-lg mb-4">
+                    <div>
+                        <font-awesome-icon icon="fa-solid fa-circle-exclamation" />
+                        <span>{{ $page.props.message.warningMessage }}</span>
+                    </div>
+                </div>
                 <div class="mb-14">
                     <slot/>
                 </div>

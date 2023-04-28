@@ -54,6 +54,10 @@
                         <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">student
                             start session
                         </Link>
+                        <Link :href="route('student.assessment.index',{topic_id:data.id})"
+                              class="btn btn-accent">
+                            Student Assessment
+                        </Link>
                     </div>
                 </template>
             </Card>
