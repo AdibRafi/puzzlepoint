@@ -103,6 +103,7 @@ Route::group(['prefix' => 'session'], function () {
 });
 
 Route::get('student/assessment', [AssessmentController::class, 'studentIndex'])->name('student.assessment.index');
+Route::post('assessment-publish', [AssessmentController::class, 'publishAssessment'])->name('assessment.publish');
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
 Route::get('displayGroupM', [TestController::class, 'displayGroupModified'])->name('display.modifiedGroup');

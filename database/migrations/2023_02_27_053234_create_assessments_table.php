@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
+            $table->integer('time')->nullable();
+            $table->boolean('isPublish');
 //            $table->string('name');
 //            $table->string('mark')->nullable();
             $table->timestamps();

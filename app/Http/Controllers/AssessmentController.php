@@ -22,6 +22,7 @@ class AssessmentController extends Controller
         } else {
             $assessmentModal = new Assessment();
             $assessmentModal->topic()->associate($topicModal->id);
+            $assessmentModal->isPublish = 0;
             $assessmentModal->save();
             return inertia('Assessment/Index', compact('assessmentModal', 'topicModal'));
         }
@@ -88,5 +89,17 @@ class AssessmentController extends Controller
             return redirect()->route('classroom.show', $classroom->id)
                 ->with('warningMessage', "There is no assessment made");
         }
+    }
+    public function publishAssessment(Request $request) //topic_id, time
+    {
+//        dd($request->all());
+        $topic_id = $request->input('topic_id');
+        Topic::find($topic_id)->assessment()->update([
+            'isPublish' => 1,
+            'time' => $request->input('time'),
+        ]);
+
+        return redirect()->route('assessment.index', compact('topic_id'))
+            ->with('alertMessage', 'Question Publish Successfully');
     }
 }

@@ -33,12 +33,14 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
 
-        $assessment_id = $request->assessment_id;
+//        dd($request->input('answer.name'));
+//        dd($request->all());
+        $assessment_id = $request->input('assessment_id');
         //todo: validate request
         $question = new Question();
         $question->assessment()->associate($assessment_id);
-        $question->name = $request->question_name;
-        $question->type = $request->question_type;
+        $question->name = $request->input('name');
+        $question->type = $request->input('type');
         $question->save();
 
         //todo need to add right_answer
@@ -47,6 +49,11 @@ class QuestionController extends Controller
             $answer = new Answer();
             $answer->question()->associate($question->id);
             $answer->name = $ansInput[$i];
+            if ($request->input('answer.right_answer') === $i) {
+                $answer->right_answer = 1;
+            } else {
+                $answer->right_answer = 0;
+            }
             $answer->save();
         }
         return redirect()->route('question.create', compact('assessment_id'))
@@ -68,7 +75,7 @@ class QuestionController extends Controller
     {
         $assessment_id = $question->assessment()->pluck('id')->first();
         $questionAnswerModal = $question->with('answers')->first();
-        return inertia('Question/Edit',compact('assessment_id','questionAnswerModal'));
+        return inertia('Question/Edit', compact('assessment_id', 'questionAnswerModal'));
     }
 
     /**
@@ -95,7 +102,7 @@ class QuestionController extends Controller
         $assessment_id = $question->assessment()->first()->id;
         $topic_id = Assessment::find($assessment_id)->topic()->first()->id;
 
-        return redirect()->route('assessment.index',compact('topic_id'))
+        return redirect()->route('assessment.index', compact('topic_id'))
             ->with('alertMessage', 'Update Question Successfully');
     }
 
