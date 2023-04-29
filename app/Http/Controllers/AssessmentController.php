@@ -82,14 +82,23 @@ class AssessmentController extends Controller
         $topicModal = Topic::find($request->input('topic_id'));
         if ($topicModal->assessment()->exists()) {
             $assessmentModal = $topicModal->assessment()->first();
-            $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
-            return inertia('Assessment/Index', compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
+            return inertia('Assessment/Student/Index', compact('topicModal', 'assessmentModal'));
         } else {
             $classroom = $topicModal->classroom()->first();
             return redirect()->route('classroom.show', $classroom->id)
                 ->with('warningMessage', "There is no assessment made");
         }
     }
+
+    public function studentSession(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $assessmentModal = $topicModal->assessment()->first();
+        $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
+
+        return inertia('Assessment/Student/Session', compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
+    }
+
     public function publishAssessment(Request $request) //topic_id, time
     {
 //        dd($request->all());
