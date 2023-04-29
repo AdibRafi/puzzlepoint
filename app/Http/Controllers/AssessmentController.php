@@ -99,6 +99,11 @@ class AssessmentController extends Controller
         return inertia('Assessment/Student/Session', compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
     }
 
+    public function studentCheckAnswer(Request $request) //name, ansInput
+    {
+        dd($request->all());
+    }
+
     public function publishAssessment(Request $request) //topic_id, time
     {
 //        dd($request->all());

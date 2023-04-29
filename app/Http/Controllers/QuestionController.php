@@ -32,8 +32,12 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        $rightAns = $request->input('answer.right_answer');
+        if ($request->input('type') === 'check') {
+            $rightAns = array_keys($rightAns);
+        }
 
-//        dd($request->input('answer.name'));
+//        dd($request->input('answer.right_answer'));
 //        dd($request->all());
         $assessment_id = $request->input('assessment_id');
         //todo: validate request
@@ -49,10 +53,18 @@ class QuestionController extends Controller
             $answer = new Answer();
             $answer->question()->associate($question->id);
             $answer->name = $ansInput[$i];
-            if ($request->input('answer.right_answer') === $i) {
-                $answer->right_answer = 1;
-            } else {
-                $answer->right_answer = 0;
+            if ($question->type === 'radio') {
+                if ($rightAns === $i) {
+                    $answer->right_answer = 1;
+                } else {
+                    $answer->right_answer = 0;
+                }
+            } elseif ($question->type === 'check') {
+                if (in_array($i, $rightAns)) {
+                    $answer->right_answer = 1;
+                } else {
+                    $answer->right_answer = 0;
+                }
             }
             $answer->save();
         }
@@ -63,7 +75,8 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Question $question)
+    public
+    function show(Question $question)
     {
         //
     }
@@ -71,7 +84,8 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Question $question)
+    public
+    function edit(Question $question)
     {
         $assessment_id = $question->assessment()->pluck('id')->first();
         $questionAnswerModal = $question->with('answers')->first();
@@ -81,7 +95,8 @@ class QuestionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Question $question) //question_name, question_type, answers { name, right_answer}
+    public
+    function update(Request $request, Question $question) //question_name, question_type, answers { name, right_answer}
     {
         //todo: do validated using QuestionStoreRequest (need to create)
         $question->update([
@@ -109,7 +124,8 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Question $question)
+    public
+    function destroy(Question $question)
     {
         //
     }

@@ -75,7 +75,8 @@
                         <div v-else-if="form.type ==='check'">
                             <div v-for="ansItem in checkAnsNumber">
                                 <label class="label cursor-pointer">
-                                    <input type="checkbox" name="checkAns" class="mr-2 checkbox">
+                                    <input type="checkbox" name="checkAns" class="mr-2 checkbox"
+                                           v-model="form.answer.right_answer[ansItem]">
                                     <input type="text" placeholder="Type your answer here"
                                            class="input input-bordered input-sm w-full max-w-xs"
                                            v-model="form.answer.name[ansItem]">
@@ -94,19 +95,19 @@
                                         </span>
                             </div>
                         </div>
-                        <div v-else-if="form.question_type === 'input'">
-                            <InputForm label-name="Answer" input-placeholder="Type answer here"
-                                       v-model="form.answer.name[1]"/>
-                        </div>
-                        <div v-else>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text">Answer</span>
-                                </label>
-                                <textarea class="textarea textarea-bordered textarea-primary h-24 w-72"
-                                          placeholder="Type Here" v-model="form.answer.name[1]"/>
-                            </div>
-                        </div>
+                        <!--                        <div v-else-if="form.question_type === 'input'">-->
+                        <!--                            <InputForm label-name="Answer" input-placeholder="Type answer here"-->
+                        <!--                                       v-model="form.answer.name[1]"/>-->
+                        <!--                        </div>-->
+                        <!--                        <div v-else>-->
+                        <!--                            <div class="form-control">-->
+                        <!--                                <label class="label">-->
+                        <!--                                    <span class="label-text">Answer</span>-->
+                        <!--                                </label>-->
+                        <!--                                <textarea class="textarea textarea-bordered textarea-primary h-24 w-72"-->
+                        <!--                                          placeholder="Type Here" v-model="form.answer.name[1]"/>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                     </div>
                 </div>
                 <template #actions>
@@ -138,7 +139,7 @@ const form = useForm({
     type: 'radio',
     answer: {
         name: {},
-        right_answer: ''
+        right_answer: {}
     }
 })
 onUpdated(function () {
@@ -152,7 +153,7 @@ const resetAns = () => {
     radioAnsNumber.value = 1
     checkAnsNumber.value = 1
     form.answer.name = {}
-    form.answer.right_answer = ''
+    form.answer.right_answer = {}
 }
 
 </script>
