@@ -1,25 +1,35 @@
 <template>
     <MainLayout>
         <Card title="DEVELOPER">
-            <p>{{props.questionAnswerModal[0].answers}}</p>
+<!--            <p>{{props.questionAnswerModal[0].answers}}</p>-->
         </Card>
         <form @submit.prevent="form.post(route('student.assessment.check.answer'))">
             <Card :title="question.title"
                 v-for="(question, index) in questions" :key="index">
                 <div v-if="question.type === 'radio'">
                     <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
-                        <input type="radio" :id="`option_${optionIndex}`" :value="option" v-model="question.answer">
-                        <label :for="`option_${optionIndex}`">{{ option }}</label>
+                        <label class="cursor-pointer">
+                            <input type="radio" :id="`option_${optionIndex}`"
+                                   class="mr-2 radio" :value="option"
+                                   v-model="question.answer">
+                            <label :for="`option_${optionIndex}`">{{ option }}</label>
+                        </label>
                     </div>
                 </div>
                 <div v-else-if="question.type === 'check'">
                     <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
-                        <input type="checkbox" :id="`option_${optionIndex}`" :value="option" v-model="question.answers">
-                        <label :for="`option_${optionIndex}`">{{ option }}</label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" :id="`option_${optionIndex}`"
+                                   class="mr-2 checkbox" :value="option"
+                                   v-model="question.answers">
+                            <label :for="`option_${optionIndex}`">{{ option }}</label>
+                        </label>
                     </div>
                 </div>
             </Card>
-            <button type="submit" class="btn" :disabled="form.processing">Submit</button>
+            <Card>
+                <button type="submit" class="btn btn-primary" :disabled="form.processing">Submit</button>
+            </Card>
         </form>
     </MainLayout>
 </template>
@@ -66,8 +76,6 @@ for (let i = 0; i < props.questionAnswerModal.length; i++) {
     }
 }
 
-const form = useForm({
-    answers: questions,
-});
+const form = useForm(questions);
 
 </script>
