@@ -45,7 +45,7 @@ class OptionController extends Controller
 //            $modules->groups()->attach(1);
 //        });
 //        dd($topicModal->getUsers());
-        for ($i = 1; $i < count($topicModal->getUsers()) + 1; $i++) {
+        for ($i = 1; $i < count($topicModal->getStudents()) + 1; $i++) {
             $group = new Group();
         }
 

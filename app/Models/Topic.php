@@ -62,7 +62,7 @@ class Topic extends Model
         return $this->hasMany(Group::class);
     }
 
-    public function getUsers(): Collection
+    public function getStudents(): Collection
     {
         //todo: check if this right query
         return $this->classroom()->with(['users' => function ($query) {

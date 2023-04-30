@@ -79,8 +79,8 @@ class GroupSeeder extends Seeder
         });
 
         $topicModal = Topic::find(1);
-        $usersId = $topicModal->getUsers()->pluck('id');
-        for ($i = 0; $i < count(Topic::find(1)->getUsers()); $i++) {
+        $usersId = $topicModal->getStudents()->pluck('id');
+        for ($i = 0; $i < count(Topic::find(1)->getStudents()); $i++) {
             $attendance = new Attendance();
             $attendance->user()->associate($usersId[$i]);
             $attendance->topic()->associate($topicModal->id);

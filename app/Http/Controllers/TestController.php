@@ -31,7 +31,7 @@ class TestController extends Controller
         $modulesId = $topicModal->modules()->pluck('id');
         $numOfModules = $topicModal->no_of_modules;
         //distribution logic
-        $usersId = $topicModal->getUsers()->pluck('id')->shuffle();
+        $usersId = $topicModal->getStudents()->pluck('id')->shuffle();
 //        dd(count($usersId));
 //        dd($topicModal->id);
 //        dd($modulesId);
@@ -94,7 +94,7 @@ class TestController extends Controller
         }
         // FOR TESTING ATTENDANCE PURPOSE
 
-        for ($i = 0; $i < count(Topic::find(1)->getUsers()); $i++) {
+        for ($i = 0; $i < count(Topic::find(1)->getStudents()); $i++) {
             $attendance = new Attendance();
             $attendance->user()->associate($usersId[$i]);
             $attendance->topic()->associate($topicModal->id);
