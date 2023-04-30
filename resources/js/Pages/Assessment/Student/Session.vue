@@ -4,7 +4,7 @@
 <!--            <p>{{props.questionAnswerModal[0].answers}}</p>-->
         </Card>
         <form @submit.prevent="form.post(route('student.assessment.check.answer'))">
-            <Card :title="question.title"
+            <Card :title="question.name"
                 v-for="(question, index) in questions" :key="index">
                 <div v-if="question.type === 'radio'">
                     <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
@@ -40,7 +40,6 @@ import {useForm} from '@inertiajs/inertia-vue3';
 import Card from "@/Components/Card.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 
-const quizTitle = 'My Awesome Quiz';
 
 const props = defineProps({
     topicModal: Object,
@@ -52,15 +51,13 @@ const questions = reactive([]);
 
 for (let i = 0; i < props.questionAnswerModal.length; i++) {
     const ans = ref([]);
-    const rightAns = ref([]);
     for (let j = 0; j < props.questionAnswerModal[i].answers.length; j++) {
         ans.value.push(props.questionAnswerModal[i].answers[j].name)
-        console.log(props.questionAnswerModal[i].answers[j].name)
     }
     if (props.questionAnswerModal[i].type === 'radio') {
         questions.push({
             id: props.questionAnswerModal[i].id,
-            title: props.questionAnswerModal[i].name,
+            name: props.questionAnswerModal[i].name,
             type: props.questionAnswerModal[i].type,
             options: ans,
             answer: ''
@@ -68,7 +65,7 @@ for (let i = 0; i < props.questionAnswerModal.length; i++) {
     } else {
         questions.push({
             id: props.questionAnswerModal[i].id,
-            title: props.questionAnswerModal[i].name,
+            name: props.questionAnswerModal[i].name,
             type: props.questionAnswerModal[i].type,
             options: ans,
             answers: []

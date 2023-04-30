@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assessment;
 use App\Models\Question;
 use App\Models\Topic;
+use Auth;
 use Illuminate\Http\Request;
 
 class AssessmentController extends Controller
@@ -99,9 +100,43 @@ class AssessmentController extends Controller
         return inertia('Assessment/Student/Session', compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
     }
 
-    public function studentCheckAnswer(Request $request) //name, ansInput
+    public function studentCheckAnswer(Request $request) //topic_id, name, type, options, answer
     {
-        dd($request->all());
+        $ansInput = collect($request->all());
+//        dd(Question::find(4)->answers()->where('right_answer', '=', '1')->pluck('right_answer')->first());
+        $score = 0;
+        for ($i = 0; $i < count($request->all()); $i++) {
+            $questionModal = Question::find($ansInput->pluck('id')[$i]);
+            if ($ansInput->pluck('type')[$i] === 'radio') {
+                if ($ansInput->pluck('answer')[$i] === $questionModal->answers()->where('right_answer', '=', '1')->pluck('name')->first()) {
+                    $score++;
+                }
+            } elseif ($ansInput->pluck('type')[$i] === 'check') {
+                $a = $ansInput->pluck('answers')[$i];
+                $b = $questionModal->answers()->where('right_answer', '=', '1')->pluck('name')->toArray();
+                if (count($a) === count($b)) {
+                    if ($a === $b) {
+                        $score++;
+                    }
+                }
+
+                if ($ansInput->pluck('answers')[$i] === $questionModal->answers()->where('right_answer', '=', '1')->pluck('name')->collect()) {
+
+                    $score++;
+                }
+            }
+        }
+
+        $assessmentId = Question::find($ansInput->pluck('id')[0])->assessment()->first()->pluck('id');
+        $assessmentModal = Assessment::find($assessmentId)->first();
+
+        $assessmentModal->users()->updateExistingPivot(Auth::id(), ['marks' => $score]);
+//        dd(Auth::user());
+//        Assessment::find(1)->users()->attach(2);
+        $topicId = $assessmentModal->topic()->first()->id;
+//        dd($topicId);
+        return redirect()->route('student.assessment.index',['topic_id' => $topicId])
+            ->with('alertMessage', 'You got ' . $score . ' scores');
     }
 
     public function publishAssessment(Request $request) //topic_id, time
