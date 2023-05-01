@@ -1,4 +1,5 @@
 <template>
+    <Head title="Session"/>
     <MainLayout>
         <Card title="DEVELOPER">
             <p></p>
@@ -10,15 +11,26 @@
 </template>
 
 <script setup>
-import {Head, Link} from "@inertiajs/vue3";
-import {defineComponent} from "vue";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-
+import '../../../bootstrap'
 
 const props = defineProps({
     topicModuleModal: Object,
 })
+
+console.log('test');
+window.Echo.channel('move-session-channel')
+    .listen('MoveSession', (e) => {
+        if (e.message === 'goExpert') {
+            router.get(route('student.session.expert', {topic_id: props.topicModuleModal.id}))
+        } else if (e.message === 'goJigsaw') {
+            router.get(route('student.session.jigsaw', {topic_id: props.topicModuleModal.id}))
+        }
+        console.log(e + 'test');
+    });
+
 </script>
 
 <style scoped>

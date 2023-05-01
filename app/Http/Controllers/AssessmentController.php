@@ -78,7 +78,7 @@ class AssessmentController extends Controller
         //
     }
 
-    public function studentIndex(Request $request) //topic_id
+    public function studentAssessmentIndex(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
         if ($topicModal->assessment()->exists()) {
@@ -91,7 +91,7 @@ class AssessmentController extends Controller
         }
     }
 
-    public function studentSession(Request $request) //topic_id
+    public function studentSessionIndex(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
         $assessmentModal = $topicModal->assessment()->first();

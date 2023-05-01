@@ -37,8 +37,15 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {Head, Link, router} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
+import '../../bootstrap'
+
+//todo: everytime got attendance, -> update database -> (student) get time from database and start from there
+window.Echo.channel('student-attendance-channel')
+    .listen('StudentAttendance', (e) => {
+        router.reload();
+    })
 
 const props = defineProps({
     topicModuleModal: Object,
@@ -54,8 +61,9 @@ const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
 
 const buttonTest = () => {
-    console.log('nice');
     router.reload();
+    // router.get(route('session.move.expert', {topic_id: props.topicModuleModal.id,
+    //     user: usePage().props.user.name}));
 }
 
 setInterval(() => {

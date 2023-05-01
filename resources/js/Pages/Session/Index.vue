@@ -56,18 +56,20 @@ const props = defineProps({
     studentAbsentModal: Object,
 })
 
+console.log('test2');
 
 window.Echo.channel('student-attendance-channel')
     .listen('StudentAttendance', (e) => {
-        console.log(e);
         router.reload();
     })
+
 
 window.Echo.channel('move-session-channel')
     .listen('MoveSession', (e) => {
         if (usePage().props.user.type === 'student' && e.message === 'goExpert') {
             router.get(route('student.session.expert', {topic_id: props.topicModuleModal.id}))
+        } else if (usePage().props.user.type === 'student' && e.message === 'goJigsaw') {
+            router.get(route('student.session.jigsaw', {topic_id: props.topicModuleModal.id}))
         }
-        console.log(e);
     });
 </script>

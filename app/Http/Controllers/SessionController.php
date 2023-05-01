@@ -177,13 +177,11 @@ class SessionController extends Controller
         return [$topicModal, $groupUserModal];
     }
 
-    public function studentSessionIndex(Request $request) //topic_id
+    private function changeAttendance($topic_id)
     {
-        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
-            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+        $topicModal = Topic::find($topic_id);
 
-        //Attendance
-        $a = Topic::find($request->input('topic_id'))->attendances()->get();
+        $a = $topicModal->attendances()->get();
         $b = Auth::user()->attendances()->get();
         $c = collect();
         $c = $c->merge($a)->merge($b)->duplicates()->values();
@@ -193,30 +191,73 @@ class SessionController extends Controller
                 'attend_status' => 'present'
             ]);
         }
+        broadcast(new StudentAttendance(Auth::user()->name . ' is present'));
+    }
 
-        broadcast(new StudentAttendance('done tukar'));
+    public function studentSessionIndex(Request $request) //topic_id
+    {
+        list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
+            $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
+        broadcast(new StudentAttendance('reload'));
         return inertia('Session/Index', compact('topicModuleModal'));
     }
 
     public function studentExpertSession(Request $request) //topic_id
     {
-        list($topicModal, $groupUserModal) =
-            $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
 
+        $attendance = Auth::user()->attendances()->where('topic_id', '=', $request->input('topic_id'))->where('attend_status', '=', 'absent')->exists();
+
+        $topicModal = Topic::find($request->input('topic_id'));
+        if ($attendance) {
+            $this->changeAttendance($topicModal->id);
+            list($topicModal, $groupUserModal) =
+                $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
+            $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
+
+
+//        $this->moveExpert($topicModal->id, Auth::id());
+
+        } else {
+            list($topicModal, $groupUserModal) =
+                $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
+        }
         $moduleModal = $groupUserModal->module()->first();
-
         return inertia('Session/Student/Expert',
             compact('topicModal', 'groupUserModal', 'moduleModal'));
+
     }
 
     public function studentJigsawSession(Request $request)
     {
-        list($topicModal, $groupUserModal) =
-            $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
+        $attendance = Auth::user()->attendances()->where('topic_id', '=', $request->input('topic_id'))->where('attend_status', '=', 'absent')->exists();
 
+        $topicModal = Topic::find($request->input('topic_id'));
+//        dd($attendance);
+        if ($attendance) {
+            $this->changeAttendance($topicModal->id);
+            list($topicModal, $groupUserModal) =
+                $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
+            $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
+
+
+//        $this->moveExpert($topicModal->id, Auth::id());
+
+        } else {
+            list($topicModal, $groupUserModal) =
+                $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
+        }
         return inertia('Session/Student/Jigsaw',
             compact('topicModal', 'groupUserModal'));
+    }
+
+    private function modifiedGroup($topic_id, $groupType, $userId)
+    {
+        $groupModalCount = Topic::find($topic_id)->groups()->where('type', '=', $groupType)->with('users')->withCount('users')->get();
+
+        $minUser = $groupModalCount->min('users_count');
+        $group = $groupModalCount->where('users_count', '=', $minUser)->first();
+        $group->users()->attach($userId);
     }
 
     private function initiateModal($topic_id, $groupType)
@@ -281,7 +322,6 @@ class SessionController extends Controller
         }
 //        dd('nice');
 
-        broadcast(new StudentAttendance('done tukar'));
     }
 
 //    public function fetchExpertAbsentStudent(Request $request) //topic_id

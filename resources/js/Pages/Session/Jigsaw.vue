@@ -31,6 +31,12 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import {ref} from "vue";
 import {router} from "@inertiajs/vue3";
+import '../../bootstrap'
+
+window.Echo.channel('student-attendance-channel')
+    .listen('StudentAttendance', (e) => {
+        router.reload();
+    })
 
 const props = defineProps({
     topicModuleModal: Object,
