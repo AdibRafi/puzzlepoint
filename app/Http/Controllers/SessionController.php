@@ -102,7 +102,7 @@ class SessionController extends Controller
 
         broadcast(new MoveSession('goExpert'));
 
-        return inertia('Session/Expert',
+        return inertia('Session/Lecturer/Expert',
             compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
     }
 
@@ -162,7 +162,7 @@ class SessionController extends Controller
 
 
         broadcast(new MoveSession('goJigsaw'));
-        return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
+        return inertia('Session/Lecturer/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
 
     private function initiateStudentSessionModal($topic_id, $groupType)
@@ -265,6 +265,17 @@ class SessionController extends Controller
 
         TimeSession::dispatch($minuteCounter, $secondCounter,
             $transitionMinuteCounter, $transitionSecondCounter);
+    }
+
+    public function lecturerEndSession(Request $request) //topic_id
+    {
+        $topicModal = Topic::find($request->input('topic_id'));
+
+    }
+
+    public function studentEndSession(Request $request) //topic_id
+    {
+
     }
 
     private function initiateModal($topic_id, $groupType)
