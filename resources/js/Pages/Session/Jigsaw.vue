@@ -23,20 +23,18 @@
                 </div>
             </Card>
         </div>
+        <Card>
+            <button class="btn btn-primary">End Session</button>
+        </Card>
     </MainLayout>
 </template>
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {router} from "@inertiajs/vue3";
 import '../../bootstrap'
-
-window.Echo.channel('student-attendance-channel')
-    .listen('StudentAttendance', (e) => {
-        router.reload();
-    })
 
 const props = defineProps({
     topicModuleModal: Object,
@@ -48,12 +46,33 @@ const minuteCounter = ref(props.topicModuleModal.max_time_jigsaw);
 const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
+const postTime = () => {
+    router.post(route('update.time', {
+        minuteCounter: minuteCounter.value,
+        secondCounter: secondCounter.value,
+        transitionMinuteCounter: transitionMinuteCounter.value,
+        transitionSecondCounter: transitionSecondCounter.value
+    }))
+}
 
 const buttonTest = () => {
     console.log('nice');
     router.reload();
+    postTime()
 }
 
+window.Echo.channel('student-attendance-channel')
+    .listen('StudentAttendance', (e) => {
+        console.log(e);
+        router.reload();
+        setTimeout(postTime, 5000)
+    })
+
+
+onMounted(() => {
+    console.log('mounted')
+    setTimeout(postTime, 3000)
+})
 setInterval(() => {
     if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
         if (secondCounter.value > 0) {
@@ -72,6 +91,7 @@ setInterval(() => {
     }
 }, 1000)
 </script>
+
 
 <style scoped>
 

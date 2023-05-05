@@ -162,7 +162,6 @@ class SessionController extends Controller
 
 
         broadcast(new MoveSession('goJigsaw'));
-        //todo: find a way to get expert -> jigsaw group
         return inertia('Session/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
 
@@ -200,7 +199,7 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        broadcast(new StudentAttendance('reload'));
+//        broadcast(new StudentAttendance('reload'));
         return inertia('Session/Index', compact('topicModuleModal'));
     }
 
@@ -215,9 +214,6 @@ class SessionController extends Controller
             list($topicModal, $groupUserModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
             $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
-
-
-//        $this->moveExpert($topicModal->id, Auth::id());
 
         } else {
             list($topicModal, $groupUserModal) =
@@ -234,7 +230,6 @@ class SessionController extends Controller
         $attendance = Auth::user()->attendances()->where('topic_id', '=', $request->input('topic_id'))->where('attend_status', '=', 'absent')->exists();
 
         $topicModal = Topic::find($request->input('topic_id'));
-//        dd($attendance);
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
             list($topicModal, $groupUserModal) =
@@ -242,7 +237,6 @@ class SessionController extends Controller
             $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
 
 
-//        $this->moveExpert($topicModal->id, Auth::id());
 
         } else {
             list($topicModal, $groupUserModal) =

@@ -35,15 +35,9 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import '../../bootstrap'
 import TimerDisplay from "@/Components/TimerDisplay.vue";
-
-//todo: everytime got attendance, -> update database -> (student) get time from database and start from there
-window.Echo.channel('student-attendance-channel')
-    .listen('StudentAttendance', (e) => {
-        router.reload();
-    })
 
 const props = defineProps({
     topicModuleModal: Object,
@@ -54,10 +48,10 @@ const props = defineProps({
 })
 
 const minuteCounter = ref(props.topicModuleModal.max_time_expert);
+
 const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
-
 const postTime = () => {
     router.post(route('update.time', {
         minuteCounter: minuteCounter.value,
@@ -66,11 +60,21 @@ const postTime = () => {
         transitionSecondCounter: transitionSecondCounter.value
     }))
 }
+window.Echo.channel('student-attendance-channel')
+    .listen('StudentAttendance', (e) => {
+        router.reload();
+        setTimeout(postTime, 5000);
+    })
 
 const buttonTest = () => {
     router.reload();
-    setTimeout(postTime, 2000);
+    // setTimeout(postTime, 2000);
 }
+
+onMounted(() => {
+    console.log('mounted')
+    setTimeout(postTime, 3000)
+})
 
 setInterval(() => {
     if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
