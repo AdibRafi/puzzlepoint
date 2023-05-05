@@ -7,12 +7,9 @@
         <Card title="Expert Session">
             <p>{{ props.topicModuleModal.name }}</p>
         </Card>
-        <Card title="Timer">
-            <p>Normal</p>
-            <p class="justify-center flex text-2xl">{{ minuteCounter }}:{{ secondCounter }}</p>
-            <p>Transition</p>
-            <p class="justify-center flex text-2xl">{{ transitionMinuteCounter }}:{{ transitionSecondCounter }}</p>
-        </Card>
+        <TimerDisplay :initiate-minute="minuteCounter" :initiate-second="secondCounter"
+                      :initiate-transition-minute="transitionMinuteCounter"
+                      :initiate-transition-second="transitionSecondCounter"/>
         <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">
             <p v-for="userData in props.studentAbsentModal" :key="userData"
                class="text-red-500">{{ userData.name }}</p>
@@ -40,6 +37,7 @@ import Card from "@/Components/Card.vue";
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
 import '../../bootstrap'
+import TimerDisplay from "@/Components/TimerDisplay.vue";
 
 //todo: everytime got attendance, -> update database -> (student) get time from database and start from there
 window.Echo.channel('student-attendance-channel')
@@ -60,10 +58,18 @@ const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
 
+const postTime = () => {
+    router.post(route('update.time', {
+        minuteCounter: minuteCounter.value,
+        secondCounter: secondCounter.value,
+        transitionMinuteCounter: transitionMinuteCounter.value,
+        transitionSecondCounter: transitionSecondCounter.value
+    }))
+}
+
 const buttonTest = () => {
     router.reload();
-    // router.get(route('session.move.expert', {topic_id: props.topicModuleModal.id,
-    //     user: usePage().props.user.name}));
+    setTimeout(postTime, 2000);
 }
 
 setInterval(() => {

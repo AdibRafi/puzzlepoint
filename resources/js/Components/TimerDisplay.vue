@@ -15,15 +15,17 @@ import {ref} from "vue";
 const props = defineProps({
     initiateMinute: Number,
     initiateTransitionMinute:Number,
+    initiateSecond: Number,
+    initiateTransitionSecond: Number,
 })
 
 const minuteCounter = ref(props.initiateMinute);
-const secondCounter = ref(0);
+const secondCounter = ref(props.initiateSecond);
 const transitionMinuteCounter = ref(props.initiateTransitionMinute);
-const transitionSecondCounter = ref(0);
+const transitionSecondCounter = ref(props.initiateTransitionSecond);
 
 setInterval(() => {
-    if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
+    if (transitionMinuteCounter.value <= 0 && transitionSecondCounter.value <= 0) {
         if (secondCounter.value > 0) {
             secondCounter.value--;
         } else {

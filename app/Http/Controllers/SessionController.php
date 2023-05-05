@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\MoveSession;
 use App\Events\StudentAttendance;
+use App\Events\TimeSession;
 use App\Models\Attendance;
 use App\Models\Group;
 use App\Models\Topic;
@@ -258,6 +259,18 @@ class SessionController extends Controller
         $minUser = $groupModalCount->min('users_count');
         $group = $groupModalCount->where('users_count', '=', $minUser)->first();
         $group->users()->attach($userId);
+    }
+
+    public function updateTime(Request $request) //time related
+    {
+//        dd($request->all());
+        $minuteCounter = $request->input('minuteCounter');
+        $secondCounter = $request->input('secondCounter');
+        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
+        $transitionSecondCounter = $request->input('transitionSecondCounter');
+
+        TimeSession::dispatch($minuteCounter, $secondCounter,
+            $transitionMinuteCounter, $transitionSecondCounter);
     }
 
     private function initiateModal($topic_id, $groupType)

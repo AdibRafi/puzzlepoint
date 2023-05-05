@@ -100,6 +100,7 @@ Route::group(['prefix' => 'session'], function () {
     Route::get('student/start', [SessionController::class, 'studentSessionIndex'])->name('student.session.index');
     Route::get('student/expert', [SessionController::class, 'studentExpertSession'])->name('student.session.expert');
     Route::get('student/jigsaw', [SessionController::class, 'studentJigsawSession'])->name('student.session.jigsaw');
+    Route::post('update-time', [SessionController::class, 'updateTime'])->name('update.time');
 });
 
 Route::get('assessment-student-index', [AssessmentController::class, 'studentAssessmentIndex'])->name('student.assessment.index');
