@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreModuleRequest;
 use App\Models\Module;
 use App\Models\Topic;
 use Illuminate\Http\Request;
-use function Sodium\add;
 
 class ModuleController extends Controller
 {
@@ -31,24 +31,30 @@ class ModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) //topic_id, modules
     {
-        $nameInput = $request->input('name');
-        $topic_id = $request->topic_id;
-        $no_of_modules = $request->no_of_modules;
-        $learningObjectivesInput = $request->input('learning_objectives');
+        $topic_id = $request->input('topic_id');
+        $modulesInput = $request->input('modules');
+//        dd($modulesInput);
+        $files = $request->file('modules.0.file_path');
+//        $file = $files['modules'][0];
 
+        $files->move('modules', $files->getClientOriginalName());
+        $extension = $files->getClientOriginalExtension();
+        dd($extension);
+
+//        dd($modulesInput[0]['name']);
 //        dd($learningObjectivesInput);
 
-        for ($i = 1; $i < $no_of_modules + 1; $i++) {
+        for ($i = 0; $i < count($modulesInput) ; $i++) {
             $module = new Module();
             $module->topic()->associate($topic_id);
-            $module->name = $nameInput[$i];
-            $module->learning_objectives = $learningObjectivesInput[$i];
+            $module->name = $modulesInput[$i]['name'];
+            $module->learning_objectives = $modulesInput[$i]['learning_objectives'];
+            $module->file_path = $modulesInput[$i]['file_path'];
             $module->save();
         }
-        Topic::find($request->topic_id)->update(['status' => 'onOption']);
-
+        Topic::find($topic_id)->update(['status' => 'onOption']);
 
         return redirect()->route('option.create', compact('topic_id'));
 //        dd($module[1]);
