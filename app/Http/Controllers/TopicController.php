@@ -33,19 +33,21 @@ class TopicController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTopicRequest $request)
+    public function store(StoreTopicRequest $request) //topicData, classroomData
     {
-        //todo:check validate
-//        $request->validated();
         $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
 
-        //todo: fix why no_of_modules is not correct for 2 n 6
         $classroom = Classroom::find($request->classroom_id);
         $topic = new Topic();
         $topic->name = $request->name;
         $topic->no_of_modules = ($request->no_of_modules / 25) + 2;
         $topic->max_time_expert = $request->max_time_expert;
         $topic->max_time_jigsaw = $request->max_time_jigsaw;
+        $topic->transition_time = $request->transition_time;
+        $topic->is_expert_form = 0;
+        $topic->is_jigsaw_form = 0;
+        $topic->is_ready = 0;
+        $topic->is_complete = 0;
         $topic->date_time = $startedAt;
         $topic->status = 'onModule';
         $topic->classroom()->associate($classroom);
@@ -54,6 +56,7 @@ class TopicController extends Controller
         $topic->save();
 
         $t = new Assessment();
+        $t->isPublish = 0;
         $t->topic()->associate($topic->id);
         $t->save();
 
@@ -61,8 +64,9 @@ class TopicController extends Controller
             'id' => $topic->id,
             'no_of_modules' => $topic->no_of_modules
         ];
+        $topic_id = $topic->id;
 
-        return redirect()->route('module.create', $topicData);
+        return redirect()->route('module.create',compact('topic_id') );
     }
 
     /**
@@ -107,5 +111,24 @@ class TopicController extends Controller
     {
         $classroom = Classroom::find($request->input('topic_id'));
         return redirect()->route('classroom.show', $classroom)->with('alertMessage', 'topic successfully created');
+    }
+
+    public function create2(Request $request) //classroom_id
+    {
+        $classroom_id = $request->input('classroom_id');
+        return inertia('Topic/Create2', compact('classroom_id'));
+    }
+
+    public function store2(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'date_time' => 'required',
+            'no_of_modules' => 'required|numeric|min:0|not_in:0',
+            'max_time_expert' => 'required|numeric|min:0|not_in:0',
+            'max_time_jigsaw' => 'required|numeric|min:0|not_in:0',
+            'transition_time' => 'required|numeric|min:0|not_in:0',
+        ]);
+        dd($request->all());
     }
 }

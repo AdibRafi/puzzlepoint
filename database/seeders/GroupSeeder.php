@@ -38,8 +38,10 @@ class GroupSeeder extends Seeder
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
             'status' => 'onReady',
-            'expert_form_group' => 0,
-            'jigsaw_form_group' => 0,
+            'is_expert_form' => 0,
+            'is_jigsaw_form' => 0,
+            'is_ready' => 0,
+            'is_complete' => 0,
         ]);
 
         Option::factory()->create([

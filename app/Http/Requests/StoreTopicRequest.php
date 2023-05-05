@@ -21,17 +21,13 @@ class StoreTopicRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        //todo: Validation rule digits requires at least 1 parameters.
         return [
             'name' => 'required',
-            'no_of_modules' => 'required|digits_between:2,6',
-            'max_time_expert' => 'required|digits_between:0,100',
-            'max_time_jigsaw' => 'required|digits_between:0,100',
-            //todo: validation for date_time
-//            'date_time' => 'required|date',
-
-
+            'no_of_modules' => 'required|numeric|between:2,6',
+            'max_time_expert' => 'required||numeric|between:1,100',
+            'max_time_jigsaw' => 'required|numeric|between:1,100',
+            'date_time' => 'required',
+            'transition_time' => 'required|numeric|between:1,5'
         ];
     }
 }

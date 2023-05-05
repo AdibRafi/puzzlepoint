@@ -1,13 +1,12 @@
 <template>
     <MainLayout>
         <Card title="DEVELOPER">
-            {{ errors }}
-            {{ form.classroom_id }}
+            {{errors}}
         </Card>
         <div v-if="errors" v-for="error in errors" class="alert alert-error w-96 shadow-lg mb-4">
             <div>
-                <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
-                <p>{{ error.valueOf() }}</p>
+                <font-awesome-icon icon="fa-solid fa-xmark" bounce />
+                <p>{{error.valueOf()}}</p>
             </div>
         </div>
         <ul class="steps w-96">
@@ -15,7 +14,7 @@
             <li class="step">Modules</li>
             <li class="step">Options</li>
         </ul>
-        <form @submit.prevent="form.post(route('topic.store'))">
+        <form @submit.prevent="form.post(route('topic.store2'))">
             <Card title="Add Topic">
                 <InputForm label-name="Topic Name" input-type="text"
                            v-model="form.name"/>
@@ -57,12 +56,10 @@ import {useForm} from "@inertiajs/inertia-vue3";
 import InputForm from "@/Components/inputForm.vue";
 
 const props = defineProps({
-    classroom_id: Object,
     errors: Object,
 })
 
 const form = useForm({
-    classroom_id: props.classroom_id,
     name: '',
     date_time: '',
     no_of_modules: '',

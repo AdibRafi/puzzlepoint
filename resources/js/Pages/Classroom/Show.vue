@@ -10,9 +10,14 @@
                 <Link :href="route('classroom.edit',props.classroom.id)" class="btn btn-accent">Edit Class</Link>
             </template>
         </Card>
-        <div v-if="$page.props.user.type === 'lecturer'" class="card w-96 bg-base-100 shadow-xl my-4">
+        <div v-if="$page.props.user.type === 'lecturer'">
             <Card :title="'You have '+props.topicModal.length + ' topic'">
                 <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
+                    Add Topic
+                </Link>
+            </Card>
+            <Card :title="'You have '+props.topicModal.length + ' topic'">
+                <Link :href="route('topic.create2',{classroom_id:props.classroom.id})" class="btn btn-secondary">
                     Add Topic
                 </Link>
             </Card>

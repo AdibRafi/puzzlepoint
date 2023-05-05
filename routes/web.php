@@ -66,7 +66,8 @@ Route::resource('assessment', AssessmentController::class);
 Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
 
-
+Route::get('topic-create2', [TopicController::class, 'create2'])->name('topic.create2');
+Route::post('topic-create2', [TopicController::class, 'store2'])->name('topic.store2');
 //Route::get('/pusher', [SessionController::class,'fetchExpertPusher'])->name('fetch.expert');
 Route::post('/pusher', [SessionController::class, 'sendExpertPusher'])->name('send.expert');
 

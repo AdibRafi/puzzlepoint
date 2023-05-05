@@ -26,8 +26,10 @@ class TopicFactory extends Factory
             'max_time_jigsaw' => $this->faker->numberBetween(1, 100),
             'transition_time' => $this->faker->numberBetween(2, 5),
             'status' => $this->faker->randomElement(['onModule', 'onOption', 'onVerify']),
-            'expert_form_group' => $this->faker->boolean,
-            'jigsaw_form_group' => $this->faker->boolean,
+            'is_expert_form' => $this->faker->boolean,
+            'is_jigsaw_form' => $this->faker->boolean,
+            'is_ready' => $this->faker->boolean,
+            'is_complete' => $this->faker->boolean,
         ];
     }
 }

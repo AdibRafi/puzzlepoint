@@ -29,7 +29,8 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date_time', 'no_of_modules', 'max_time_expert', 'max_time_jigsaw','transition_time', 'status', 'expert_form_group', 'jigsaw_form_group'];
+//    protected $fillable = ['name', 'date_time', 'no_of_modules', 'max_time_expert', 'max_time_jigsaw','transition_time', 'status', 'expert_form_group', 'jigsaw_form_group'];
+    protected $guarded = [];
 
 
     public function classroom(): BelongsTo

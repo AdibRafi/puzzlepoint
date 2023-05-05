@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Add Topic</button>
+                        <button class="btn btn-primary">Add Topic test</button>
                     </div>
                 </div>
             </div>
