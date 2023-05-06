@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Option;
@@ -35,41 +36,39 @@ class OptionController extends Controller
      */
     public function store(Request $request) //topic_id / groupMethod / timeMethod / tm{}
     {
-        dd($request);
-        $topicModal = Topic::find($request->topic_id);
-        $groupDistribution = $request->groupMethod;
-        //todo: create group modal first then distribute users
-        $groupModal = $topicModal->modules();
-        //todo: group distribution here
-//        $topicModal->modules()->each(function ($modules) use ($groups) {
-//            $modules->groups()->attach(1);
-//        });
-//        dd($topicModal->getUsers());
-        for ($i = 1; $i < count($topicModal->getStudents()) + 1; $i++) {
-            $group = new Group();
-        }
-
-        //distribution
+//        dd($request->all());
+        $topicModal = Topic::find($request->input('topic_id'));
+        $groupDistribution = $request->input('groupMethod');
+        $timeMethod = $request->input('timeMethod');
+        //todo: do Group distribution
 
         $option = new Option();
         $option->topic()->associate($topicModal->id);
         $option->group_distribution = $groupDistribution;
-        if ($request->timeMethod === 'even') {
-            $time = $topicModal->max_time_jigsaw / $topicModal->no_of_modules;
-            for ($i = 1; $i < $topicModal->no_of_modules + 1; $i++) {
-                $option->setAttribute('tm' . $i, $time);
-            }
-            //todo: calculate and store it inside db
-        } elseif ($request->timeMethod === 'uneven') {
-//            dd(count($request->input('tm')));
-            for ($i = 1; $i < $topicModal->no_of_modules + 1; $i++) {
-                $option->setAttribute('tm' . $i, $request->tm[$i]);
-            }
+        $option->time_method = $timeMethod;
+        for ($j = 1; $j < $topicModal->no_of_modules +1; $j++) {
+            $option->setAttribute('tm' . $j, $request->tm[$j]);
         }
         $option->save();
-        $topicModal->update(['status' => 'onVerify']);
+        $topicModal->update([
+            'status' => 'onReady',
+            'is_ready' => true,
+        ]);
 
-        return inertia('Lecturer/CreateTopic/Verify', compact('topicModal'));
+        $students = $topicModal->getStudents();
+        for ($i = 0; $i < $students->count(); $i++) {
+            $attendance = new Attendance();
+            $attendance->user()->associate($students->get($i));
+            $attendance->topic()->associate($topicModal->id);
+            $attendance->attend_status = 'absent';
+            $attendance->date = $topicModal->date_time;
+            $attendance->save();
+        }
+        $topicModal->getStudents()->count();
+
+        $classroom = $topicModal->classroom()->first();
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Topic has been created');
     }
 
     /**

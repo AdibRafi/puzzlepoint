@@ -5,7 +5,7 @@
         <Card :title="props.classroom.name">
             <p>{{ props.classroom.subject_code }}</p>
             <template #actions v-if="$page.props.user.type === 'lecturer'">
-                <button @click="destroy(props.classroom.id)" type="button" class="btn btn-warning">Delete Class
+                <button @click="destroyClassroom(props.classroom.id)" type="button" class="btn btn-warning">Delete Class
                 </button>
                 <Link :href="route('classroom.edit',props.classroom.id)" class="btn btn-accent">Edit Class</Link>
             </template>
@@ -13,11 +13,6 @@
         <div v-if="$page.props.user.type === 'lecturer'">
             <Card :title="'You have '+props.topicModal.length + ' topic'">
                 <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
-                    Add Topic
-                </Link>
-            </Card>
-            <Card :title="'You have '+props.topicModal.length + ' topic'">
-                <Link :href="route('topic.create2',{classroom_id:props.classroom.id})" class="btn btn-secondary">
                     Add Topic
                 </Link>
             </Card>
@@ -47,16 +42,21 @@
                                 </li>
                             </ul>
                         </div>
-                        <div v-if="data.status === 'onReady'">
-                            <Link :href="route('lecturer.session.index',{topic_id: data.id})" class="btn btn-primary">Start
+                        <div v-if="data.is_ready === 1">
+                            <Link :href="route('lecturer.session.index',{topic_id: data.id})" class="btn btn-primary">
+                                Start
                             </Link>
                         </div>
+                        <button @click="destroyTopic(data.id)" type="button" class="btn btn-warning">Delete
+                        </button>
                         <Link :href="route('assessment.index',{topic_id:data.id})" class="btn btn-primary">
                             Assessment
                         </Link>
+
                     </div>
                     <div v-if="$page.props.user.type === 'student'">
-                        <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">student
+                        <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">
+                            student
                             start session
                         </Link>
                         <Link :href="route('student.assessment.index',{topic_id:data.id})"
@@ -81,9 +81,15 @@ const props = defineProps({
 })
 
 // console.log(props.topicModal.length);
-const destroy = (id) => {
+const destroyClassroom = (id) => {
     if (confirm('Are you sure to delete?')) {
         router.delete(route('classroom.destroy', id))
+    }
+}
+
+const destroyTopic = (id) => {
+    if (confirm('Are you sure to delete?')) {
+        router.delete(route('topic.destroy', id));
     }
 }
 

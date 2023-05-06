@@ -31,27 +31,26 @@ class ModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) //topic_id, modules
+    public function store(StoreModuleRequest $request) //topic_id, modules
     {
+//        dd($request->all());
         $topic_id = $request->input('topic_id');
         $modulesInput = $request->input('modules');
-//        dd($modulesInput);
-        $files = $request->file('modules.0.file_path');
-//        $file = $files['modules'][0];
 
-        $files->move('modules', $files->getClientOriginalName());
-        $extension = $files->getClientOriginalExtension();
-        dd($extension);
 
-//        dd($modulesInput[0]['name']);
-//        dd($learningObjectivesInput);
-
-        for ($i = 0; $i < count($modulesInput) ; $i++) {
+        for ($i = 0; $i < count($modulesInput); $i++) {
             $module = new Module();
             $module->topic()->associate($topic_id);
             $module->name = $modulesInput[$i]['name'];
             $module->learning_objectives = $modulesInput[$i]['learning_objectives'];
-            $module->file_path = $modulesInput[$i]['file_path'];
+
+            $filePath = 'modules.' . $i . '.file_path';
+            if ($request->hasFile($filePath)) {
+                $file = $request->file($filePath);
+                $file->move('modules', $file->getClientOriginalName());
+
+                $module->file_path = $file->getClientOriginalName();
+            }
             $module->save();
         }
         Topic::find($topic_id)->update(['status' => 'onOption']);
@@ -117,7 +116,7 @@ class ModuleController extends Controller
         $classroomModal = Topic::find($request->input('topic_id'))->classroom()->first();
         $classroomId = $classroomModal->id;
 
-        return redirect()->route('classroom.show',$classroomId)
+        return redirect()->route('classroom.show', $classroomId)
             ->with('alertMessage', 'Module update successfully');
     }
 }

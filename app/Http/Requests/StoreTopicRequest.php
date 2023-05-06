@@ -30,4 +30,16 @@ class StoreTopicRequest extends FormRequest
             'transition_time' => 'required|numeric|between:1,5'
         ];
     }
+    public function messages()
+    {
+        return [
+            'name' => 'Please Fill in Name',
+            'no_of_modules' => 'Please Specify Number of Modules',
+            'max_time_expert' => 'Please Specify Expert Time',
+            'max_time_jigsaw' => 'Please Specify Jigsaw Time',
+            'date_time' => 'Please Specify date',
+            'transition_time' => 'Please Specify Transition Time',
+
+        ];
+    }
 }

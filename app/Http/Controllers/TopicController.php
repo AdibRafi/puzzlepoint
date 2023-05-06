@@ -40,7 +40,7 @@ class TopicController extends Controller
         $classroom = Classroom::find($request->classroom_id);
         $topic = new Topic();
         $topic->name = $request->name;
-        $topic->no_of_modules = ($request->no_of_modules / 25) + 2;
+        $topic->no_of_modules = $request->no_of_modules;
         $topic->max_time_expert = $request->max_time_expert;
         $topic->max_time_jigsaw = $request->max_time_jigsaw;
         $topic->transition_time = $request->transition_time;
@@ -60,13 +60,9 @@ class TopicController extends Controller
         $t->topic()->associate($topic->id);
         $t->save();
 
-        $topicData = [
-            'id' => $topic->id,
-            'no_of_modules' => $topic->no_of_modules
-        ];
         $topic_id = $topic->id;
 
-        return redirect()->route('module.create',compact('topic_id') );
+        return redirect()->route('module.create', compact('topic_id'));
     }
 
     /**
@@ -98,7 +94,17 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
-        //
+        $classroom = $topic->classroom()->first();
+        if ($topic->assessment()->exists()) {
+            $topic->assessment()->delete();
+        }
+        $topic->attendances()->delete();
+        $topic->modules()->delete();
+        $topic->delete();
+
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Topic Delete Successfully');
+
     }
 
     public function verify(Request $request) //topic_id

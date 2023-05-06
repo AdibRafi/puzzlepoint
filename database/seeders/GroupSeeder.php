@@ -40,7 +40,7 @@ class GroupSeeder extends Seeder
             'status' => 'onReady',
             'is_expert_form' => 0,
             'is_jigsaw_form' => 0,
-            'is_ready' => 0,
+            'is_ready' => 1,
             'is_complete' => 0,
         ]);
 
