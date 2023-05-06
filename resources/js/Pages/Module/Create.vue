@@ -61,7 +61,6 @@ for (let i = 0; i < props.topicModal.no_of_modules; i++) {
         file_path: ''
     })
 }
-//todo: file upload?????
 
 const form = useForm({
     topic_id: props.topicModal.id,

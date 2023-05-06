@@ -93,7 +93,6 @@ const tm = reactive({
     6: 0,
 })
 
-//todo: find a way to push tm with even time
 const form = useForm({
     topic_id: props.topicModal.id,
     groupMethod: 'none',

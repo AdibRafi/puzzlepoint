@@ -132,7 +132,6 @@ const props = defineProps({
     assessment_id: Object,
 })
 
-//todo: change question_name into just name
 const form = useForm({
     assessment_id: props.assessment_id,
     name: '',

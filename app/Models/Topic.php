@@ -65,9 +65,7 @@ class Topic extends Model
 
     public function getStudents(): Collection
     {
-        //todo: check if this right query
         return $this->classroom()->with(['users' => function ($query) {
-//            $query->where('users.id', '!=', $this->id); //don't want to include self
             $query->where('users.type', '=', 'student');
         }])->get()->pluck('users')->flatten();
     }

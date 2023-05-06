@@ -138,7 +138,6 @@ class SessionController extends Controller
         }
         $splitUser = $expertUserModal->split($numOfModules);
 
-        //todo: deal with remainder
         if ($topicModuleModal->jigsaw_form_group === 0) {
             for ($j = 0; $j < $totalGroup; $j++) {
                 if ($splitUser !== null) {

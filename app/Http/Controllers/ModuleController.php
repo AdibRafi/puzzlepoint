@@ -20,7 +20,6 @@ class ModuleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    //todo: request can only just use topic_id -> use topicModal
     public function create(Request $request) //topic_id
     {
         //todo: kena encrypt

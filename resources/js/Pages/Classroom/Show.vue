@@ -1,5 +1,4 @@
 <template>
-    <!--    todo: Head - change to class name-->
     <Head :title="props.classroom.name"/>
     <MainLayout>
         <Card :title="props.classroom.name">

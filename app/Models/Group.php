@@ -29,7 +29,6 @@ class Group extends Model
 
     protected $fillable = ['name', 'type'];
 
-    //todo: maybe change to one to one
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
