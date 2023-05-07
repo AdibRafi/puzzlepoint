@@ -19,7 +19,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 import Card from "@/Components/Card.vue";
 
 const form = useForm({

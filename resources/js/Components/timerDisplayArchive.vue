@@ -19,22 +19,6 @@
                     </div>
                 </div>
             </div>
-            <!--                <div class="card-actions flex justify-end">-->
-            <!--                    <div>-->
-            <!--                        <select class="select select-primary w-full max-w-xs my-2">-->
-            <!--                            <option disabled selected>Select Minute</option>-->
-            <!--                            <option>1 minute</option>-->
-            <!--                            <option>2 minute</option>-->
-            <!--                            <option>3 minute</option>-->
-            <!--                            <option>4 minute</option>-->
-            <!--                            <option>5 minute</option>-->
-            <!--                        </select>-->
-            <!--                        <button class="btn btn-primary">Add Time</button>-->
-            <!--                    </div>-->
-            <!--                    <div>-->
-            <!--                        <button class="btn btn-primary">End Early</button>-->
-            <!--                    </div>-->
-            <!--                </div>-->
         </div>
     </div>
 </template>

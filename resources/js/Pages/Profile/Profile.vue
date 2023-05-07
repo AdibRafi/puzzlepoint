@@ -60,7 +60,7 @@
 import {onMounted, ref} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, router, useForm, usePage} from "@inertiajs/vue3";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 import Card from "@/Components/Card.vue";
 
 

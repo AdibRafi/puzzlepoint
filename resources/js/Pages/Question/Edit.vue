@@ -127,7 +127,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, useForm} from "@inertiajs/vue3";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 import {onUpdated, ref} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 

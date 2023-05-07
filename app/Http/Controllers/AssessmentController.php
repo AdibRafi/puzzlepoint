@@ -51,7 +51,7 @@ class AssessmentController extends Controller
      */
     public function show(Assessment $assessment)
     {
-        dd($assessment);
+        //
     }
 
     /**
@@ -75,7 +75,13 @@ class AssessmentController extends Controller
      */
     public function destroy(Assessment $assessment)
     {
-        //
+        $topicModal = $assessment->topic()->first();
+        $classroom = Topic::find($topicModal->id)->classroom()->first();
+
+        $assessment->delete();
+
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Assessment Delete Successfully');
     }
 
     public function studentAssessmentIndex(Request $request) //topic_id

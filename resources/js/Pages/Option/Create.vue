@@ -73,7 +73,7 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 import {Head, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
 import {onMounted, onUpdated, reactive, ref} from "vue";

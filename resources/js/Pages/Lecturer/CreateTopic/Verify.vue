@@ -81,7 +81,7 @@
 <script setup>
 import {ref} from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 import {useForm} from "@inertiajs/vue3";
 
 const props = defineProps({

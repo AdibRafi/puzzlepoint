@@ -12,11 +12,17 @@
                 </Link>
             </div>
             <div class="card-actions justify-center">
-                <button class="btn btn-warning">Delete Assessment</button>
+                <button class="btn btn-warning"
+                        @click="destroyAssessment(props.assessmentModal.id)">
+                    Delete Assessment
+                </button>
             </div>
             <div class="divider"/>
             <form @submit.prevent="form.post(route('assessment.publish'))">
-                <InputForm label-name="Time" input-placeholder="in minutes" class="mb-4" v-model="form.time"/>
+                <InputForm label-name="Time"
+                           input-type="number"
+                           input-placeholder="in minutes" class="mb-4"
+                           v-model="form.time"/>
                 <button type="submit" :disabled="form.processing" class="btn btn-accent">
                     Publish
                 </button>
@@ -39,9 +45,9 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import {Head, Link, router, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 
 
 const props = defineProps({
@@ -54,8 +60,10 @@ const form = useForm({
     topic_id: props.topicModal.id,
     time: '',
 })
+
+const destroyAssessment = (id) => {
+    if (confirm('Are you sure to delete?')) {
+        router.delete(route('assessment.destroy', id))
+    }
+}
 </script>
-
-<style>
-
-</style>

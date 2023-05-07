@@ -54,7 +54,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import {reactive, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import InputForm from "@/Components/inputForm.vue";
+import InputForm from "@/Components/InputForm.vue";
 
 const props = defineProps({
     classroom_id: Object,
