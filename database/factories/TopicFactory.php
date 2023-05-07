@@ -29,6 +29,7 @@ class TopicFactory extends Factory
             'is_expert_form' => $this->faker->boolean,
             'is_jigsaw_form' => $this->faker->boolean,
             'is_ready' => $this->faker->boolean,
+            'is_start' => $this->faker->boolean,
             'is_complete' => $this->faker->boolean,
         ];
     }

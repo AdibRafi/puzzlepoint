@@ -41,6 +41,7 @@ class GroupSeeder extends Seeder
             'is_expert_form' => 0,
             'is_jigsaw_form' => 0,
             'is_ready' => 1,
+            'is_start' => 0,
             'is_complete' => 0,
         ]);
 

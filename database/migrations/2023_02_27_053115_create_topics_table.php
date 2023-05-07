@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_expert_form');
             $table->boolean('is_jigsaw_form');
             $table->boolean('is_ready');
+            $table->boolean('is_start');
             $table->boolean('is_complete');
             $table->timestamps();
         });
