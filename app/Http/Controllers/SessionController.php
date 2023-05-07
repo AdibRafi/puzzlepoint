@@ -56,24 +56,7 @@ class SessionController extends Controller
             }
 
             $splitUserIdE = $studentAttendModal->split($numOfModules);
-//            dd($splitUserIdE);
 
-//            if ($topicModuleModal->jigsaw_form_group === 0) {
-//                for ($i = 0; $i < $totalGroup; $i++) {
-//                    if ($splitUserIdJ !== null) {
-//                        $group = new Group();
-//                        $group->name = 'jigsaw' . $i;
-//                        $group->type = 'jigsaw';
-//                        $group->topic()->associate($topicModuleModal->id);
-//                        $group->save();
-//
-//                        $group->users()->attach($splitUserIdJ->pop());
-//                    }
-//                }
-//                $topicModuleModal->update(['jigsaw_form_group' => 1]);
-//            }
-
-//            dd($splitUserIdE);
             if ($topicModuleModal->expert_form_group === 0) {
                 for ($j = 0; $j < $numOfModules; $j++) {
                     $group = new Group();
@@ -84,26 +67,18 @@ class SessionController extends Controller
                     $group->save();
 
                     $group->users()->attach($splitUserIdE->pop());
-//                    for ($i = 0; $i < count($splitUserIdE); $i++) {
-//                        if (count($splitUserIdE[$i]) === $numOfModules) {
-//                            $group->users()->attach($splitUserIdE[$i]->pop());
-//                        } else {
-//                            $group->users()->attach($splitUserIdE[$i]->pop());
-//                            $group->users()->attach($splitUserIdE[$i]->pop());
-//                        }
-//                    }
+                    $topicModuleModal->update(['expert_form_group' => 1]);
                 }
-                $topicModuleModal->update(['expert_form_group' => 1]);
             }
+
+            $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
+                ->where('type', '=', 'expert')->get();
+
+            broadcast(new MoveSession('goExpert'));
+
+            return inertia('Session/Lecturer/Expert',
+                compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
         }
-
-        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
-            ->where('type', '=', 'expert')->get();
-
-        broadcast(new MoveSession('goExpert'));
-
-        return inertia('Session/Lecturer/Expert',
-            compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
     }
 
     public function lecturerJigsawSession(Request $request) //topic_id
@@ -236,7 +211,6 @@ class SessionController extends Controller
             $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
 
 
-
         } else {
             list($topicModal, $groupUserModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
@@ -276,84 +250,4 @@ class SessionController extends Controller
     {
 
     }
-
-    private function initiateModal($topic_id, $groupType)
-    {
-        $topicModal = Topic::find($topic_id);
-        $groupModal = Group::whereHas('users', function ($query) use ($groupType, $topicModal) {
-            $query->where('user_id', Auth::id());
-            $query->where('topic_id', '=', $topicModal->id);
-        })->where('type', '=', $groupType)->first();
-        $userModal = Group::find($groupModal->id)->users()->get();
-        return [$topicModal, $groupModal, $userModal];
-
-    }
-
-    public function AstudentExpert(Request $request) //topic_id
-    {
-        list($topicModal, $groupModal, $userModal) = $this->initiateModal($request->input('topic_id'), 'expert');
-
-//        dd($groupModal);
-
-//        dd($groupModal);
-        return inertia('Student/Session/ExpertSession', compact('topicModal', 'groupModal', 'userModal'));
-
-    }
-
-    public function AstudentJigsaw(Request $request) //topic_id
-    {
-        list($topicModal, $groupModal, $userModal) = $this->initiateModal($request->input('topic_id'), 'jigsaw');
-
-        return inertia('Student/Session/JigsawSession', compact('topicModal', 'groupModal', 'userModal'));
-    }
-
-    public function AlecturerExpert(Request $request) //topic_id
-    {
-        $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
-        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
-
-        return inertia('Lecturer/Session/ExpertSession', compact('topicModal', 'groupUserAttendModal', 'absentStudentModal'));
-    }
-
-    public function AlecturerJigsaw(Request $request) //topic_id
-    {
-        $topicModal = Topic::find($request->input('topic_id'));
-        $groupUserAttendModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
-        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
-
-        return inertia('Lecturer/Session/JigsawSession', compact('topicModal', 'groupUserAttendModal', 'absentStudentModal'));
-    }
-
-    public function sendExpertPusher(Request $request) //topic_id
-    {
-        $a = Topic::find($request->input('topic_id'))->attendances()->get();
-        $b = Auth::user()->attendances()->get();
-        $c = collect();
-        $c = $c->merge($a)->merge($b)->duplicates()->values();
-
-        foreach ($c as $value) {
-            $value->update([
-                'attend_status' => 'present'
-            ]);
-        }
-//        dd('nice');
-
-    }
-
-//    public function fetchExpertAbsentStudent(Request $request) //topic_id
-//    {
-////        dd($request->all());
-//        $absentStudentModal = Topic::find($request->input('topic_id'))->getAbsentStudents();
-////        $topic_id = $request->input('topic_id');
-////        return redirect()->route('lecturer.jigsaw',compact());
-////            ->route('lecturer.expert',compact('topic_id'));
-////        return Topic::find($request->input('topic_id'))->getAbsentStudents();
-//    }
-//
-//    public function fetchExpertPusher()
-//    {
-//        return Topic::find(1)->getAbsentStudents()->first();
-////            Topic::find(1)->attendances()->where('attend_status','=','absent')->get();
-//    }
 }

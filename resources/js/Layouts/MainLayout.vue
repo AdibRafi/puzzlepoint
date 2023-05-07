@@ -8,55 +8,11 @@
                 <ul tabindex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li>
-                        <!--                        <Link :href="route('classroom.index')">Home</Link>-->
-                    </li>
-                    <li>
-                        <!--                        <Link :href="route('lect.create.topic')">CreateTopic</Link>-->
-                    </li>
-                    <li>
-                        <!--                        <Link :href="route('lect.create.module')">CreateModule</Link>-->
-                    </li>
-                    <li>
-                        <Link :href="route('lect.create.option')">CreateOption</Link>
-                    </li>
-                    <li>
-                        <!--                        <Link :href="route('lect.create.verify')">CreateVerify</Link>-->
-                    </li>
-                    <li>
-                        <!--                        <Link :href="route('lect.assessment.create')">CreateAssessment</Link>-->
-                    </li>
-                    <li>
                         <Link :href="route('test.index')">Test</Link>
-                    </li>
-                    <li>
-                        <Link :href="route('student.expert',{topic_id: 1})">Student Expert</Link>
-                    </li>
-                    <li>
-                        <Link :href="route('student.jigsaw',{topic_id: 1})">Student Jigsaw</Link>
-                    </li>
-                    <li>
-                        <Link :href="route('lecturer.expert',{topic_id: 1})">Lecturer Expert</Link>
-                    </li>
-                    <li>
-                        <Link :href="route('lecturer.jigsaw',{topic_id: 1})">Lecturer Jigsaw</Link>
                     </li>
                     <li>
                         <Link :href="route('display.group',{topic_id: 1})">Display Group</Link>
                     </li>
-                    <!--                    <li tabindex="0">-->
-                    <!--                        <a>-->
-                    <!--                            SESSION-->
-                    <!--                            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
-                    <!--                                 viewBox="0 0 24 24">-->
-                    <!--                                <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/>-->
-                    <!--                            </svg>-->
-                    <!--                        </a>-->
-                    <!--                        <ul class="p-2 bg-base-100">-->
-                    <!--                            <li>-->
-                    <!--&lt;!&ndash;                                <Link :href="route('lect.session.expert')">Lecturer</Link>&ndash;&gt;-->
-                    <!--                            </li>-->
-                    <!--                        </ul>-->
-                    <!--                    </li>-->
                 </ul>
             </div>
         </div>
@@ -145,6 +101,3 @@ import {Link, router} from "@inertiajs/vue3";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 </script>
-
-<style scoped>
-</style>

@@ -47,10 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
 });
 
-//Route::get('/test', function () {
-//    return view('test');
-//});
-
 Route::get('test', [TestController::class, 'index'])->name('test.index');
 Route::post('test', [TestController::class, 'store'])->name('test.store');
 
@@ -66,23 +62,6 @@ Route::resource('assessment', AssessmentController::class);
 Route::resource('question', QuestionController::class);
 Route::resource('option', OptionController::class);
 
-Route::get('topic-create2', [TopicController::class, 'create2'])->name('topic.create2');
-Route::post('topic-create2', [TopicController::class, 'store2'])->name('topic.store2');
-//Route::get('/pusher', [SessionController::class,'fetchExpertPusher'])->name('fetch.expert');
-Route::post('/pusher', [SessionController::class, 'sendExpertPusher'])->name('send.expert');
-
-//Route::post('/fetchAbsentStudentE', [SessionController::class, 'fetchExpertAbsentStudent'])->name('fetch.absent.expertStudent');
-
-Route::get('/event', function () {
-    event(new StudentAttendance('hello world'));
-});
-
-Route::get('listen', function () {
-    return \inertia('Test');
-});
-
-Route::get('verify', [TopicController::class, 'verify'])->name('topic.verify');
-Route::post('verify', [TopicController::class, 'storeVerify'])->name('topic.storeVerify');
 
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
@@ -91,10 +70,6 @@ Route::patch('profile', [ProfileController::class, 'update'])->name('profile.upd
 Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::group(['prefix' => 'session'], function () {
-    Route::get('studentExpert', [SessionController::class, 'AstudentExpert'])->name('student.expert');
-    Route::get('studentJigsaw', [SessionController::class, 'AstudentJigsaw'])->name('student.jigsaw');
-    Route::get('lecturerExpert', [SessionController::class, 'AlecturerExpert'])->name('lecturer.expert');
-    Route::get('lecturerJigsaw', [SessionController::class, 'AlecturerJigsaw'])->name('lecturer.jigsaw');
     Route::get('start', [SessionController::class, 'lecturerIndexSession'])->name('lecturer.session.index');
     Route::get('expert', [SessionController::class, 'lecturerExpertSession'])->name('lecturer.session.expert');
     Route::get('jigsaw', [SessionController::class, 'lecturerJigsawSession'])->name('lecturer.session.jigsaw');
@@ -112,17 +87,5 @@ Route::get('assessment-student-session', [AssessmentController::class, 'studentS
 Route::post('assessment-student-check-answer', [AssessmentController::class, 'studentCheckAnswer'])->name('student.assessment.check.answer');
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
-Route::get('displayGroupM', [TestController::class, 'displayGroupModified'])->name('display.modifiedGroup');
-
-Route::group(['prefix' => 'LecturerSide'], function () {
-
-    Route::inertia('/CreateOption', 'Lecturer/CreateTopic/Option')->name('lect.create.option');
-});
-
-Route::group(['prefix' => 'StudentSide'], function () {
-    Route::inertia('/ExpertSession', 'Student/Session/ExpertSession')->name('stud.session.expert');
-});
-
-//Route::inertia('profileTest', 'Profile')->name('profileIndex');
 
 require __DIR__ . '/auth.php';
