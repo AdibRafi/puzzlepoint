@@ -119,22 +119,12 @@ class TopicController extends Controller
         return redirect()->route('classroom.show', $classroom)->with('alertMessage', 'topic successfully created');
     }
 
-    public function create2(Request $request) //classroom_id
+    public function topicArchiveIndex(Request $request) //classroom_id
     {
-        $classroom_id = $request->input('classroom_id');
-        return inertia('Topic/Create2', compact('classroom_id'));
-    }
-
-    public function store2(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'date_time' => 'required',
-            'no_of_modules' => 'required|numeric|min:0|not_in:0',
-            'max_time_expert' => 'required|numeric|min:0|not_in:0',
-            'max_time_jigsaw' => 'required|numeric|min:0|not_in:0',
-            'transition_time' => 'required|numeric|min:0|not_in:0',
-        ]);
         dd($request->all());
+    }
+    public function topicArchiveShow(Topic $topic)
+    {
+
     }
 }

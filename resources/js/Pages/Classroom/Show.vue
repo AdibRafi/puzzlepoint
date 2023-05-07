@@ -10,9 +10,17 @@
             </template>
         </Card>
         <div v-if="$page.props.user.type === 'lecturer'">
-            <Card :title="'You have '+props.topicModal.length + ' topic'">
-                <Link :href="route('topic.create',{classroom_id:props.classroom.id})" class="btn btn-primary">
+            <Card :title="'You have '+props.topicModal.length + ' topic'"
+                  class="flex">
+                <Link :href="route('topic.create',{classroom_id:props.classroom.id})"
+                      class="btn btn-primary flex-grow">
                     Add Topic
+                </Link>
+                <div class="divider"/>
+                <h2 class="card-title">You have archive</h2>
+                <Link :href="route('topic.archive.index',{classroom_id:props.classroom.id})"
+                      class="btn btn-secondary">
+                    Go To Archive
                 </Link>
             </Card>
         </div>
@@ -28,7 +36,7 @@
                 <template #actions>
                     <div v-if="$page.props.user.type ==='lecturer'">
                         <div class="dropdown dropdown-hover">
-                            <label tabindex="0" class="btn m-1">Edit</label>
+                            <label tabindex="0" class="btn m-1 btn-accent">Edit</label>
                             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li>
                                     <Link :href="route('module.editIndex',{topic_id:data.id})">Module</Link>
