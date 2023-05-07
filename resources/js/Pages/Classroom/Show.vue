@@ -54,10 +54,12 @@
 
                     </div>
                     <div v-if="$page.props.user.type === 'student'">
-                        <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">
-                            student
-                            start session
-                        </Link>
+                        <div v-if="data.is_start === 1">
+                            <Link :href="route('student.session.index',{topic_id: data.id})" class="btn btn-secondary">
+                                student
+                                start session
+                            </Link>
+                        </div>
                         <Link :href="route('student.assessment.index',{topic_id:data.id})"
                               class="btn btn-accent">
                             Student Assessment

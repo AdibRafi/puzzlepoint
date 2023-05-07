@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MoveSession;
 use App\Events\StudentAttendance;
 use App\Events\TimeSession;
 use App\Models\Attendance;
@@ -29,6 +28,10 @@ class SessionController extends Controller
     {
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+
+        $topicModuleModal->update([
+            'is_start' => true
+        ]);
 
         return inertia('Session/Index', compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal'));
 
@@ -74,7 +77,7 @@ class SessionController extends Controller
             $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
                 ->where('type', '=', 'expert')->get();
 
-            broadcast(new MoveSession('goExpert'));
+//            broadcast(new MoveSession('goExpert'));
 
             return inertia('Session/Lecturer/Expert',
                 compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
@@ -135,7 +138,7 @@ class SessionController extends Controller
         $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
 
 
-        broadcast(new MoveSession('goJigsaw'));
+//        broadcast(new MoveSession('goJigsaw'));
         return inertia('Session/Lecturer/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
 
