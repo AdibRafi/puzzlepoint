@@ -35,7 +35,14 @@
                 </p>
             </Card>
             <Card>
-                <Link :href="route('lecturer.session.expert',{topic_id:props.topicModuleModal.id})"
+                <Link :href="route('lecturer.session.expert',{
+                    topic_id:props.topicModuleModal.id,
+                    minuteCounter: props.topicModuleModal.max_time_expert,
+                    secondCounter: 0,
+                    transitionMinuteCounter: props.topicModuleModal.transition_time,
+                    transitionSecondCounter:0,
+
+                })"
                       class="btn btn-primary">Start
                     Expert Session
                 </Link>
@@ -56,20 +63,21 @@ const props = defineProps({
     studentAbsentModal: Object,
 })
 
-console.log('test2');
 
 window.Echo.channel('student-attendance-channel')
     .listen('StudentAttendance', (e) => {
         router.reload();
     })
 
-
-window.Echo.channel('move-session-channel')
-    .listen('MoveSession', (e) => {
-        if (usePage().props.user.type === 'student' && e.message === 'goExpert') {
+if (usePage().props.user.type === 'student') {
+    window.Echo.channel('move-expert-channel')
+        .listen('MoveExpertSession', (e) => {
             router.get(route('student.session.expert', {topic_id: props.topicModuleModal.id}))
-        } else if (usePage().props.user.type === 'student' && e.message === 'goJigsaw') {
+        });
+    window.Echo.channel('move-jigsaw-channel')
+        .listen('MoveJigsawSession', (e) => {
             router.get(route('student.session.jigsaw', {topic_id: props.topicModuleModal.id}))
-        }
-    });
+        })
+}
+
 </script>

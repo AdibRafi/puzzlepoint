@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EndSession;
+use App\Events\MoveExpertSession;
+use App\Events\MoveJigsawSession;
 use App\Events\StudentAttendance;
 use App\Events\TimeSession;
 use App\Models\Attendance;
@@ -37,15 +40,15 @@ class SessionController extends Controller
 
     }
 
-    public function lecturerExpertSession(Request $request) //topic_id
+    public function lecturerExpertSession(Request $request) //topic_id //Time
     {
+
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
+        if ($topicModuleModal->is_expert_form === 0) {
 
-        if ($topicModuleModal->expert_form_group === 0 ||
-            $topicModuleModal->jigsaw_form_group === 0) {
-
+            //todo: distribution thing
             $studentAttendModal = $studentAttendModal->shuffle();
             $numOfModules = $topicModuleModal->no_of_modules;
             $modulesId = $topicModuleModal->modules->pluck('id');
@@ -54,34 +57,38 @@ class SessionController extends Controller
 
             if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
                 $numOfModules *= 2;
-                $totalGroup /= 2;
+//                $totalGroup /= 2;
                 $modulesId = $modulesId->merge($modulesId);
             }
 
-            $splitUserIdE = $studentAttendModal->split($numOfModules);
+            $splitUser = $studentAttendModal->split($numOfModules);
 
-            if ($topicModuleModal->expert_form_group === 0) {
-                for ($j = 0; $j < $numOfModules; $j++) {
-                    $group = new Group();
-                    $group->name = 'expert' . $j;
-                    $group->type = 'expert';
-                    $group->topic()->associate($topicModuleModal->id);
-                    $group->module()->associate($modulesId[$j]);
-                    $group->save();
+            for ($j = 0; $j < $numOfModules; $j++) {
+                $group = new Group();
+                $group->name = 'expert' . $j;
+                $group->type = 'expert';
+                $group->topic()->associate($topicModuleModal->id);
+                $group->module()->associate($modulesId[$j]);
+                $group->save();
 
-                    $group->users()->attach($splitUserIdE->pop());
-                    $topicModuleModal->update(['expert_form_group' => 1]);
-                }
+                $group->users()->attach($splitUser->pop());
+                $topicModuleModal->update(['is_expert_form' => 1]);
             }
-
-            $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
-                ->where('type', '=', 'expert')->get();
-
-//            broadcast(new MoveSession('goExpert'));
-
-            return inertia('Session/Lecturer/Expert',
-                compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
         }
+        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
+            ->where('type', '=', 'expert')->get();
+
+        MoveExpertSession::dispatch();
+
+//        $minuteCounter = $request->input('minuteCounter');
+//        $secondCounter = $request->input('secondCounter');
+//        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
+//        $transitionSecondCounter = $request->input('transitionSecondCounter');
+//        TimeSession::dispatch($minuteCounter, $secondCounter, $transitionMinuteCounter, $transitionSecondCounter);
+
+        return inertia('Session/Lecturer/Expert',
+            compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
+
     }
 
     public function lecturerJigsawSession(Request $request) //topic_id
@@ -92,8 +99,11 @@ class SessionController extends Controller
         $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->with('users')->withCount('users')->get();
         $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
 
+//        $to = Topic::find(1);
+//        $to->test = 'lol';
+//        dd($to);
         $remainderUser = collect();
-        $lessGroup = $expertGroupModal[0]->users_count;
+        $lessGroup = $expertGroupModal->min('users_count');
         for ($i = 0; $i < count($expertGroupModal); $i++) {
             if ($expertGroupModal[$i]->users_count > $lessGroup) {
                 $user = $expertGroupModal[$i]->users()->get()->pop();
@@ -116,7 +126,7 @@ class SessionController extends Controller
         }
         $splitUser = $expertUserModal->split($numOfModules);
 
-        if ($topicModuleModal->jigsaw_form_group === 0) {
+        if ($topicModuleModal->is_jigsaw_form === 0) {
             for ($j = 0; $j < $totalGroup; $j++) {
                 if ($splitUser !== null) {
                     $group = new Group();
@@ -132,13 +142,14 @@ class SessionController extends Controller
                     }
                 }
             }
-            $topicModuleModal->update(['jigsaw_form_group' => 1]);
+            $topicModuleModal->update(['is_jigsaw_form' => 1]);
         }
 
         $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
 
 
-//        broadcast(new MoveSession('goJigsaw'));
+        MoveJigsawSession::dispatch();
+
         return inertia('Session/Lecturer/Jigsaw', compact('topicModuleModal', 'jigsawGroupUserModal', 'studentAbsentModal'));
     }
 
@@ -171,7 +182,7 @@ class SessionController extends Controller
         broadcast(new StudentAttendance(Auth::user()->name . ' is present'));
     }
 
-    public function studentSessionIndex(Request $request) //topic_id
+    public function studentSessionIndex(Request $request) //topic_id, time
     {
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
@@ -247,10 +258,26 @@ class SessionController extends Controller
     {
         $topicModal = Topic::find($request->input('topic_id'));
 
+
+        EndSession::dispatch();
+
+
+        $classroom = $topicModal->classroom()->first();
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Session Successfully Ended');
     }
 
     public function studentEndSession(Request $request) //topic_id
     {
+        $topicModal = Topic::find($request->input('topic_id'));
+        $topicModal->update([
+            'is_complete' => true,
+        ]);
 
+        $classroom = $topicModal->classroom()->first();
+
+
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Your Lecturer Successfully Ended the session');
     }
 }

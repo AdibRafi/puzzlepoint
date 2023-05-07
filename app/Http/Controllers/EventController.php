@@ -33,6 +33,16 @@ class EventController extends Controller
     public function timeSession($minuteCounter, $secondCounter,
                                 $transitionMinuteCounter, $transitionSecondCounter)
     {
-        TimeSession::dispatch($minuteCounter, $secondCounter, $transitionMinuteCounter, $transitionMinuteCounter);
+        TimeSession::dispatch($minuteCounter, $secondCounter, $transitionMinuteCounter, $transitionSecondCounter);
+    }
+
+    public function moveExpert(): void
+    {
+        MoveExpertSession::dispatch();
+    }
+
+    public function moveJigsaw(): void
+    {
+        MoveJigsawSession::dispatch();
     }
 }

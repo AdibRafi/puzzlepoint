@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MoveExpertSession implements ShouldBroadcast
+class EndSession implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,6 +19,7 @@ class MoveExpertSession implements ShouldBroadcast
      */
     public function __construct()
     {
+        //
     }
 
     /**
@@ -28,6 +29,6 @@ class MoveExpertSession implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new Channel('move-expert-channel');
+        return new Channel('end-session-channel');
     }
 }

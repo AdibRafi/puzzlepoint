@@ -35,7 +35,7 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import '../../../bootstrap'
 import TimerDisplay from "@/Components/TimerDisplay.vue";
 
@@ -53,22 +53,35 @@ const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
 const postTime = () => {
-    router.post(route('update.time', {
-        minuteCounter: minuteCounter.value,
-        secondCounter: secondCounter.value,
-        transitionMinuteCounter: transitionMinuteCounter.value,
-        transitionSecondCounter: transitionSecondCounter.value
-    }))
+    // router.post(route('update.time', {
+    //     minuteCounter: minuteCounter.value,
+    //     secondCounter: secondCounter.value,
+    //     transitionMinuteCounter: transitionMinuteCounter.value,
+    //     transitionSecondCounter: transitionSecondCounter.value
+    // }))
 }
 window.Echo.channel('student-attendance-channel')
     .listen('StudentAttendance', (e) => {
-        router.reload();
-        setTimeout(postTime, 5000);
+        // router.reload({
+        //     data: {
+        //         minuteCounter: minuteCounter.value,
+        //         secondCounter: secondCounter.value,
+        //         transitionMinuteCounter: transitionMinuteCounter.value,
+        //         transitionSecondCounter: transitionSecondCounter.value
+        //     }
+        // });
+        // setTimeout(postTime, 5000);
     })
 
 const buttonTest = () => {
-    router.reload();
-    // setTimeout(postTime, 2000);
+    router.reload({
+        data: {
+            minuteCounter: minuteCounter.value,
+            secondCounter: secondCounter.value,
+            transitionMinuteCounter: transitionMinuteCounter.value,
+            transitionSecondCounter: transitionSecondCounter.value
+        }
+    });
 }
 
 onMounted(() => {
@@ -76,7 +89,7 @@ onMounted(() => {
     setTimeout(postTime, 3000)
 })
 
-setInterval(() => {
+const interval = setInterval(() => {
     if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
         if (secondCounter.value > 0) {
             secondCounter.value--;
@@ -92,7 +105,21 @@ setInterval(() => {
             transitionMinuteCounter.value--;
         }
     }
+    console.log('idk')
+    router.post(route('update.time'), {
+        minuteCounter: minuteCounter.value,
+        secondCounter: secondCounter.value,
+        transitionMinuteCounter: transitionMinuteCounter.value,
+        transitionSecondCounter: transitionSecondCounter.value
+    }, {
+        preserveScroll: true,
+    });
+
 }, 1000)
+
+onUnmounted(()=>{
+    clearInterval(interval);
+})
 </script>
 
 <style scoped>

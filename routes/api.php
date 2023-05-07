@@ -23,12 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('student-attendance', [EventController::class, 'studentAttendance'])->name('event.student-attendance');
 
-Route::get('move-expert-session', function () {
-    MoveExpertSession::dispatch();
-})->name('event.move-expert-session');
+Route::get('move-expert-session', [EventController::class, 'moveExpert'])
+    ->name('event.move-expert-session');
 
-Route::get('move-jigsaw-session', function () {
-    MoveJigsawSession::dispatch();
-})->name('event.move-jigsaw-session');
+Route::get('move-jigsaw-session', [EventController::class, 'moveJigsaw'])
+    ->name('event.move-jigsaw-session');
 
 Route::get('time-session', [EventController::class, 'timeSession'])->name('event.time-session');

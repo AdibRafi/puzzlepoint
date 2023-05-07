@@ -1,17 +1,15 @@
 <template>
     <MainLayout>
         <Card title="DEVELOPER">
-            <p>{{ displayTime }}</p>
-            <p>{{ loop}}</p>
+            <!--            <p>{{props.groupUserModal}}</p>-->
         </Card>
         <Card title="Jigsaw Session">
             <p>{{ props.topicModal.name }}</p>
         </Card>
-        <TimerDisplay v-if="displayTime"
-                      :initiate-minute="minuteCounter"
-                      :initiate-second="secondCounter"
-                      :initiate-transition-minute="transitionMinuteCounter"
-                      :initiate-transition-second="transitionSecondCounter"/>
+        <TimerDisplayStatic :minute-counter="minuteCounter"
+                            :second-counter="secondCounter"
+                            :transition-minute-counter="transitionMinuteCounter"
+                            :transition-second-counter="transitionSecondCounter"/>
         <Card title="Your Group Members">
             <p v-for="userData in props.groupUserModal.users" :key="userData">
                 {{ userData.name }}
@@ -30,6 +28,8 @@ import Card from "@/Components/Card.vue";
 import TimerDisplay from "@/Components/TimerDisplay.vue";
 import {onMounted, ref} from "vue";
 import '../../../bootstrap'
+import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
+import {router} from "@inertiajs/vue3";
 
 
 const minuteCounter = ref(0);
@@ -37,19 +37,15 @@ const secondCounter = ref(0);
 const transitionMinuteCounter = ref(0);
 const transitionSecondCounter = ref(0);
 
-const displayTime = ref();
 
-//todo: why after student masuk (lepas attendance) dia loop?????
-onMounted(()=>{
+onMounted(() => {
     console.log('mounted')
-    displayTime.value = false;
 })
 
 const props = defineProps({
     topicModal: Object,
     groupUserModal: Object,
 });
-const loop = ref(0)
 window.Echo.channel('time-session-channel')
     .listen('TimeSession', (e) => {
         console.log(e);
@@ -57,7 +53,10 @@ window.Echo.channel('time-session-channel')
         secondCounter.value = e.secondCounter;
         transitionMinuteCounter.value = e.transitionMinuteCounter;
         transitionSecondCounter.value = e.transitionSecondCounter;
-        displayTime.value = true;
-        loop.value++
     });
+
+window.Echo.channel('end-session-channel')
+    .listen('EndSession', (e) => {
+        router.get(route('student.session.end'), {topic_id: props.topicModal.id})
+    })
 </script>

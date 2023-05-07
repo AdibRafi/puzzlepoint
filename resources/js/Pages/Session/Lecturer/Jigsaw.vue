@@ -24,7 +24,10 @@
             </Card>
         </div>
         <Card>
-            <button class="btn btn-primary">End Session</button>
+            <Link :href="route('lecturer.session.end',{topic_id:props.topicModuleModal.id})"
+                  class="btn btn-primary">
+                End Session
+            </Link>
         </Card>
     </MainLayout>
 </template>
@@ -32,8 +35,8 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {onMounted, ref} from "vue";
-import {router} from "@inertiajs/vue3";
+import {onMounted, onUnmounted, ref} from "vue";
+import {Link, router} from "@inertiajs/vue3";
 import '../../../bootstrap'
 
 const props = defineProps({
@@ -47,18 +50,18 @@ const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
 const postTime = () => {
-    router.post(route('update.time', {
-        minuteCounter: minuteCounter.value,
-        secondCounter: secondCounter.value,
-        transitionMinuteCounter: transitionMinuteCounter.value,
-        transitionSecondCounter: transitionSecondCounter.value
-    }))
+    // router.post(route('update.time', {
+    //     minuteCounter: minuteCounter.value,
+    //     secondCounter: secondCounter.value,
+    //     transitionMinuteCounter: transitionMinuteCounter.value,
+    //     transitionSecondCounter: transitionSecondCounter.value
+    // }))
 }
 
 const buttonTest = () => {
     console.log('nice');
     router.reload();
-    postTime()
+    // postTime()
 }
 
 window.Echo.channel('student-attendance-channel')
@@ -73,7 +76,7 @@ onMounted(() => {
     console.log('mounted')
     setTimeout(postTime, 3000)
 })
-setInterval(() => {
+const interval = setInterval(() => {
     if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
         if (secondCounter.value > 0) {
             secondCounter.value--;
@@ -89,7 +92,20 @@ setInterval(() => {
             transitionMinuteCounter.value--;
         }
     }
+
+    router.post(route('update.time'), {
+        minuteCounter: minuteCounter.value,
+        secondCounter: secondCounter.value,
+        transitionMinuteCounter: transitionMinuteCounter.value,
+        transitionSecondCounter: transitionSecondCounter.value
+    }, {
+        preserveScroll: true,
+    });
 }, 1000)
+
+onUnmounted(() => {
+    clearInterval(interval);
+})
 </script>
 
 
