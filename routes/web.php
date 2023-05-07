@@ -67,7 +67,7 @@ Route::resource('option', OptionController::class);
 Route::get('dashboard', [ClassroomController::class, 'index'])->name('dashboard');
 
 Route::get('topic-archive', [TopicController::class, 'topicArchiveIndex'])->name('topic.archive.index');
-Route::get('topic/archive/{topic}', [TopicController::class, 'topicArchiveShow'])->name('topic.archive.show');
+Route::get('topic-archive/{topic}', [TopicController::class, 'topicArchiveShow'])->name('topic.archive.show');
 
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -121,10 +121,25 @@ class TopicController extends Controller
 
     public function topicArchiveIndex(Request $request) //classroom_id
     {
-        dd($request->all());
+        $topicModal = Classroom::find($request->input('classroom_id'))->topics()->where('is_complete', '=', 1)->get();
+
+
+        return inertia('Topic/Archive/Index', compact('topicModal'));
     }
+
     public function topicArchiveShow(Topic $topic)
     {
+        $expertGroupModal = $topic->groups()
+            ->where('type', '=', 'expert')
+            ->with('module')
+            ->with('users')
+            ->get();
 
+        $jigsawGroupModal = $topic->groups()
+            ->where('type', '=', 'jigsaw')
+            ->with('users')
+            ->get();
+
+        return inertia('Topic/Archive/Show', compact('topic', 'expertGroupModal', 'jigsawGroupModal'));
     }
 }
