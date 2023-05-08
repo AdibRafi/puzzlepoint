@@ -34,6 +34,9 @@
         <!--                </div>-->
         <!--            </div>-->
         <!--        </div>-->
+        <Card>
+<!--            <VuePdfEmbed source="modules/M1.pdf"/>-->
+        </Card>
     </MainLayout>
 </template>
 
@@ -41,6 +44,9 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, useForm} from "@inertiajs/vue3";
 import {onMounted} from "vue";
+import Card from "@/Components/Card.vue";
+import VuePdfEmbed from "vue-pdf-embed";
+
 
 const tmDummy = {
     '1': '15',

@@ -46,9 +46,10 @@ class ModuleController extends Controller
             $filePath = 'modules.' . $i . '.file_path';
             if ($request->hasFile($filePath)) {
                 $file = $request->file($filePath);
+                $file_path = 'modules/' . $file->getClientOriginalName();
                 $file->move('modules', $file->getClientOriginalName());
 
-                $module->file_path = $file->getClientOriginalName();
+                $module->file_path = $file_path;
             }
             $module->save();
         }

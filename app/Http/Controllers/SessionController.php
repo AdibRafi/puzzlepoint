@@ -33,7 +33,7 @@ class SessionController extends Controller
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
         $topicModuleModal->update([
-            'is_start' => true
+            'is_start' => 1,
         ]);
 
         return inertia('Session/Index', compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal'));
@@ -80,12 +80,6 @@ class SessionController extends Controller
 
         MoveExpertSession::dispatch();
 
-//        $minuteCounter = $request->input('minuteCounter');
-//        $secondCounter = $request->input('secondCounter');
-//        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
-//        $transitionSecondCounter = $request->input('transitionSecondCounter');
-//        TimeSession::dispatch($minuteCounter, $secondCounter, $transitionMinuteCounter, $transitionSecondCounter);
-
         return inertia('Session/Lecturer/Expert',
             compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal', 'expertGroupUserModal'));
 
@@ -99,9 +93,6 @@ class SessionController extends Controller
         $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->with('users')->withCount('users')->get();
         $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
 
-//        $to = Topic::find(1);
-//        $to->test = 'lol';
-//        dd($to);
         $remainderUser = collect();
         $lessGroup = $expertGroupModal->min('users_count');
         for ($i = 0; $i < count($expertGroupModal); $i++) {
@@ -187,7 +178,6 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-//        broadcast(new StudentAttendance('reload'));
         return inertia('Session/Index', compact('topicModuleModal'));
     }
 
@@ -207,6 +197,7 @@ class SessionController extends Controller
             list($topicModal, $groupUserModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
         }
+
         $moduleModal = $groupUserModal->module()->first();
         return inertia('Session/Student/Expert',
             compact('topicModal', 'groupUserModal', 'moduleModal'));

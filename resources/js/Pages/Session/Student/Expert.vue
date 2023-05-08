@@ -15,7 +15,11 @@
             <p v-for="userData in props.groupUserModal.users" :key="userData">{{ userData.name }}</p>
         </Card>
         <Card title="Display Slides here">
-
+<!--            <VuePdfEmbed :source="props.moduleModal.file_path"/>-->
+            <VuePdfEmbed :source="{
+                cMapURL:'public/modules',
+                url:'M1.pdf'
+            }"/>
         </Card>
     </MainLayout>
 </template>
@@ -25,16 +29,18 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import '../../../bootstrap'
-import TimerDisplay from "@/Components/TimerDisplay.vue";
 import {router} from "@inertiajs/vue3";
 import {ref} from "vue";
 import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
+import VuePdfEmbed from "vue-pdf-embed";
 
 const props = defineProps({
     topicModal: Object,
     groupUserModal: Object,
     moduleModal: Object,
 })
+
+console.log(props.moduleModal.file_path);
 
 const minuteCounter = ref(0);
 const secondCounter = ref(0);
@@ -49,7 +55,7 @@ window.Echo.channel('move-jigsaw-channel')
 
 window.Echo.channel('time-session-channel')
     .listen('TimeSession', (e) => {
-        console.log(e);
+        // console.log(e);
         minuteCounter.value = e.minuteCounter;
         secondCounter.value = e.secondCounter;
         transitionMinuteCounter.value = e.transitionMinuteCounter;

@@ -48,6 +48,7 @@ class TopicController extends Controller
         $topic->is_jigsaw_form = 0;
         $topic->is_ready = 0;
         $topic->is_complete = 0;
+        $topic->is_start = 0;
         $topic->date_time = $startedAt;
         $topic->status = 'onModule';
         $topic->classroom()->associate($classroom);
