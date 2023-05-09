@@ -7,10 +7,11 @@ import {
     faPlus,
     faMinus,
     faCircleExclamation,
-    faXmark
+    faXmark,
+    faCircleCheck as solidFaCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {faCircleCheck} from "@fortawesome/free-regular-svg-icons"
 
 library.add(faAnglesLeft, faBars, faArrowRightFromBracket, faUser,
     faCircleCheck, faPlus, faMinus,
-    faCircleExclamation,faXmark);
+    faCircleExclamation, faXmark, solidFaCircle);

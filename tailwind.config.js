@@ -16,8 +16,9 @@ module.exports = {
             },
         },
     },
-    daisyui:{
-      themes:false
+    daisyui: {
+        themes: ['light'],
+        // themes: ['dark'],
     },
 
     plugins: [
