@@ -32,6 +32,14 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'email' => 'Please fill in your Email Address',
+            'password' => 'Please fill in your Password'
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *
