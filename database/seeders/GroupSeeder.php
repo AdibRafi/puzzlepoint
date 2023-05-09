@@ -55,7 +55,7 @@ class GroupSeeder extends Seeder
 
         Module::factory(4)->create([
             'topic_id' => 1,
-            'name' => 'moduleTest'
+            'name' => 'moduleTest' . rand(1, 10)
         ]);
 
         User::factory()->create([

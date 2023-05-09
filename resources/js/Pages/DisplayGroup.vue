@@ -8,8 +8,6 @@
                         <h2 class="card-title">Press to generate group</h2>
                         <div class="card-actions justify-end">
                             <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>
-                            <Link class="btn btn-secondary" :href="route('display.modifiedGroup',{topic_id:1})">Modified
-                            </Link>
                         </div>
                     </div>
                 </div>
