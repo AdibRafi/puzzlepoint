@@ -26,6 +26,7 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "daisyui": "^2.51.0",
         "laravel-echo": "^1.15.0",
-        "pusher-js": "^8.0.2"
+        "pusher-js": "^8.0.2",
+        "theme-change": "^2.5.0"
     }
 }

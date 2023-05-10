@@ -1,43 +1,36 @@
 <template>
     <Head title="Test"/>
-    <MainLayout>
-        <form @submit.prevent="form.post(route('test.store'))">
-            <div class="card w-96 bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">Card title!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                    <div class="card-actions justify-end">
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <form @submit.prevent="form2.post(route('send.expert',{topic_id:1}));">
-            <div class="card w-96 bg-red-200 shadow-xl my-4">
-                <div class="card-body">
-                    <div class="card-actions justify-end">
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div class="card w-96 bg-base-100 shadow-xl my-6">
-            <div class="card-body">
-                <h2 class="card-title">{{ props.data }}</h2>
-            </div>
-        </div>
-        <!--        <div v-for="data in data">-->
-        <!--            <div class="card w-96 bg-base-100 shadow-xl my-6">-->
-        <!--                <div class="card-body">-->
-        <!--                    <h2 class="card-title">{{ data.name }}</h2>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <Card>
-<!--            <VuePdfEmbed source="modules/M1.pdf"/>-->
-        </Card>
-    </MainLayout>
+   <Layout>
+
+   </Layout>
+<!--    <MainLayout>-->
+<!--        <form @submit.prevent="form.post(route('test.store'))">-->
+<!--            <div class="card w-96 bg-base-100 shadow-xl">-->
+<!--                <div class="card-body">-->
+<!--                    <h2 class="card-title">Card title!</h2>-->
+<!--                    <p>If a dog chews shoes whose shoes does he choose?</p>-->
+<!--                    <div class="card-actions justify-end">-->
+<!--                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--        <form @submit.prevent="form2.post(route('send.expert',{topic_id:1}));">-->
+<!--            <div class="card w-96 bg-red-200 shadow-xl my-4">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="card-actions justify-end">-->
+<!--                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--        <div class="card w-96 bg-base-100 shadow-xl my-6">-->
+<!--            <div class="card-body">-->
+<!--                <h2 class="card-title">{{ props.data }}</h2>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </MainLayout>-->
 </template>
 
 <script setup>
@@ -46,6 +39,7 @@ import {Head, useForm} from "@inertiajs/vue3";
 import {onMounted} from "vue";
 import Card from "@/Components/Card.vue";
 import VuePdfEmbed from "vue-pdf-embed";
+import Layout from "@/Layouts/Layout.vue";
 
 
 const tmDummy = {
