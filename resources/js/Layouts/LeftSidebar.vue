@@ -14,23 +14,23 @@
                Classroom
             </Link>
          </li>
-         <li>
-            <Link :href="route('display.group',{topic_id:1})"
-                  :class="route().current('display.group') ? activeRoute : inactiveRoute">
-               Display Group
-               <span v-if="route().current('display.group')" :class="activeRouteSpan"
-                     aria-hidden="true"/>
-            </Link>
-         </li>
-         <li>
-            <Link :href="route('test.index')"
-                  :class="route().current('test.index') ? activeRoute : inactiveRoute">
-               Test
-               <span v-if="route().current('test.index')"
-                     :class="activeRouteSpan"
-                     aria-hidden="true"/>
-            </Link>
-         </li>
+         <!--         <li>-->
+         <!--            <Link :href="route('display.group',{topic_id:1})"-->
+         <!--                  :class="route().current('display.group') ? activeRoute : inactiveRoute">-->
+         <!--               Display Group-->
+         <!--               <span v-if="route().current('display.group')" :class="activeRouteSpan"-->
+         <!--                     aria-hidden="true"/>-->
+         <!--            </Link>-->
+         <!--         </li>-->
+         <!--         <li>-->
+         <!--            <Link :href="route('test.index')"-->
+         <!--                  :class="route().current('test.index') ? activeRoute : inactiveRoute">-->
+         <!--               Test-->
+         <!--               <span v-if="route().current('test.index')"-->
+         <!--                     :class="activeRouteSpan"-->
+         <!--                     aria-hidden="true"/>-->
+         <!--            </Link>-->
+         <!--         </li>-->
          <li>
             <Link :href="route('profile.edit')"
                   :class="route().current('profile.edit') ? activeRoute : inactiveRoute">
@@ -42,17 +42,56 @@
          </li>
          <li v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <Link :href="route('classroom.show',classroomData.id)"
-                  :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
+                  :class="route().current('classroom.show') ? activeRoute : inactiveRoute">
                {{ classroomData.name }}
-               <span v-if="route().current('classroom.show',classroomData.id)"
+               <span v-if="route().current('classroom.show')"
                      :class="activeRouteSpan"
                      aria-hidden="true"/>
             </Link>
          </li>
+         <div class="divider"/>
+         <li v-if="route().current('classroom.*')">
+            <Link :href="route('topic.create',
+               {classroom_id:route().params.classroom})"
+                  :class="route().current('topic.create') ? activeRoute : inactiveRoute">
+               Add Topic
+               <span v-if="route().current('topic.create')"
+                     :class="activeRouteSpan"
+                     aria-hidden="true"/>
+            </Link>
+         </li>
+         <li v-else>
+            <p>Please choose a classroom</p>
+         </li>
+         <div class="divider"/>
          <li>
             <div class="flex-col">
                <div class="w-full" @click="setIsExpanded">
-
+                  DEVELOPER
+                  <font-awesome-icon icon="fa-solid fa-angle-down"
+                                     :class="'w-5 h-5 mt-1 float-right delay-400 duration-500 transition-all ' + (isExpanded ? 'rotate-180' : '')"/>
+               </div>
+               <div :class="'w-full ' + (isExpanded ? '' : 'hidden')">
+                  <ul class="menu menu-compact">
+                     <li>
+                        <Link :href="route('test.index')"
+                              :class="route().current('text.index') ? activeRoute : inactiveRoute">
+                           test
+                           <span v-if="route().current('test.index')"
+                                 :class="activeSubRouteSpan"
+                                 aria-hidden="true"/>
+                        </Link>
+                     </li>
+                     <li>
+                        <Link :href="route('display.group',{topic_id:1})"
+                              :class="route().current('display.group',{topic_id:1}) ? activeRoute : inactiveRoute">
+                           Display Group
+                           <span v-if="route().current('display.group')"
+                                 :class="activeSubRouteSpan"
+                                 aria-hidden="true"/>
+                        </Link>
+                     </li>
+                  </ul>
                </div>
             </div>
          </li>
@@ -62,19 +101,29 @@
 <script setup>
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {Link, usePage} from "@inertiajs/vue3";
+import {Link, router, usePage} from "@inertiajs/vue3";
 import SidebarSubmenu from "@/Layouts/SidebarSubmenu.vue";
+import {onMounted, ref} from "vue";
 
 const inactiveRoute = 'font-normal ';
-const activeRoute = 'font-semibold bg-base-200 '
+const activeRoute = 'font-semibold '
 const activeRouteSpan = 'absolute inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary';
+const activeSubRouteSpan = 'absolute mt-1 mb-1 inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary';
+
+const isExpanded = ref(false);
+const setIsExpanded = () => {
+   isExpanded.value = !isExpanded.value
+}
 const close = (e) => {
    document.getElementById('left-sidebar-drawer').click()
 }
 
-const setIsExpanded = () => {
+onMounted(() => {
+   if (route().current('display.group') || route().current('test.index')) {
+      isExpanded.value = true
+   }
+})
 
-}
-
-
+console.log(route().params.classroom)
+console.log(route().current('classroom.*'))
 </script>

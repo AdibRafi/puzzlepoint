@@ -9,10 +9,12 @@ import {
    faCircleExclamation,
    faXmark,
    faCircleCheck as solidFaCircle,
-   faPuzzlePiece
+   faPuzzlePiece,
+   faAngleDown
 } from "@fortawesome/free-solid-svg-icons";
 import {faCircleCheck} from "@fortawesome/free-regular-svg-icons"
 
 library.add(faAnglesLeft, faBars, faArrowRightFromBracket, faUser,
-    faCircleCheck, faPlus, faMinus,
-    faCircleExclamation, faXmark, solidFaCircle, faPuzzlePiece);
+   faCircleCheck, faPlus, faMinus,
+   faCircleExclamation, faXmark, solidFaCircle, faPuzzlePiece,
+   faAngleDown);

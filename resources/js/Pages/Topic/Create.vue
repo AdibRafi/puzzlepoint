@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <Layout page-title="Create Topic">
         <Card title="DEVELOPER">
             {{ errors }}
             {{ form.classroom_id }}
@@ -46,7 +46,7 @@
             </Card>
 
         </form>
-    </MainLayout>
+    </Layout>
 </template>
 
 <script setup>
@@ -55,6 +55,7 @@ import Card from "@/Components/Card.vue";
 import {reactive, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import InputForm from "@/Components/InputForm.vue";
+import Layout from "@/Layouts/Layout.vue";
 
 const props = defineProps({
     classroom_id: Object,

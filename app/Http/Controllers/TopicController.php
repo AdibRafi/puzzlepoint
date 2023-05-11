@@ -23,7 +23,7 @@ class TopicController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request) //classroom_id
     {
         //todo: kena encrypt
         $classroom_id = $request->input('classroom_id');
