@@ -27,7 +27,6 @@
                <li class="justify-between">
                   <Link :href="route('profile.edit')">
                      Profile Settings
-                     <span class="badge">New</span>
                   </Link>
                </li>
 <!--               <li class=''><Link to={'/app/settings-billing'}>Bill History</Link></li>-->

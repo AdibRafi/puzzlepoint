@@ -1,36 +1,11 @@
 <template>
-    <Head title="Test"/>
+   <Head title="Test"/>
    <Layout>
-
+      <Card title="DEVELOPER"/>
+      <TitleCard top-margin="mt-6" title="testlol"
+                 top-right-button-label="idk"
+                 @click="t"/>
    </Layout>
-<!--    <MainLayout>-->
-<!--        <form @submit.prevent="form.post(route('test.store'))">-->
-<!--            <div class="card w-96 bg-base-100 shadow-xl">-->
-<!--                <div class="card-body">-->
-<!--                    <h2 class="card-title">Card title!</h2>-->
-<!--                    <p>If a dog chews shoes whose shoes does he choose?</p>-->
-<!--                    <div class="card-actions justify-end">-->
-<!--                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--        <form @submit.prevent="form2.post(route('send.expert',{topic_id:1}));">-->
-<!--            <div class="card w-96 bg-red-200 shadow-xl my-4">-->
-<!--                <div class="card-body">-->
-<!--                    <div class="card-actions justify-end">-->
-<!--                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Send Broadcast-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--        <div class="card w-96 bg-base-100 shadow-xl my-6">-->
-<!--            <div class="card-body">-->
-<!--                <h2 class="card-title">{{ props.data }}</h2>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </MainLayout>-->
 </template>
 
 <script setup>
@@ -40,33 +15,58 @@ import {onMounted} from "vue";
 import Card from "@/Components/Card.vue";
 import VuePdfEmbed from "vue-pdf-embed";
 import Layout from "@/Layouts/Layout.vue";
+import TitleCard from "@/Components/TitleCard.vue";
+import {useStore} from 'vuex'
+
+const t = () => {
+   console.log('tah')
+}
+
+const topSideButtonFunc = () => {
+   const action = useStore();
+
+   const openAddNewLeadModal = () => {
+      action.dispatch(openModal({title: "Add New Lead", bodyType: MODAL_BODY_TYPES.LEAD_ADD_NEW}))
+   }
+
+   return '<div class="inline-block float-right">\n' +
+      '         <button class="btn px-6 btn-sm normal-case btn-primary"  @click="openAddNewLeadModal">Add New\n' +
+      '         </button>\n' +
+      '      </div>';
+   // return (???
+   //    <div class="inline-block float-right">
+   //       <button class="btn px-6 btn-sm normal-case btn-primary"  onClick={() => openAddNewLeadModal()}>Add New
+   //       </button>
+   //    </div>
+   // )
+}
 
 
 const tmDummy = {
-    '1': '15',
-    '2': '15',
-    '3': '15',
-    '4': '15',
+   '1': '15',
+   '2': '15',
+   '3': '15',
+   '4': '15',
 }
 
 const props = defineProps({
-    data: Object,
+   data: Object,
 })
 
 const form = useForm({
-    topic_id: 1,
-    groupMethod: 'none',
-    timeMethod: 'even',
-    tm: tmDummy,
+   topic_id: 1,
+   groupMethod: 'none',
+   timeMethod: 'even',
+   tm: tmDummy,
 });
 
 const form2 = useForm({
-    topic_id: 1,
+   topic_id: 1,
 
 })
 
 onMounted(() => {
-    console.log('mounted')
+   console.log('mounted')
 });
 
 </script>

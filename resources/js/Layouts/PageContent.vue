@@ -1,8 +1,8 @@
 <template>
    <div class="drawer-content flex flex-col">
-      <Header />
+      <Header/>
       <main class="flex-1 overflow-y-auto pt-8 px-6 bg-base-200">
-<!--         <p>test</p>-->
+         <slot/>
          <div class="h-16"/>
       </main>
    </div>

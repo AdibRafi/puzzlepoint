@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
 });
 
-Route::get('test', [TestController::class, 'index'])->name('test.index');
-Route::post('test', [TestController::class, 'store'])->name('test.store');
+Route::get('/test', [TestController::class, 'index'])->name('test.index');
+Route::post('/test', [TestController::class, 'store'])->name('test.store');
 
 Route::get('/module/editIndex', [ModuleController::class, 'editIndex'])->name('module.editIndex');
 Route::post('/module/editIndex', [ModuleController::class, 'updateIndex'])->name('module.updateIndex');

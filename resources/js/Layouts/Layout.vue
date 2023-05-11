@@ -2,8 +2,10 @@
    <div class="drawer drawer-mobile">
       <input id="left-sidebar-drawer" type="checkbox"
              class="drawer-toggle">
-      <PageContent/>
-      <LeftSidebar />
+      <PageContent>
+         <slot />
+      </PageContent>
+      <LeftSidebar/>
    </div>
 </template>
 

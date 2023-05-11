@@ -1,6 +1,6 @@
 <template>
     <Head title="Display Group"/>
-    <MainLayout>
+    <Layout>
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -51,13 +51,14 @@
                 </div>
             </div>
         </div>
-    </MainLayout>
+    </Layout>
 </template>
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, router, useForm} from "@inertiajs/vue3";
 import '../bootstrap';
+import Layout from "@/Layouts/Layout.vue";
 
 // router.on('start', (e) => {
 //     router.reload();
