@@ -1,6 +1,6 @@
 <template>
    <div class="drawer-content flex flex-col">
-      <Header/>
+      <Header :page-title="pageTitle"/>
       <main class="flex-1 overflow-y-auto pt-8 px-6 bg-base-200">
          <slot/>
          <div class="h-16"/>
@@ -9,6 +9,9 @@
 </template>
 
 <script setup>
-
 import Header from "@/Layouts/Header.vue";
+
+defineProps({
+   pageTitle: String,
+})
 </script>

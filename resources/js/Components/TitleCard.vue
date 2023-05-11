@@ -1,11 +1,16 @@
 <template>
    <div :class="'card w-full p-6 bg-base-100 shadow-xl ' + (topMargin || 'mt-6')">
-      <div class="card-title inline-block">
-         {{ title }}
+      <div class="inline-block">
+         <h2 class="card-title">{{title}}</h2>
          <div class="inline-block float-right">
             <button v-if="topRightButtonLabel"
-               class="btn btn-primary px-6 btn-sm normal-case" @click="$emit('')">{{ topRightButtonLabel }}</button>
+                    class="btn btn-primary px-6 btn-sm normal-case" @click="$emit('')">{{ topRightButtonLabel }}
+            </button>
          </div>
+      </div>
+      <div class="divider mt-2"/>
+      <div class="h-full w-full pb-6 bg-base-100">
+         <slot/>
       </div>
    </div>
 </template>

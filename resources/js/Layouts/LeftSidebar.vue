@@ -31,6 +31,15 @@
                      aria-hidden="true"/>
             </Link>
          </li>
+         <li>
+            <Link :href="route('profile.edit')"
+                  :class="route().current('profile.edit') ? activeRoute : inactiveRoute">
+               Profile
+               <span v-if="route().current('profile.edit')"
+                     :class="activeRouteSpan"
+                     aria-hidden="true" />
+            </Link>
+         </li>
       </ul>
    </div>
 </template>

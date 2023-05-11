@@ -1,6 +1,6 @@
 <template>
     <Head title="Display Group"/>
-    <Layout>
+    <Layout page-title="Display Group">
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
                 <div class="card w-96 bg-base-100 shadow-xl">

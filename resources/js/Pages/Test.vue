@@ -1,6 +1,6 @@
 <template>
    <Head title="Test"/>
-   <Layout>
+   <Layout page-title="Test Page">
       <Card title="DEVELOPER"/>
       <TitleCard top-margin="mt-6" title="testlol"
                  top-right-button-label="idk"

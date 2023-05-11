@@ -17,7 +17,7 @@ module.exports = {
         },
     },
     daisyui: {
-        themes: ['light','dark','corporate','business'],
+        themes: ['light','dark','corporate','business','emerald'],
         // themes: ['dark'],
     },
 

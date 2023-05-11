@@ -6,7 +6,7 @@
             <font-awesome-icon icon="fa-solid fa-bars"
                                class="h-5 inline-block w-5"/>
          </label>
-         <h1 class="text-2xl font-semibold ml-2">PAGENAME</h1>
+         <h1 class="text-2xl font-semibold ml-2">{{ pageTitle }}</h1>
       </div>
       <div class="order-last">
          <select class="select mr-4" data-choose-theme>
@@ -15,6 +15,7 @@
             <option value="dark">Dark</option>
             <option value="corporate">Corporate</option>
             <option value="business">Business</option>
+            <option value="emerald">Emerald</option>
          </select>
          <div class="dropdown dropdown-end ml-4">
             <label tabIndex="0" class="btn btn-ghost btn-circle avatar">
@@ -29,11 +30,13 @@
                      Profile Settings
                   </Link>
                </li>
-<!--               <li class=''><Link to={'/app/settings-billing'}>Bill History</Link></li>-->
-               <div class="divider mt-0 mb-0" />
-               <li><Link :href="route('logout')" method="post">
-                  Logout
-               </Link></li>
+               <!--               <li class=''><Link to={'/app/settings-billing'}>Bill History</Link></li>-->
+               <div class="divider mt-0 mb-0"/>
+               <li>
+                  <Link :href="route('logout')" method="post">
+                     Logout
+                  </Link>
+               </li>
             </ul>
          </div>
       </div>
@@ -44,4 +47,7 @@
 import {Link} from "@inertiajs/vue3";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
+defineProps({
+   pageTitle: String,
+})
 </script>
