@@ -42,12 +42,19 @@
          </li>
          <li v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <Link :href="route('classroom.show',classroomData.id)"
-            :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
+                  :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
                {{ classroomData.name }}
                <span v-if="route().current('classroom.show',classroomData.id)"
                      :class="activeRouteSpan"
-                     aria-hidden="true" />
+                     aria-hidden="true"/>
             </Link>
+         </li>
+         <li>
+            <div class="flex-col">
+               <div class="w-full" @click="setIsExpanded">
+
+               </div>
+            </div>
          </li>
       </ul>
    </div>
@@ -58,13 +65,16 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {Link, usePage} from "@inertiajs/vue3";
 import SidebarSubmenu from "@/Layouts/SidebarSubmenu.vue";
 
+const inactiveRoute = 'font-normal ';
+const activeRoute = 'font-semibold bg-base-200 '
+const activeRouteSpan = 'absolute inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary';
 const close = (e) => {
    document.getElementById('left-sidebar-drawer').click()
 }
 
-const inactiveRoute = 'font-normal ';
-const activeRoute = 'font-semibold bg-base-200 '
-const activeRouteSpan = 'absolute inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary';
+const setIsExpanded = () => {
+
+}
 
 
 </script>
