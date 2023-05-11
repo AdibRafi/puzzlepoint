@@ -5,12 +5,15 @@
       <TitleCard top-margin="mt-6" title="testlol"
                  top-right-button-label="idk"
                  @click="t"/>
+      <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
+         <p>{{ classroomData.name }}</p>
+      </Card>
    </Layout>
 </template>
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {onMounted} from "vue";
 import Card from "@/Components/Card.vue";
 import VuePdfEmbed from "vue-pdf-embed";
@@ -21,6 +24,8 @@ import {useStore} from 'vuex'
 const t = () => {
    console.log('tah')
 }
+
+console.log(usePage().props.auth.classroom)
 
 const topSideButtonFunc = () => {
    const action = useStore();

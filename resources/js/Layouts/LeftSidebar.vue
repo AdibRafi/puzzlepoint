@@ -37,6 +37,15 @@
                Profile
                <span v-if="route().current('profile.edit')"
                      :class="activeRouteSpan"
+                     aria-hidden="true"/>
+            </Link>
+         </li>
+         <li v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
+            <Link :href="route('classroom.show',classroomData.id)"
+            :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
+               {{ classroomData.name }}
+               <span v-if="route().current('classroom.show',classroomData.id)"
+                     :class="activeRouteSpan"
                      aria-hidden="true" />
             </Link>
          </li>
@@ -46,7 +55,7 @@
 <script setup>
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {Link} from "@inertiajs/vue3";
+import {Link, usePage} from "@inertiajs/vue3";
 import SidebarSubmenu from "@/Layouts/SidebarSubmenu.vue";
 
 const close = (e) => {
