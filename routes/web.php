@@ -36,20 +36,20 @@ use Inertia\Inertia;
 //    ]);
 //});
 Route::get('/', function () {
-    return Inertia::render('Welcome/Index', [
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION
-    ]);
+   return Inertia::render('Welcome/Index', [
+      'laravelVersion' => Application::VERSION,
+      'phpVersion' => PHP_VERSION
+   ]);
 });
 
 Route::get('/dashboardA', function () {
-    return Inertia::render('Archives/DashboardA');
+   return Inertia::render('Archives/DashboardA');
 })->middleware(['auth', 'verified'])->name('dashboardA');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
-    Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
-    Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
+   Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
+   Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
+   Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
 });
 
 Route::get('/test', [TestController::class, 'index'])->name('test.index');
@@ -78,15 +78,15 @@ Route::patch('profile', [ProfileController::class, 'update'])->name('profile.upd
 Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::group(['prefix' => 'session'], function () {
-    Route::get('start', [SessionController::class, 'lecturerIndexSession'])->name('lecturer.session.index');
-    Route::get('expert', [SessionController::class, 'lecturerExpertSession'])->name('lecturer.session.expert');
-    Route::get('jigsaw', [SessionController::class, 'lecturerJigsawSession'])->name('lecturer.session.jigsaw');
-    Route::get('student/start', [SessionController::class, 'studentSessionIndex'])->name('student.session.index');
-    Route::get('student/expert', [SessionController::class, 'studentExpertSession'])->name('student.session.expert');
-    Route::get('student/jigsaw', [SessionController::class, 'studentJigsawSession'])->name('student.session.jigsaw');
-    Route::post('update-time', [SessionController::class, 'updateTime'])->name('update.time');
-    Route::get('end',[SessionController::class,'lecturerEndSession'])->name('lecturer.session.end');
-    Route::get('student/end', [SessionController::class, 'studentEndSession'])->name('student.session.end');
+   Route::get('start', [SessionController::class, 'lecturerIndexSession'])->name('lecturer.session.index');
+   Route::get('expert', [SessionController::class, 'lecturerExpertSession'])->name('lecturer.session.expert');
+   Route::get('jigsaw', [SessionController::class, 'lecturerJigsawSession'])->name('lecturer.session.jigsaw');
+   Route::get('student/start', [SessionController::class, 'studentSessionIndex'])->name('student.session.index');
+   Route::get('student/expert', [SessionController::class, 'studentExpertSession'])->name('student.session.expert');
+   Route::get('student/jigsaw', [SessionController::class, 'studentJigsawSession'])->name('student.session.jigsaw');
+   Route::post('update-time', [SessionController::class, 'updateTime'])->name('update.time');
+   Route::get('end', [SessionController::class, 'lecturerEndSession'])->name('lecturer.session.end');
+   Route::get('student/end', [SessionController::class, 'studentEndSession'])->name('student.session.end');
 });
 
 Route::get('assessment-student-index', [AssessmentController::class, 'studentAssessmentIndex'])->name('student.assessment.index');
@@ -95,7 +95,6 @@ Route::get('assessment-student-session', [AssessmentController::class, 'studentS
 Route::post('assessment-student-check-answer', [AssessmentController::class, 'studentCheckAnswer'])->name('student.assessment.check.answer');
 
 Route::get('displayGroup', [TestController::class, 'displayGroup'])->name('display.group');
-
 
 
 require __DIR__ . '/auth.php';

@@ -50,7 +50,8 @@
             </Link>
          </li>
          <div class="divider"/>
-         <li v-if="route().current('classroom.*')">
+         <li v-if="route().current('classroom.*') || route().current('topic.*') || route().current('module.*') || route().current('option.*') ||
+         route().current('assessment.*')">
             <Link :href="route('topic.create',
                {classroom_id:route().params.classroom})"
                   :class="route().current('topic.create') ? activeRoute : inactiveRoute">
