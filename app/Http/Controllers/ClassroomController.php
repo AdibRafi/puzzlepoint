@@ -76,10 +76,11 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
+       //todo: detach topic n its relationship
         $classroom->users()->detach();
         $classroom->delete();
 
         return redirect()->route('classroom.index')
-            ->with('message', 'Classroom deleted successfully');
+            ->with('alertMessage', 'Classroom deleted successfully');
     }
 }

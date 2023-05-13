@@ -125,6 +125,4 @@ onMounted(() => {
    }
 })
 
-console.log(route().params.classroom)
-console.log(route().current('classroom.*'))
 </script>

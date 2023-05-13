@@ -1,6 +1,10 @@
 <template>
    <Head :title="props.classroom.name"/>
-   <Layout :page-title="props.classroom.name + ' ' + props.classroom.subject_code">
+   <Layout page-title="Classroom">
+      <TitleCard :title="props.classroom.name" top-right-button-label="Edit Class"
+                 @click="router.get(route('classroom.edit',props.classroom.id))">
+
+      </TitleCard>
       <Card :title="props.classroom.name">
          <p>{{ props.classroom.subject_code }}</p>
          <template #actions v-if="$page.props.user.type === 'lecturer'">
@@ -84,6 +88,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, router} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
+import TitleCard from "@/Components/TitleCard.vue";
 
 const props = defineProps({
    classroom: Object,
