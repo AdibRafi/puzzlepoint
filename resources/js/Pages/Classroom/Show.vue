@@ -1,9 +1,42 @@
 <template>
    <Head :title="props.classroom.name"/>
-   <Layout page-title="Classroom">
+   <Layout :page-title="props.classroom.name">
+      <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+         <div class="state shadow bg-base-100">
+            <div class="stat">
+               <div class="stat-figure btn btn-circle btn-primary">
+                  <Link :href="route('topic.create')">
+                     <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
+                  </Link>
+               </div>
+               <div class="stat-title">Total Topic</div>
+               <div class="stat-value">{{ topicModal.length }}</div>
+               <div class="stat-desc">
+                  To add more, Click the + Button
+               </div>
+            </div>
+         </div>
+         <div class="state shadow bg-base-100">
+            <div class="stat">
+               <div class="stat-figure btn btn-circle btn-secondary">
+                  <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
+               </div>
+               <div class="stat-title">Total Archive</div>
+               <div class="stat-value">SOMETHING</div>
+               <div class="stat-desc">Click the button to see Archive</div>
+            </div>
+         </div>
+      </div>
       <TitleCard :title="props.classroom.name" top-right-button-label="Edit Class"
-                 @click="router.get(route('classroom.edit',props.classroom.id))">
+                 @button-function="router.get(route('classroom.edit',props.classroom.id))">
 
+         <h2 class="card-title">List of Created Topics</h2>
+         <div v-for="data in topicModal" :key="data">
+            <Card :title="data.name" @click="goTopic(data.id)"
+                  class="cursor-pointer hover:bg-base-200 w-1/2">
+               <p>Modules = {{data.no_of_modules}}</p>
+            </Card>
+         </div>
       </TitleCard>
       <Card :title="props.classroom.name">
          <p>{{ props.classroom.subject_code }}</p>
@@ -89,11 +122,18 @@ import {Head, Link, router} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
+import InputText from "@/Components/InputText.vue";
+import TextAreaInput from "@/Components/TextAreaInput.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const props = defineProps({
    classroom: Object,
    topicModal: Object,
 })
+
+const goTopic = (id) => {
+   router.get(route('topic.show', id))
+}
 
 // console.log(props.topicModal.length);
 const destroyClassroom = (id) => {

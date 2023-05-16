@@ -3,8 +3,7 @@
    <Layout title="Classroom">
       <TitleCard title="Classroom" top-right-button-label="Add Class"
                  v-if="$page.props.user.type === 'lecturer'"
-                 @click="router.get(route('classroom.create'))">
-
+                 @button-function="router.get(route('classroom.create'))">
          <div v-for="data in classroomData" :key="data">
             <Card :title="data.name" @click="goClassroom(data.id)"
                   class="cursor-pointer hover:bg-base-200 w-1/2">

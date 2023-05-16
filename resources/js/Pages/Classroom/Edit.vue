@@ -3,7 +3,7 @@
    <Layout>
       <form @submit.prevent="form.put(route('classroom.update',form.id));">
          <TitleCard title="Edit Classroom" top-right-button-label="Destroy"
-                    @click="destroy(props.classroom.id)">
+                    @button-function="destroy(props.classroom.id)">
             <InputText label-title="Classroom Name" v-model="form.name"/>
             <InputText label-title="Subject_code" v-model="form.subject_code"/>
             <div class="divider"/>

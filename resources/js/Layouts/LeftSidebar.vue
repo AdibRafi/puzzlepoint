@@ -42,9 +42,9 @@
          </li>
          <li v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <Link :href="route('classroom.show',classroomData.id)"
-                  :class="route().current('classroom.show') ? activeRoute : inactiveRoute">
+                  :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
                {{ classroomData.name }}
-               <span v-if="route().current('classroom.show')"
+               <span v-if="route().current('classroom.show',classroomData.id)"
                      :class="activeRouteSpan"
                      aria-hidden="true"/>
             </Link>

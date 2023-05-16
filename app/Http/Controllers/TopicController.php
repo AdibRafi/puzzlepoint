@@ -12,135 +12,139 @@ use Inertia\Inertia;
 
 class TopicController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+   /**
+    * Display a listing of the resource.
+    */
+   public function index()
+   {
+      //
+   }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request) //classroom_id
-    {
-        //todo: kena encrypt
-        $classroom_id = $request->input('classroom_id');
-        return inertia('Topic/Create', compact('classroom_id'));
-    }
+   /**
+    * Show the form for creating a new resource.
+    */
+   public function create(Request $request) //classroom_id
+   {
+      //todo: kena encrypt
+      $classroom_id = $request->input('classroom_id');
+      return inertia('Topic/Create', compact('classroom_id'));
+   }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTopicRequest $request) //topicData, classroomData
-    {
-        $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
+   /**
+    * Store a newly created resource in storage.
+    */
+   public function store(StoreTopicRequest $request) //topicData, classroomData
+   {
+      $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
 
-        $classroom = Classroom::find($request->classroom_id);
-        $topic = new Topic();
-        $topic->name = $request->name;
-        $topic->no_of_modules = $request->no_of_modules;
-        $topic->max_time_expert = $request->max_time_expert;
-        $topic->max_time_jigsaw = $request->max_time_jigsaw;
-        $topic->transition_time = $request->transition_time;
-        $topic->is_expert_form = 0;
-        $topic->is_jigsaw_form = 0;
-        $topic->is_ready = 0;
-        $topic->is_complete = 0;
-        $topic->is_start = 0;
-        $topic->date_time = $startedAt;
-        $topic->status = 'onModule';
-        $topic->classroom()->associate($classroom);
+      $classroom = Classroom::find($request->classroom_id);
+      $topic = new Topic();
+      $topic->name = $request->name;
+      $topic->no_of_modules = $request->no_of_modules;
+      $topic->max_time_expert = $request->max_time_expert;
+      $topic->max_time_jigsaw = $request->max_time_jigsaw;
+      $topic->transition_time = $request->transition_time;
+      $topic->is_expert_form = 0;
+      $topic->is_jigsaw_form = 0;
+      $topic->is_ready = 0;
+      $topic->is_complete = 0;
+      $topic->is_start = 0;
+      $topic->date_time = $startedAt;
+      $topic->status = 'onModule';
+      $topic->classroom()->associate($classroom);
 //        dd($topic);
 
-        $topic->save();
+      $topic->save();
 
-        $t = new Assessment();
-        $t->isPublish = 0;
-        $t->topic()->associate($topic->id);
-        $t->save();
+      $t = new Assessment();
+      $t->isPublish = 0;
+      $t->topic()->associate($topic->id);
+      $t->save();
 
-        $topic_id = $topic->id;
+      $topic_id = $topic->id;
 
-        return redirect()->route('module.create', compact('topic_id'));
-    }
+      return redirect()->route('module.create', compact('topic_id'));
+   }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Topic $topic)
-    {
-        //
-    }
+   /**
+    * Display the specified resource.
+    */
+   public function show(Topic $topic)
+   {
+      $moduleModal = $topic->modules()->get();
+      $studentModal = $topic->getStudents();
+      return inertia('Topic/Show',
+         compact('topic', 'moduleModal',
+            'studentModal'));
+   }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Topic $topic)
-    {
-        //
-    }
+   /**
+    * Show the form for editing the specified resource.
+    */
+   public function edit(Topic $topic)
+   {
+      //
+   }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Topic $topic)
-    {
-        //
-    }
+   /**
+    * Update the specified resource in storage.
+    */
+   public function update(Request $request, Topic $topic)
+   {
+      //
+   }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Topic $topic)
-    {
-        $classroom = $topic->classroom()->first();
-        if ($topic->assessment()->exists()) {
-            $topic->assessment()->delete();
-        }
-        $topic->attendances()->delete();
-        $topic->modules()->delete();
-        $topic->delete();
+   /**
+    * Remove the specified resource from storage.
+    */
+   public function destroy(Topic $topic)
+   {
+      $classroom = $topic->classroom()->first();
+      if ($topic->assessment()->exists()) {
+         $topic->assessment()->delete();
+      }
+      $topic->attendances()->delete();
+      $topic->modules()->delete();
+      $topic->delete();
 
-        return redirect()->route('classroom.show', $classroom)
-            ->with('alertMessage', 'Topic Delete Successfully');
+      return redirect()->route('classroom.show', $classroom)
+         ->with('alertMessage', 'Topic Delete Successfully');
 
-    }
+   }
 
-    public function verify(Request $request) //topic_id
-    {
-        $topicModal = Topic::find($request->input('topic_id'));
-        return inertia('Lecturer/CreateTopic/Verify', compact('topicModal'));
-    }
+   public function verify(Request $request) //topic_id
+   {
+      $topicModal = Topic::find($request->input('topic_id'));
+      return inertia('Lecturer/CreateTopic/Verify', compact('topicModal'));
+   }
 
-    public function storeVerify(Request $request) //topic_id
-    {
-        $classroom = Classroom::find($request->input('topic_id'));
-        return redirect()->route('classroom.show', $classroom)->with('alertMessage', 'topic successfully created');
-    }
+   public function storeVerify(Request $request) //topic_id
+   {
+      $classroom = Classroom::find($request->input('topic_id'));
+      return redirect()->route('classroom.show', $classroom)->with('alertMessage', 'topic successfully created');
+   }
 
-    public function topicArchiveIndex(Request $request) //classroom_id
-    {
-        $topicModal = Classroom::find($request->input('classroom_id'))->topics()->where('is_complete', '=', 1)->get();
+   public function topicArchiveIndex(Request $request) //classroom_id
+   {
+      $topicModal = Classroom::find($request->input('classroom_id'))->topics()->where('is_complete', '=', 1)->get();
 
 
-        return inertia('Topic/Archive/Index', compact('topicModal'));
-    }
+      return inertia('Topic/Archive/Index', compact('topicModal'));
+   }
 
-    public function topicArchiveShow(Topic $topic)
-    {
-        $expertGroupModal = $topic->groups()
-            ->where('type', '=', 'expert')
-            ->with('module')
-            ->with('users')
-            ->get();
+   public function topicArchiveShow(Topic $topic)
+   {
+      $expertGroupModal = $topic->groups()
+         ->where('type', '=', 'expert')
+         ->with('module')
+         ->with('users')
+         ->get();
 
-        $jigsawGroupModal = $topic->groups()
-            ->where('type', '=', 'jigsaw')
-            ->with('users')
-            ->get();
+      $jigsawGroupModal = $topic->groups()
+         ->where('type', '=', 'jigsaw')
+         ->with('users')
+         ->get();
 
-        return inertia('Topic/Archive/Show', compact('topic', 'expertGroupModal', 'jigsawGroupModal'));
-    }
+      return inertia('Topic/Archive/Show', compact('topic', 'expertGroupModal', 'jigsawGroupModal'));
+   }
 }
