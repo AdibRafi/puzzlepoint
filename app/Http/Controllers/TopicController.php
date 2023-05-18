@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreModuleRequest;
+use App\Http\Requests\StoreOptionRequest;
 use App\Http\Requests\StoreTopicRequest;
 use App\Models\Assessment;
+use App\Models\Attendance;
 use App\Models\Classroom;
+use App\Models\Module;
+use App\Models\Option;
 use App\Models\Topic;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,17 +40,21 @@ class TopicController extends Controller
     */
    public function store(Request $request) //topicData, classroomData
    {
-      dd($request->all());
+      $topicInput = $request->input('topic');
+      $modulesInput = $request->input('modules');
+      $optionInput = $request->input('option');
+//      dd($request->all());
 
-      $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
+      $startedAt = Carbon::createFromFormat('Y-m-d\TH:i',
+         $topicInput['date_time'])->toDateTimeString();
 
-      $classroom = Classroom::find($request->classroom_id);
+      $classroom = Classroom::find($request->input('classroom_id'));
       $topic = new Topic();
-      $topic->name = $request->name;
-      $topic->no_of_modules = $request->no_of_modules;
-      $topic->max_time_expert = $request->max_time_expert;
-      $topic->max_time_jigsaw = $request->max_time_jigsaw;
-      $topic->transition_time = $request->transition_time;
+      $topic->name = $topicInput['name'];
+      $topic->no_of_modules = $topicInput['no_of_modules'];
+      $topic->max_time_expert = $topicInput['max_time_expert'];
+      $topic->max_time_jigsaw = $topicInput['max_time_jigsaw'];
+      $topic->transition_time = $topicInput['transition_time'];
       $topic->is_expert_form = 0;
       $topic->is_jigsaw_form = 0;
       $topic->is_ready = 0;
@@ -55,18 +63,66 @@ class TopicController extends Controller
       $topic->date_time = $startedAt;
       $topic->status = 'onModule';
       $topic->classroom()->associate($classroom);
-//        dd($topic);
 
       $topic->save();
 
-      $t = new Assessment();
-      $t->isPublish = 0;
-      $t->topic()->associate($topic->id);
-      $t->save();
+      $assessment = new Assessment();
+      $assessment->is_publish = 0;
+      $assessment->topic()->associate($topic->id);
+      $assessment->save();
 
-      $topic_id = $topic->id;
+      for ($i = 0; $i < count($modulesInput); $i++) {
+         $module = new Module();
+         $module->topic()->associate($topic->id);
+         $module->name = $modulesInput[$i]['name'];
+         $module->learning_objectives = $modulesInput[$i]['learning_objectives'];
 
-      return redirect()->route('module.create', compact('topic_id'));
+         $filePath = 'modules.' . $i . '.file_path';
+         if ($request->hasFile($filePath)) {
+            $file = $request->file($filePath);
+            $file_path = 'modules/' . $file->getClientOriginalName();
+            $file->move('modules', $file->getClientOriginalName());
+
+            $module->file_path = $file_path;
+         }
+         $module->save();
+      }
+
+      $groupDistribution = $optionInput['groupMethod'];
+      $timeMethod = $optionInput['timeMethod'];
+      //todo: do Group distribution
+
+      $option = new Option();
+      $option->topic()->associate($topic->id);
+      $option->group_distribution = $groupDistribution;
+      $option->time_method = $timeMethod;
+      for ($j = 1; $j < $topic->no_of_modules + 1; $j++) {
+         $option->setAttribute('tm' . $j, $optionInput['tm'][$j]);
+      }
+      $option->save();
+      $topic->update([
+         'status' => 'onReady',
+         'is_ready' => 1,
+      ]);
+
+      $students = $topic->getStudents();
+      for ($i = 0; $i < $students->count(); $i++) {
+         $attendance = new Attendance();
+         $attendance->user()->associate($students->get($i));
+         $attendance->topic()->associate($topic->id);
+         $attendance->attend_status = 'absent';
+         $attendance->date = $topic->date_time;
+         $attendance->save();
+      }
+      $topic->getStudents()->count();
+
+      $classroom = $topic->classroom()->first();
+      return redirect()->route('classroom.show', $classroom)
+         ->with('alertMessage', 'Topic has been created');
+
+//      $topic_id = $topic->id;
+
+//      return redirect()->route('module.create', compact('topic_id'));
    }
 
    /**
@@ -160,5 +216,10 @@ class TopicController extends Controller
    public function topicSecondStep(StoreModuleRequest $request)
    {
       //just check validate
+   }
+
+   public function topicThirdStep(StoreOptionRequest $request)
+   {
+
    }
 }

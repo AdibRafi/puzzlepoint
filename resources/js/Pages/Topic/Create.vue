@@ -1,4 +1,5 @@
 <template>
+   <Head title="Add Topic"/>
    <Layout page-title="Create Topic">
       <Card title="DEVELOPER">
          <!--         {{ errors }}-->
@@ -6,7 +7,7 @@
          {{ formStep }}
          <p>modules = {{ modules.length }}</p>
          <p>even time = {{ evenTime }}</p>
-         <p>tm = {{option.tm}}</p>
+         <p>tm = {{ option.tm }}</p>
       </Card>
       <ul class="steps w-full">
          <li class="step step-primary">Topic</li>
@@ -124,7 +125,7 @@
                       class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                   <span class="block">
                      <p class="w-full text-lg font-semibold">Even</p>
-                     <p class="w-full">Each Student will present for {{evenTime}} minutes</p>
+                     <p class="w-full">Each Student will present for {{ evenTime }} minutes</p>
                   </span>
                   <font-awesome-icon icon="fa-solid fa-equals" size="xl"/>
                </label>
@@ -146,7 +147,8 @@
          <div v-if="option.timeMethod === 'uneven'">
             <div class="divider"/>
             <div v-for="(moduleData,index) in modules" :key="moduleData">
-               <InputText :label-title="'Time for Module ' + (index+1)" input-type="number" v-model="option.tm[index+1]"/>
+               <InputText :label-title="'Time for Module ' + (index+1)" input-type="number"
+                          v-model="option.tm[index+1]"/>
             </div>
          </div>
          <div class="divider"/>
@@ -171,16 +173,15 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {onUpdated, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import InputForm from "@/Components/InputForm.vue";
 import Layout from "@/Layouts/Layout.vue";
-import {router} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
 
 const formStep = ref(1);
 const evenTime = ref(0);
@@ -202,12 +203,12 @@ const topic = reactive({
 const modules = reactive([])
 
 const tm = reactive({
-   1 : 0,
-   2 : 0,
-   3 : 0,
-   4 : 0,
-   5 : 0,
-   6 : 0
+   1: 0,
+   2: 0,
+   3: 0,
+   4: 0,
+   5: 0,
+   6: 0
 })
 
 const option = reactive({

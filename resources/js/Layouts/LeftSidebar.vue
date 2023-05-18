@@ -11,7 +11,7 @@
          <li class="mb-2 font-semibold text-xl">
             <Link :href="route('classroom.index')">
                <img class="mask mask-squircle w-10" src="/PuzzlePointLogo.png" alt="Logo"/>
-               Classroom
+               PuzzlePoint
             </Link>
          </li>
          <!--         <li>-->

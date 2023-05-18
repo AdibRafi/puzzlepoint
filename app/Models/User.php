@@ -43,59 +43,53 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+   use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'bio',
-        'type',
-    ];
+   /**
+    * The attributes that are mass assignable.
+    *
+    * @var array<int, string>
+    */
+   protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+   /**
+    * The attributes that should be hidden for serialization.
+    *
+    * @var array<int, string>
+    */
+   protected $hidden = [
+      'password',
+      'remember_token',
+   ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+   /**
+    * The attributes that should be cast.
+    *
+    * @var array<string, string>
+    */
+   protected $casts = [
+      'email_verified_at' => 'datetime',
+   ];
 
 //    protected $with = ['classrooms'];
 
-    public function classrooms(): BelongsToMany
-    {
-        return $this->belongsToMany(Classroom::class, 'classroom_user');
-    }
+   public function classrooms(): BelongsToMany
+   {
+      return $this->belongsToMany(Classroom::class, 'classroom_user');
+   }
 
-    public function groups(): BelongsToMany
-    {
-        return $this->belongsToMany(Group::class);
-    }
+   public function groups(): BelongsToMany
+   {
+      return $this->belongsToMany(Group::class);
+   }
 
-    public function assessments(): BelongsToMany
-    {
-        return $this->belongsToMany(Assessment::class);
-    }
+   public function assessments(): BelongsToMany
+   {
+      return $this->belongsToMany(Assessment::class);
+   }
 
-    public function attendances(): HasMany
-    {
-        return $this->hasMany(Attendance::class);
-    }
+   public function attendances(): HasMany
+   {
+      return $this->hasMany(Attendance::class);
+   }
 }

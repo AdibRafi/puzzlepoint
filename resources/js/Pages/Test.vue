@@ -8,18 +8,43 @@
       <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
          <p>{{ classroomData.name }}</p>
       </Card>
+      <TitleCard title="thing">
+         <div class="overflow-x-auto">
+            <table class="table w-full">
+               <!-- head -->
+               <thead>
+               <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Message</th>
+               </tr>
+               </thead>
+               <tbody>
+               <!-- row 1 -->
+               <tr v-for="(message,index) in messages" :key="message">
+                  <th>{{ index + 1 }}</th>
+                  <td>{{message.name}}</td>
+                  <td>{{message.messageInput}}</td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+         <InputText input-type="text" label-title="Message" v-model="inputMessage"/>
+         <button @click="addMessage" class="btn btn-primary w-full mt-6">Add</button>
+      </TitleCard>
    </Layout>
 </template>
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {onMounted} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import Card from "@/Components/Card.vue";
 import VuePdfEmbed from "vue-pdf-embed";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {useStore} from 'vuex'
+import InputText from "@/Components/InputText.vue";
 
 const t = () => {
    console.log('tah')
@@ -27,25 +52,14 @@ const t = () => {
 
 console.log(usePage().props.auth.classroom)
 
-const topSideButtonFunc = () => {
-   const action = useStore();
-
-   const openAddNewLeadModal = () => {
-      action.dispatch(openModal({title: "Add New Lead", bodyType: MODAL_BODY_TYPES.LEAD_ADD_NEW}))
-   }
-
-   return '<div class="inline-block float-right">\n' +
-      '         <button class="btn px-6 btn-sm normal-case btn-primary"  @click="openAddNewLeadModal">Add New\n' +
-      '         </button>\n' +
-      '      </div>';
-   // return (???
-   //    <div class="inline-block float-right">
-   //       <button class="btn px-6 btn-sm normal-case btn-primary"  onClick={() => openAddNewLeadModal()}>Add New
-   //       </button>
-   //    </div>
-   // )
+const messages = reactive([])
+const inputMessage = ref(null);
+const addMessage = () => {
+   messages.push({
+      name: 'adib',
+      messageInput: inputMessage.value
+   })
 }
-
 
 const tmDummy = {
    '1': '15',
@@ -65,10 +79,6 @@ const form = useForm({
    tm: tmDummy,
 });
 
-const form2 = useForm({
-   topic_id: 1,
-
-})
 
 onMounted(() => {
    console.log('mounted')
