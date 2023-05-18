@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreModuleRequest;
 use App\Http\Requests\StoreTopicRequest;
 use App\Models\Assessment;
 use App\Models\Classroom;
@@ -33,8 +34,10 @@ class TopicController extends Controller
    /**
     * Store a newly created resource in storage.
     */
-   public function store(StoreTopicRequest $request) //topicData, classroomData
+   public function store(Request $request) //topicData, classroomData
    {
+      dd($request->all());
+
       $startedAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->date_time)->toDateTimeString();
 
       $classroom = Classroom::find($request->classroom_id);
@@ -73,9 +76,10 @@ class TopicController extends Controller
    {
       $moduleModal = $topic->modules()->get();
       $studentModal = $topic->getStudents();
+      $assessmentModal = $topic->assessment()->exists() ? $topic->assessment()->get() : null;
       return inertia('Topic/Show',
          compact('topic', 'moduleModal',
-            'studentModal'));
+            'studentModal', 'assessmentModal'));
    }
 
    /**
@@ -146,5 +150,15 @@ class TopicController extends Controller
          ->get();
 
       return inertia('Topic/Archive/Show', compact('topic', 'expertGroupModal', 'jigsawGroupModal'));
+   }
+
+   public function topicFirstStep(StoreTopicRequest $request)
+   {
+      //just check validate
+   }
+
+   public function topicSecondStep(StoreModuleRequest $request)
+   {
+      //just check validate
    }
 }

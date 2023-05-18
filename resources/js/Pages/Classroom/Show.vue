@@ -5,7 +5,7 @@
          <div class="state shadow bg-base-100">
             <div class="stat">
                <div class="stat-figure btn btn-circle btn-primary">
-                  <Link :href="route('topic.create')">
+                  <Link :href="route('topic.create',{classroom_id : props.classroom.id})">
                      <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
                   </Link>
                </div>
