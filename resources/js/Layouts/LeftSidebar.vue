@@ -34,6 +34,7 @@
          <li>
             <Link :href="route('profile.edit')"
                   :class="route().current('profile.edit') ? activeRoute : inactiveRoute">
+               <font-awesome-icon icon="fa-regular fa-address-card" size="lg"/>
                Profile
                <span v-if="route().current('profile.edit')"
                      :class="activeRouteSpan"
@@ -43,6 +44,7 @@
          <li v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <Link :href="route('classroom.show',classroomData.id)"
                   :class="route().current('classroom.show',classroomData.id) ? activeRoute : inactiveRoute">
+               <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
                {{ classroomData.name }}
                <span v-if="route().current('classroom.show',classroomData.id)"
                      :class="activeRouteSpan"

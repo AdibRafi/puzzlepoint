@@ -1,45 +1,100 @@
 <template>
    <Head title="Dashboard"/>
    <Layout title="Classroom">
-      <TitleCard title="Classroom" top-right-button-label="Add Class"
-                 v-if="$page.props.user.type === 'lecturer'"
-                 @button-function="router.get(route('classroom.create'))">
-         <div v-for="data in classroomData" :key="data">
-            <Card :title="data.name" @click="goClassroom(data.id)"
-                  class="cursor-pointer hover:bg-base-200 w-1/2">
-               <p>{{ data.subject_code }}</p>
-            </Card>
+      <div v-if="$page.props.auth.user.is_first_time === 0">
+         <TitleCard title="Classroom" top-right-button-label="Add Class"
+                    v-if="$page.props.auth.user.type === 'lecturer'"
+                    @button-function="router.get(route('classroom.create'))">
+            <div v-for="data in classroomData" :key="data">
+               <Card :title="data.name" @click="goClassroom(data.id)"
+                     class="cursor-pointer hover:bg-base-200 w-1/2">
+                  <p>{{ data.subject_code }}</p>
+               </Card>
+            </div>
+         </TitleCard>
+         <TitleCard title="Classroom"
+                    v-else-if="$page.props.auth.user.type === 'student'">
+            <div v-for="data in classroomData" :key="data">
+               <Card :title="data.name" @click="goClassroom(data.id)"
+                     class="cursor-pointer hover:bg-base-200 w-1/2">
+                  <p>{{ data.subject_code }}</p>
+               </Card>
+            </div>
+         </TitleCard>
+      </div>
+      <div v-else-if="$page.props.auth.user.is_first_time === 1">
+         <div v-if="$page.props.auth.user.type === 'lecturer'">
+            <TitleCard title="Classroom" top-right-button-label="Add Class"
+                       v-if="$page.props.auth.user.type === 'lecturer'"
+                       @button-function="router.get(route('classroom.create'))"
+                       tooltip-text="Lets Start with Adding a Class">
+               <!--               <div v-for="data in classroomData" :key="data">-->
+               <!--                  <Card :title="data.name" @click="goClassroom(data.id)"-->
+               <!--                        class="cursor-pointer hover:bg-base-200 w-1/2">-->
+               <!--                     <p>{{ data.subject_code }}</p>-->
+               <!--                  </Card>-->
+               <!--               </div>-->
+            </TitleCard>
+
+            <input type="checkbox" id="my-modal" class="modal-toggle"
+                   v-model="openModal"/>
+            <div class="modal">
+               <div class="modal-box">
+                  <h3 class="font-bold text-lg">Welcome to PuzzlePoint
+                     <span class="mx-4">
+                        <font-awesome-icon icon="fa-solid fa-hand" shake size="xl"/>
+                     </span>
+                  </h3>
+                  <p class="py-4">Let's get started! Are you up for a tutorial?</p>
+                  <div class="modal-action">
+                     <button @click.prevent="updateWizard"
+                             class="btn btn-warning">No
+                     </button>
+                     <button @click.prevent="openModalFunction"
+                             class="btn btn-primary">Yes!
+                     </button>
+                  </div>
+               </div>
+            </div>
          </div>
-      </TitleCard>
-      <TitleCard title="Classroom"
-                 v-else>
-         <div v-for="data in classroomData" :key="data">
-            <Card :title="data.name" @click="goClassroom(data.id)"
-                  class="cursor-pointer hover:bg-base-200 w-1/2">
-               <p>{{ data.subject_code }}</p>
-            </Card>
-         </div>
-      </TitleCard>
+      </div>
    </Layout>
 
 </template>
 
 
 <script setup>
-import {Head, Link, router} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
+import {onMounted, ref} from "vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const props = defineProps({
    classroomData: Object,
 })
 
+const openModal = ref(false);
+
 const goClassroom = (id) => {
    router.get(route('classroom.show', id))
 }
 
+onMounted(() => {
+   if (usePage().props.auth.user.type === 'lecturer' &&
+      usePage().props.auth.user.is_first_time === 1) {
+      openModal.value = true;
+   }
+})
+const openModalFunction = () => {
+   openModal.value = !openModal.value;
+}
+
+const updateWizard = () => {
+   router.get(route('user.update.wizard'))
+}
 const destroy = (id) => {
    if (confirm('Are you sure to delete?')) {
       router.delete(route('classroom.destroy', id))

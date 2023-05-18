@@ -44,12 +44,12 @@ class HandleInertiaRequests extends Middleware
          'message' => [
             'alertMessage' => session('alertMessage'),
             'warningMessage' => session('warningMessage'),
-         ],
-         'user' => [
-            'name' => auth()->user()->name ?? '',
-            'email' => auth()->user()->email ?? '',
-            'type' => auth()->user()->type ?? '',
          ]
+//         'user' => [
+//            'name' => auth()->user()->name ?? '',
+//            'email' => auth()->user()->email ?? '',
+//            'type' => auth()->user()->type ?? '',
+//         ]
       ]);
    }
 }

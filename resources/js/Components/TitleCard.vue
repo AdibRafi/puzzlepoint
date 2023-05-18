@@ -3,7 +3,10 @@
       <div class="inline-block">
          <h2 class="card-title">{{ title }}</h2>
          <button v-if="topRightButtonLabel"
-                 :class="'btn px-6 btn-sm normal-case inline-block float-right ' + (topRightButtonLabel === 'Destroy' ? 'btn-warning':'btn-primary')"
+                 :class="'btn px-6 btn-sm normal-case inline-block float-right ' +
+                 (topRightButtonLabel === 'Destroy' ? 'btn-warning ':'btn-primary ') +
+                 (tooltipText ? 'tooltip tooltip-left tooltip-open tooltip-info':'')"
+                 :data-tip="tooltipText"
                  @click="$emit('buttonFunction')">{{ topRightButtonLabel }}
          </button>
       </div>
@@ -19,6 +22,7 @@ defineProps({
    topMargin: String,
    title: String,
    topRightButtonLabel: String,
+   tooltipText: String
 })
 
 defineEmits(['buttonFunction'])

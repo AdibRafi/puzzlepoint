@@ -10,41 +10,48 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
-    public function edit(User $user)
-    {
-        return inertia('Profile/Profile');
-    }
+   public function edit(User $user)
+   {
+      return inertia('Profile/Profile');
+   }
 
-    public function update(ProfileUpdateRequest $request)
-    {
-        $request->user()->fill($request->validated());
+   public function update(ProfileUpdateRequest $request)
+   {
+      $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+      if ($request->user()->isDirty('email')) {
+         $request->user()->email_verified_at = null;
+      }
 
-        $request->user()->save();
+      $request->user()->save();
 
-        return redirect()->route('profile.edit')
-            ->with('alertMessage', 'Profile update successfully');
-    }
+      return redirect()->route('profile.edit')
+         ->with('alertMessage', 'Profile update successfully');
+   }
 
-    public function destroy(Request $request)
-    {
-        $user = $request->user();
+   public function destroy(Request $request)
+   {
+      $user = $request->user();
 
-        $user->classrooms()->detach();
-        $user->assessments()->detach();
-        $user->groups()->detach();
-        $user->attendances()->delete();
+      $user->classrooms()->detach();
+      $user->assessments()->detach();
+      $user->groups()->detach();
+      $user->attendances()->delete();
 
-        Auth::logout();
+      Auth::logout();
 
-        $user->delete();
+      $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+      $request->session()->invalidate();
+      $request->session()->regenerateToken();
 
-        return Redirect::to('/');
-    }
+      return Redirect::to('/');
+   }
+
+   public function updateWizard()
+   {
+      Auth::user()->update([
+         'is_first_time' => 0,
+      ]);
+   }
 }
