@@ -24,7 +24,7 @@ class GroupSeeder extends Seeder
          'email' => 'adibtest@gmail.com',
          'password' => bcrypt('test1234'),
          'type' => 'lecturer',
-         'is_first_time' => 1,
+         'wizard_status' => 'onCreateClassroom',
       ]);
       Classroom::factory()->create([
          'name' => 'classroomTest',

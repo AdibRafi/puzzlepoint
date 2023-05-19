@@ -117,7 +117,7 @@
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, Link, router} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
@@ -129,6 +129,8 @@ const props = defineProps({
    classroom: Object,
    topicModal: Object,
 })
+
+const wizardStatus = usePage().props.auth.user.wizard_status
 
 const goTopic = (id) => {
    router.get(route('topic.show', id))

@@ -27,7 +27,7 @@ class UserFactory extends Factory
          'type' => 'student',
          'remember_token' => Str::random(10),
          'gender' => $this->faker->randomElement(['male', 'female']),
-         'is_first_time' => $this->faker->boolean,
+         'wizard_status' => '',
       ];
    }
 

@@ -15,12 +15,13 @@ import {
    faHourglass,
    faShuffle, faEquals, faNotEqual,
    faArrowUpRightFromSquare,
-   faHand
+   faHand,
+   faCircleInfo
 } from "@fortawesome/free-solid-svg-icons";
-import {faCircleCheck,faAddressCard,} from "@fortawesome/free-regular-svg-icons"
+import {faCircleCheck, faAddressCard} from "@fortawesome/free-regular-svg-icons"
 
 library.add(faAnglesLeft, faBars, faArrowRightFromBracket, faUser,
    faCircleCheck, faPlus, faMinus,
    faCircleExclamation, faXmark, solidFaCircle, faPuzzlePiece,
    faAngleDown, faArrowRightToBracket, faHourglass, faShuffle, faEquals,
-   faNotEqual,faAddressCard,faArrowUpRightFromSquare,faHand);
+   faNotEqual, faAddressCard, faArrowUpRightFromSquare, faHand, faCircleInfo);

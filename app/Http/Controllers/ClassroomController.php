@@ -40,6 +40,12 @@ class ClassroomController extends Controller
         $id = $classroom->id;
         auth()->user()->classrooms()->attach($id);
 
+        if (Auth::user()->wizard_status === 'onCreateClassroom'){
+           Auth::user()->update([
+              'wizard_status' => 'onCreateTopic'
+           ]);
+        }
+
         return redirect()->route('classroom.index')
             ->with('alertMessage', 'Classroom created successfully');
     }

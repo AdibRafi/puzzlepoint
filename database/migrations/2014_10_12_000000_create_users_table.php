@@ -19,7 +19,7 @@ return new class extends Migration {
          $table->string('bio');
          $table->string('type');
          $table->string('gender');
-         $table->boolean('is_first_time');
+         $table->string('wizard_status');
          $table->rememberToken();
          $table->timestamps();
       });
