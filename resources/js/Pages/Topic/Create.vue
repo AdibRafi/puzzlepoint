@@ -44,8 +44,11 @@
                           input-type="number"
                           v-model="topic.max_time_jigsaw"/>
             </div>
-            <InputText label-title="Transition Time" input-type="number"
-                       v-model="topic.transition_time"/>
+            <div class="tooltip tooltip-bottom tooltip-info"
+                 data-tip="2 - 5 Minutes">
+               <InputText label-title="Transition Time" input-type="number"
+                          v-model="topic.transition_time"/>
+            </div>
             <InputText label-title="Date" input-type="datetime-local"
                        v-model="topic.date_time"/>
          </div>
@@ -68,6 +71,16 @@
          </div>
       </TitleCard>
       <TitleCard title="Add Modules" v-if="formStep===2">
+         <div v-if="wizardStatus === 'onCreateTopic'"
+              class="alert alert-info shadow-lg mb-10">
+            <div>
+               <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+               <span>
+                  Fill in the name in each modules. <br/>
+                  (Don't worry about the learning_objectives and file for now)
+               </span>
+            </div>
+         </div>
          <div v-for="(moduleData,Index) in modules" :key="moduleData">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
@@ -99,6 +112,15 @@
          </div>
       </TitleCard>
       <TitleCard title="Add Option" v-if="formStep===3">
+         <div v-if="wizardStatus === 'onCreateTopic'"
+              class="alert alert-info shadow-lg mb-10">
+            <div>
+               <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+               <span>
+                  Choose the following option for both grouping and time option
+               </span>
+            </div>
+         </div>
          <h2 class="card-title mb-8">Grouping Option</h2>
          <ul class="grid w-full gap-6 md:grid-cols-2">
             <li>

@@ -11,6 +11,7 @@ use App\Models\Classroom;
 use App\Models\Module;
 use App\Models\Option;
 use App\Models\Topic;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -114,7 +115,13 @@ class TopicController extends Controller
          $attendance->date = $topic->date_time;
          $attendance->save();
       }
-      $topic->getStudents()->count();
+
+      if (Auth::user()->wizard_status === 'onCreateTopic') {
+         Auth::user()->update([
+            'wizard_status' => 'onStartSession'
+         ]);
+         $topic->getStudents();
+      }
 
       $classroom = $topic->classroom()->first();
       return redirect()->route('classroom.show', $classroom)
@@ -216,10 +223,5 @@ class TopicController extends Controller
    public function topicSecondStep(StoreModuleRequest $request)
    {
       //just check validate
-   }
-
-   public function topicThirdStep(StoreOptionRequest $request)
-   {
-
    }
 }

@@ -38,6 +38,13 @@
       <TitleCard :title="props.classroom.name" top-right-button-label="Edit Class"
                  @button-function="router.get(route('classroom.edit',props.classroom.id))">
 
+         <div v-if="wizardStatus === 'onStartSession'"
+              class="alert alert-info shadow-lg mb-4">
+            <div>
+               <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+               <span>Great! Now you can click the created topic</span>
+            </div>
+         </div>
          <h2 class="card-title">List of Created Topics</h2>
          <div v-for="data in topicModal" :key="data">
             <Card :title="data.name" @click="goTopic(data.id)"
