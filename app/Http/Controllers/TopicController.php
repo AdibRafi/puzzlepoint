@@ -106,21 +106,21 @@ class TopicController extends Controller
          'is_ready' => 1,
       ]);
 
+      $attendanceStatus = 'absent';
+      if (Auth::user()->wizard_status === 'onCreateTopic') {
+         Auth::user()->update([
+            'wizard_status' => 'onStartSession'
+         ]);
+         $attendanceStatus = 'present';
+      }
       $students = $topic->getStudents();
       for ($i = 0; $i < $students->count(); $i++) {
          $attendance = new Attendance();
          $attendance->user()->associate($students->get($i));
          $attendance->topic()->associate($topic->id);
-         $attendance->attend_status = 'absent';
+         $attendance->attend_status = $attendanceStatus;
          $attendance->date = $topic->date_time;
          $attendance->save();
-      }
-
-      if (Auth::user()->wizard_status === 'onCreateTopic') {
-         Auth::user()->update([
-            'wizard_status' => 'onStartSession'
-         ]);
-         $topic->getStudents();
       }
 
       $classroom = $topic->classroom()->first();
