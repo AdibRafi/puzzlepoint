@@ -20,7 +20,7 @@
             <Link :href="route('classroom.index')" class="btn btn-ghost normal-case text-xl">
                 PuzzlePoint
             </Link>
-            <p>{{ $page.props.user.name }}</p>
+            <p>{{ $page.props.auth.user.name }}</p>
         </div>
         <div class="navbar-end">
             <Link class="btn btn-ghost btn-circle" :href="route('profile.edit')">

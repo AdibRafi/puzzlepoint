@@ -1,9 +1,9 @@
 <template>
-    <MainLayout>
+    <SessionLayout page-title="Index">
         <Card title="DEVELOPER">
             <!--            <p>{{ props.studentAbsentModal }}</p>-->
         </Card>
-        <div v-if="$page.props.user.type ==='student'">
+        <div v-if="$page.props.auth.user.type ==='student'">
             <Card title="You have enter a session">
                 Please wait for your lecturer to start the session
                 <div class="divider">Topic</div>
@@ -15,7 +15,7 @@
                 <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>
             </Card>
         </div>
-        <div v-if="$page.props.user.type === 'lecturer'">
+        <div v-if="$page.props.auth.user.type === 'lecturer'">
             <Card :title="props.topicModuleModal.name">
                 <p>Module: </p>
                 <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">
@@ -48,7 +48,7 @@
                 </Link>
             </Card>
         </div>
-    </MainLayout>
+    </SessionLayout>
 </template>
 
 <script setup>
@@ -56,6 +56,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import '../../bootstrap'
 import {Link, router, usePage} from "@inertiajs/vue3";
+import SessionLayout from "@/Layouts/SessionLayout.vue";
 
 const props = defineProps({
     topicModuleModal: Object,
@@ -69,7 +70,7 @@ window.Echo.channel('student-attendance-channel')
         router.reload();
     })
 
-if (usePage().props.user.type === 'student') {
+if (usePage().props.auth.user.type === 'student') {
     window.Echo.channel('move-expert-channel')
         .listen('MoveExpertSession', (e) => {
             router.get(route('student.session.expert', {topic_id: props.topicModuleModal.id}))
