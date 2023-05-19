@@ -15,11 +15,23 @@
          <li :class="'step ' + (formStep === 3 ? 'step-primary':'')">Options</li>
       </ul>
       <TitleCard title="Add Topic" v-if="formStep===1">
+         <div v-if="wizardStatus === 'onCreateTopic'"
+              class="alert alert-info shadow-lg mb-10">
+            <div>
+               <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+               <span>Fill in the topic, number of modules, max time for jigsaw and expert, and transition time</span>
+            </div>
+         </div>
          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InputText label-title="Topic Name" input-type="text"
                        v-model="topic.name"/>
-            <InputText label-title="Number of Modules" input-type="number"
-                       v-model="topic.no_of_modules"/>
+            <div :class="wizardStatus === 'onCreateTopic' ?
+            'tooltip tooltip-top tooltip-info tooltip-open': ''"
+                 data-tip="This will affect the time for jigsaw session">
+               <InputText label-title="Number of Modules"
+                          input-type="number"
+                          v-model="topic.no_of_modules"/>
+            </div>
             <div class="tooltip tooltip-top tooltip-primary"
                  data-tip="Advisable to put a bit less time">
                <InputText label-title="Maximum Time for Expert Session"
@@ -177,7 +189,7 @@ import Card from "@/Components/Card.vue";
 import {reactive, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import Layout from "@/Layouts/Layout.vue";
-import {Head, router} from "@inertiajs/vue3";
+import {Head, router, usePage} from "@inertiajs/vue3";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -185,6 +197,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const formStep = ref(1);
 const evenTime = ref(0);
+const wizardStatus = usePage().props.auth.user.wizard_status
 
 const props = defineProps({
    classroom_id: Object,
