@@ -24,7 +24,7 @@
                   <form @submit.prevent="submit">
                      <div class="mb-4">
                         <InputText type="email"
-                                   container-style="border-none"
+                                   container-style="border-none bg-base-100"
                                    label-title="Email"
                                    v-model="form.email"/>
                         <ErrorAlert v-if="errors" v-for="error in errors" :key="error"

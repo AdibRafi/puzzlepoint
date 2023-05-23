@@ -44,7 +44,7 @@ Route::get('/dashboardA', function () {
    return Inertia::render('Archives/DashboardA');
 })->middleware(['auth', 'verified'])->name('dashboardA');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
    Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
    Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
    Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
