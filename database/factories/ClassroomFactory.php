@@ -19,6 +19,7 @@ class ClassroomFactory extends Factory
         return [
             'name' => $this->faker->text(20),
             'subject_code' => $this->faker->text(7),
+            'join_code' => $this->faker->regexify('[A-Za-z0-9]{6}')
         ];
     }
 }
