@@ -26,11 +26,12 @@
             </div>
             <div class="state shadow bg-base-100">
                 <div class="stat">
-                    <div class="stat-figure btn btn-circle btn-secondary">
+                    <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
+                    class="stat-figure btn btn-circle btn-accent">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
-                    </div>
+                    </Link>
                     <div class="stat-title">Total Archive</div>
-                    <div class="stat-value">SOMETHING</div>
+                    <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
                     <div class="stat-desc">Click the button to see Archive</div>
                 </div>
             </div>
@@ -145,6 +146,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 const props = defineProps({
     classroom: Object,
     topicModal: Object,
+    topicArchiveModal: Object,
+
 })
 
 const wizardStatus = usePage().props.auth.user.wizard_status

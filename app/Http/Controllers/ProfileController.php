@@ -51,7 +51,7 @@ class ProfileController extends Controller
    public function updateWizard()
    {
       Auth::user()->update([
-         'is_first_time' => 0,
+         'wizard_status' => 'done',
       ]);
    }
 }
