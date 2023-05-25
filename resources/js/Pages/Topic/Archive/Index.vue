@@ -1,4 +1,5 @@
 <template>
+    <Head title="Archive" />
     <Layout>
         <Card title="DEVELOPER">
             <p>{{ topicModal }}</p>
@@ -35,7 +36,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {Link, router} from "@inertiajs/vue3";
+import {Head, Link, router} from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Login"/>
     <div class="min-h-screen bg-base-200 flex items-center">
         <div class="card mx-auto w-full max-w-5xl shadow-xl">
             <div class="grid md:grid-cols-2 grid-cols-1 bg-base-100 rounded-xl">
@@ -53,8 +54,9 @@
 <script setup>
 import LandingIntro from "@/Pages/Welcome/LandingIntro.vue";
 import InputText from "@/Components/InputText.vue";
-import {Link, useForm} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import ErrorAlert from "@/Components/ErrorAlert.vue";
+import Header from "@/Layouts/Header.vue";
 
 const props = defineProps({
     errors: Object,

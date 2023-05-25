@@ -9,7 +9,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import './iconLibrary';
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = 'PuzzlePoint';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

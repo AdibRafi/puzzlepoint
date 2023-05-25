@@ -27,7 +27,7 @@ class Assessment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['time','is_publish'];
+    protected $fillable = ['time', 'is_publish', 'is_complete'];
 
     public function users(): BelongsToMany
     {

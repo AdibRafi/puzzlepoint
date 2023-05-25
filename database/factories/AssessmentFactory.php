@@ -10,16 +10,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AssessmentFactory extends Factory
 {
-   /**
-    * Define the model's default state.
-    *
-    * @return array<string, mixed>
-    */
-   public function definition(): array
-   {
-      return [
-         'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
-         'is_publish' => $this->faker->boolean,
-      ];
-   }
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
+            'is_publish' => $this->faker->boolean,
+            'is_complete' => $this->faker->boolean,
+
+        ];
+    }
 }

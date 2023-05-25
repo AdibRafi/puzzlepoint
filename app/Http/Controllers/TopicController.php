@@ -70,6 +70,7 @@ class TopicController extends Controller
         $assessment = new Assessment();
         $assessment->is_publish = 0;
         $assessment->topic()->associate($topic->id);
+        $assessment->is_complete = 0;
         $assessment->save();
 
         for ($i = 0; $i < count($modulesInput); $i++) {
@@ -91,7 +92,6 @@ class TopicController extends Controller
 
         $groupDistribution = $optionInput['groupMethod'];
         $timeMethod = $optionInput['timeMethod'];
-        //todo: do Group distribution
 
         $option = new Option();
         $option->topic()->associate($topic->id);
@@ -109,7 +109,7 @@ class TopicController extends Controller
         $attendanceStatus = 'absent';
         if (Auth::user()->wizard_status === 'onCreateTopic') {
             Auth::user()->update([
-                'wizard_status' => 'onStartSession'
+                'wizard_status' => 'onCreateAssessment'
             ]);
             $attendanceStatus = 'present';
         }

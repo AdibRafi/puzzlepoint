@@ -147,7 +147,7 @@ class AssessmentController extends Controller
 
     public function publishAssessment(Request $request) //topic_id, time
     {
-//        dd($request->all());
+        dd($request->all());
         $topic_id = $request->input('topic_id');
         Topic::find($topic_id)->assessment()->update([
             'isPublish' => 1,

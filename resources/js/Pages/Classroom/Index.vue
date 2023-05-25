@@ -34,13 +34,7 @@
             <TitleCard title="Classroom" top-right-button-label="Add Class"
                        v-if="$page.props.auth.user.type === 'lecturer'"
                        @button-function="router.get(route('classroom.create'))"
-                       tooltip-text="Lets Start with Adding a Class">
-               <!--               <div v-for="data in classroomData" :key="data">-->
-               <!--                  <Card :title="data.name" @click="goClassroom(data.id)"-->
-               <!--                        class="cursor-pointer hover:bg-base-200 w-1/2">-->
-               <!--                     <p>{{ data.subject_code }}</p>-->
-               <!--                  </Card>-->
-               <!--               </div>-->
+                       tooltip-btn-text="Lets Start with Adding a Class">
             </TitleCard>
 
             <input type="checkbox" id="my-modal" class="modal-toggle"

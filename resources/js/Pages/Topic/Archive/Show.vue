@@ -1,4 +1,5 @@
 <template>
+    <Head title="Archive" />
     <Layout page-title="Archive">
         <Card title="DEVELOPER">
 
@@ -119,13 +120,13 @@
 
 <script setup>
 
-import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {ref} from "vue";
 import CardTable from "@/Components/CardTable.vue";
+import {Head} from "@inertiajs/vue3";
 
 const props = defineProps({
     topic: Object,

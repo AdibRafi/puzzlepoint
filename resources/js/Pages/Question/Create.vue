@@ -1,6 +1,9 @@
 <template>
     <Head title="Question"/>
-    <MainLayout>
+    <Layout>
+        <TitleCard title="Add Question">
+
+        </TitleCard>
         <form @submit.prevent="form.post(route('question.store'))">
             <Card title="DEVELOPER">
                 <p>q type = {{ form.type }}</p>
@@ -117,7 +120,7 @@
                 </template>
             </Card>
         </form>
-    </MainLayout>
+    </Layout>
 </template>
 
 <script setup>
@@ -127,6 +130,8 @@ import InputForm from "@/Components/InputForm.vue";
 import {onUpdated, ref} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Card from "@/Components/Card.vue";
+import Layout from "@/Layouts/Layout.vue";
+import TitleCard from "@/Components/TitleCard.vue";
 
 const props = defineProps({
     assessment_id: Object,
