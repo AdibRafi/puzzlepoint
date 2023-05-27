@@ -142,7 +142,7 @@ class SessionController extends Controller
         MoveJigsawSession::dispatch();
 
         return inertia('Session/Lecturer/Jigsaw', compact('topicModuleModal',
-            'jigsawGroupUserModal','studentAttendModal', 'studentAbsentModal'));
+            'jigsawGroupUserModal', 'studentAttendModal', 'studentAbsentModal'));
     }
 
     private function initiateStudentSessionModal($topic_id, $groupType)
@@ -250,12 +250,17 @@ class SessionController extends Controller
     {
         $topicModal = Topic::find($request->input('topic_id'));
 
-
         EndSession::dispatch();
 
         $topicModal->update([
             'is_complete' => 1,
         ]);
+
+        if (Auth::user()->wizard_status === 'onStartSession') {
+            Auth::user()->update([
+                'wizard_status' => 'onStartAssessment'
+            ]);
+        }
 
         $classroom = $topicModal->classroom()->first();
         return redirect()->route('classroom.show', $classroom)
