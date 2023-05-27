@@ -63,8 +63,21 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        $topicModal = $classroom->topics()->where('is_complete', '=', 0)->get();
-        $topicArchiveModal = $classroom->topics()->where('is_complete', '=', 1)->get();
+        $topicModal = $classroom->topics()
+            ->where('is_complete', '=', 0)
+            ->orWhere('is_complete','=',1)
+            ->whereHas('assessment', function ($query) {
+                $query->where('is_complete', '=', 0);
+            })
+            ->get();
+
+//        dd($topicModal);
+        $topicArchiveModal = $classroom->topics()
+            ->where('is_complete', '=', 1)
+            ->whereHas('assessment',function ($query){
+                $query->where('is_complete', '=', 1);
+            })
+            ->get();
         return inertia('Classroom/Show',
             compact('classroom', 'topicModal', 'topicArchiveModal'));
     }

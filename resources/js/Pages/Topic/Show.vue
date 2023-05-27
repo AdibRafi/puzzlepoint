@@ -57,7 +57,7 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onStartSession' ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'')"
                         @click.prevent="toAssessment(props.topic.id)">
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
@@ -70,7 +70,7 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onCreateAssessment' ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onCreateAssessment' || isSessionComplete ? 'btn-disabled':'')"
                         @click.prevent="openSession">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                     </div>
@@ -89,6 +89,15 @@
                     'Click the Start Session Button to Continue'
                     :
                     'This will be the topic info. \n For this tutorial, you will be create an assessment first.\n Click the assessment button to continue'}}
+               </span>
+            </div>
+        </div>
+        <div v-if="wizardStatus === 'onStartAssessment'"
+             class="alert alert-info shadow-lg mt-10">
+            <div>
+                <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                <span>
+                    Click back to the Assessment Page
                </span>
             </div>
         </div>
@@ -126,8 +135,11 @@ const formatDate = (date) => {
 // console.log(formatDate(props.topic.date_time))
 const dateTime = formatDate(new Date(props.topic.date_time))
 console.log(dateTime)
+
 const isModuleExpand = ref(false);
 const wizardStatus = usePage().props.auth.user.wizard_status
+const isSessionComplete = props.topic.is_complete;
+const isAssessmentComplete = props.assessmentModal.is_complete;
 
 const setModuleExpand = () => {
     isModuleExpand.value = !isModuleExpand.value

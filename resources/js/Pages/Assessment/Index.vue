@@ -19,7 +19,8 @@
                         <div class="stat-desc">Click Button to Add Question</div>
                     </div>
                 </div>
-                <div class="stats shadow bg-base-100 border-2">
+                <div v-if="!props.assessmentModal.is_publish"
+                     class="stats shadow bg-base-100 border-2">
                     <div class="stat">
                         <div @click.prevent="sendPublish"
                              class="stat-figure btn btn-circle btn-primary">
@@ -29,9 +30,23 @@
                         <div class="stat-value">
                             <InputText input-type="number"
                                        label-title="How Many Minutes?"
-                                v-model="form.time"/>
+                                       v-model="form.time"/>
                         </div>
                         <div class="stat-desc">Click Button to Publish</div>
+                    </div>
+                </div>
+                <div v-else
+                     class="stats shadow bg-base-100 border-2">
+                    <div class="stat">
+                        <div @click.prevent="toStartAssessment"
+                             class="stat-figure btn btn-circle btn-primary">
+                            <font-awesome-icon icon="fa-solid fa-play" size="xl"/>
+                        </div>
+                        <div class="stat-title">Start</div>
+                        <div class="stat-value">
+                            {{ props.assessmentModal.time }} Minutes
+                        </div>
+                        <div class="stat-desc">Click Button to Start</div>
                     </div>
                 </div>
             </div>
@@ -49,42 +64,51 @@
                     <span>After you're done, you can publish it.<br/> Specify the minutes that you would like students to answer the assessment. <br/> After that, click the publish button to continue</span>
                 </div>
             </div>
+            <div v-if="wizardStatus === 'onStartAssessment'"
+                 class="alert alert-info shadow-lg mt-10">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span>
+                    Click the Start button to Start!
+               </span>
+                </div>
+            </div>
         </TitleCard>
-<!--        <Card title="Assessment">-->
-<!--            <div class="card-actions justify-center my-2">-->
-<!--                <Link :href="route('question.create',{assessment_id:props.assessmentModal.id})"-->
-<!--                      class="btn btn-primary">Create Question-->
-<!--                </Link>-->
-<!--            </div>-->
-<!--            <div class="card-actions justify-center">-->
-<!--                <button class="btn btn-warning"-->
-<!--                        @click="destroyAssessment(props.assessmentModal.id)">-->
-<!--                    Delete Assessment-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="divider"/>-->
-<!--            <form @submit.prevent="form.post(route('assessment.publish'))">-->
-<!--                <InputForm label-name="Time"-->
-<!--                           input-type="number"-->
-<!--                           input-placeholder="in minutes" class="mb-4"-->
-<!--                           v-model="form.time"/>-->
-<!--                <button type="submit" :disabled="form.processing" class="btn btn-accent">-->
-<!--                    Publish-->
-<!--                </button>-->
-<!--            </form>-->
-<!--        </Card>-->
-<!--        <Card class="my-4">-->
-<!--            <h2 class="card-title">List of Question</h2>-->
-<!--        </Card>-->
-<!--        <Card :title="quesData.name" v-for="quesData in questionAnswerModal" class="my-4">-->
-<!--            <p>type: {{ quesData.type }}</p>-->
-<!--            <div v-for="ansData in quesData.answers">-->
-<!--                <p>{{ ansData.name }}</p>-->
-<!--            </div>-->
-<!--            <template #actions>-->
-<!--                <Link :href="route('question.edit',quesData)" class="btn btn-accent">Edit question</Link>-->
-<!--            </template>-->
-<!--        </Card>-->
+        <!--        <Card title="Assessment">-->
+        <!--            <div class="card-actions justify-center my-2">-->
+        <!--                <Link :href="route('question.create',{assessment_id:props.assessmentModal.id})"-->
+        <!--                      class="btn btn-primary">Create Question-->
+        <!--                </Link>-->
+        <!--            </div>-->
+        <!--            <div class="card-actions justify-center">-->
+        <!--                <button class="btn btn-warning"-->
+        <!--                        @click="destroyAssessment(props.assessmentModal.id)">-->
+        <!--                    Delete Assessment-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--            <div class="divider"/>-->
+        <!--            <form @submit.prevent="form.post(route('assessment.publish'))">-->
+        <!--                <InputForm label-name="Time"-->
+        <!--                           input-type="number"-->
+        <!--                           input-placeholder="in minutes" class="mb-4"-->
+        <!--                           v-model="form.time"/>-->
+        <!--                <button type="submit" :disabled="form.processing" class="btn btn-accent">-->
+        <!--                    Publish-->
+        <!--                </button>-->
+        <!--            </form>-->
+        <!--        </Card>-->
+        <!--        <Card class="my-4">-->
+        <!--            <h2 class="card-title">List of Question</h2>-->
+        <!--        </Card>-->
+        <!--        <Card :title="quesData.name" v-for="quesData in questionAnswerModal" class="my-4">-->
+        <!--            <p>type: {{ quesData.type }}</p>-->
+        <!--            <div v-for="ansData in quesData.answers">-->
+        <!--                <p>{{ ansData.name }}</p>-->
+        <!--            </div>-->
+        <!--            <template #actions>-->
+        <!--                <Link :href="route('question.edit',quesData)" class="btn btn-accent">Edit question</Link>-->
+        <!--            </template>-->
+        <!--        </Card>-->
     </Layout>
 </template>
 
@@ -123,13 +147,11 @@ const sendPublish = () => {
     form.post(route('assessment.publish'))
 }
 
-const destroyAssessment = (id) => {
-    if (confirm('Are you sure to delete?')) {
-        router.delete(route('assessment.destroy', id))
-    }
+const toStartAssessment = () => {
+    router.get();
 }
 
-onMounted(()=>{
+onMounted(() => {
     router.reload();
 })
 </script>
