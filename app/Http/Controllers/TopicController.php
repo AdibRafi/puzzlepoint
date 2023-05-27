@@ -139,7 +139,8 @@ class TopicController extends Controller
     {
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
-        $assessmentModal = $topic->assessment()->exists() ? $topic->assessment()->get() : null;
+        $assessmentModal = $topic->assessment()->exists() ?
+            $topic->assessment()->first() : null;
         return inertia('Topic/Show',
             compact('topic', 'moduleModal',
                 'studentModal', 'assessmentModal'));
@@ -222,7 +223,7 @@ class TopicController extends Controller
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
         return inertia('Topic/Archive/Show',
-            compact('topic', 'expertGroupModal', 'jigsawGroupModal', 'moduleModal','studentModal'));
+            compact('topic', 'expertGroupModal', 'jigsawGroupModal', 'moduleModal', 'studentModal'));
     }
 
     public function topicFirstStep(StoreTopicRequest $request)

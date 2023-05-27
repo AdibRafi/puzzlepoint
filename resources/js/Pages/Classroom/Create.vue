@@ -1,6 +1,7 @@
 <template>
    <Head title="Create Classroom"/>
    <Layout>
+<!--       todo: place the error alert-->
       <form @submit.prevent="form.post(route('classroom.store'));">
          <TitleCard title="Create Classroom">
             <div v-if="wizardStatus === 'onCreateClassroom'"

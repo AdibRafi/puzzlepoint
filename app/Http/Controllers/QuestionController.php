@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreQuestionRequest;
 use App\Models\Answer;
 use App\Models\Assessment;
 use App\Models\Question;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
 {
@@ -30,8 +32,9 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreQuestionRequest $request)
     {
+//        dd($request->all());
         $rightAns = $request->input('answer.right_answer');
         if ($request->input('type') === 'check') {
             $rightAns = array_keys($rightAns);
@@ -67,6 +70,12 @@ class QuestionController extends Controller
                 }
             }
             $answer->save();
+        }
+
+        if (Auth::user()->wizard_status === 'onCreateAssessment'){
+            Auth::user()->update([
+                'wizard_status' => 'onStartSession'
+            ]);
         }
         return redirect()->route('question.create', compact('assessment_id'))
             ->with('alertMessage', 'Added Question Successfully');

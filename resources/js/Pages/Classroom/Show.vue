@@ -43,7 +43,7 @@
                    :tooltip-desc-text="wizardStatus === 'onCreateTopic' ? 'Share this code to student to join' : ''"
                    :tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''">
 
-            <div v-if="wizardStatus === 'onStartSession'"
+            <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
                  class="alert alert-info shadow-lg mb-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>

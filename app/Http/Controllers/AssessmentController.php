@@ -13,19 +13,27 @@ class AssessmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) //topic_id
+    public function index(Request $request) //topic_id OR assessment_id
     {
+        $assessmentModal = Assessment::find($request->input('assessment_id'));
         $topicModal = Topic::find($request->input('topic_id'));
-        if ($topicModal->assessment()->exists()) {
+        if ($assessmentModal !== null) {
+            $topicModal = $assessmentModal->topic()->first();
+            $questionAnswerModal = $assessmentModal->questions()->with('answers')->get();
+            return inertia('Assessment/Index',
+                compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
+        } else if ($topicModal->assessment()->exists()) {
             $assessmentModal = $topicModal->assessment()->first();
             $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
-            return inertia('Assessment/Index', compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
+            return inertia('Assessment/Index',
+                compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
         } else {
             $assessmentModal = new Assessment();
             $assessmentModal->topic()->associate($topicModal->id);
-            $assessmentModal->isPublish = 0;
+            $assessmentModal->is_publish = 0;
             $assessmentModal->save();
-            return inertia('Assessment/Index', compact('assessmentModal', 'topicModal'));
+            return inertia('Assessment/Index',
+                compact('assessmentModal', 'topicModal'));
         }
 
     }
@@ -141,20 +149,22 @@ class AssessmentController extends Controller
 //        Assessment::find(1)->users()->attach(2);
         $topicId = $assessmentModal->topic()->first()->id;
 //        dd($topicId);
-        return redirect()->route('student.assessment.index',['topic_id' => $topicId])
+        return redirect()->route('student.assessment.index', ['topic_id' => $topicId])
             ->with('alertMessage', 'You got ' . $score . ' scores');
     }
 
-    public function publishAssessment(Request $request) //topic_id, time
+    public function publishAssessment(Request $request) //assessment_id, time
     {
-        dd($request->all());
-        $topic_id = $request->input('topic_id');
-        Topic::find($topic_id)->assessment()->update([
-            'isPublish' => 1,
-            'time' => $request->input('time'),
+        $assessmentModal = Assessment::find($request->input('assessment_id'));
+
+        $topicModal = $assessmentModal->topic()->first()->id;
+
+        $assessmentModal->update([
+            'is_publish' => 1,
+            'time' => $request->input('time')
         ]);
 
-        return redirect()->route('assessment.index', compact('topic_id'))
-            ->with('alertMessage', 'Question Publish Successfully');
+        return redirect()->route('topic.show', $topicModal)
+            ->with('alertMessage', 'Assessment Publish Successfully');
     }
 }

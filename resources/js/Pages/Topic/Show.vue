@@ -62,7 +62,8 @@
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
                     <div class="stat-title">Assessment</div>
-                    <div class="stat-value">Not Started</div>
+                    <div class="stat-value">{{ props.assessmentModal.time !== null
+                        ? props.assessmentModal.time : 'Not Started' }}</div>
                     <div class="stat-desc">To go to assessment page, click button</div>
                 </div>
             </div>
