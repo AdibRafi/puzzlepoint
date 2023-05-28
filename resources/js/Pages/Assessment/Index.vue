@@ -38,15 +38,15 @@
                 <div v-else
                      class="stats shadow bg-base-100 border-2">
                     <div class="stat">
-                        <div @click.prevent="toStartAssessment"
+                        <div @click.prevent="toEndAssessment"
                              class="stat-figure btn btn-circle btn-primary">
-                            <font-awesome-icon icon="fa-solid fa-play" size="xl"/>
+                            <font-awesome-icon icon="fa-solid fa-forward-step" size="xl"/>
                         </div>
-                        <div class="stat-title">Start</div>
+                        <div class="stat-title">End Assessment Session</div>
                         <div class="stat-value">
                             {{ props.assessmentModal.time }} Minutes
                         </div>
-                        <div class="stat-desc">Click Button to Start</div>
+                        <div class="stat-desc">Click Button to End</div>
                     </div>
                 </div>
             </div>
@@ -57,22 +57,33 @@
                     <span>This will be Assessment Page. <br/> Click the Question Button.</span>
                 </div>
             </div>
-            <div v-else-if="wizardStatus === 'onStartSession'"
+            <div v-else-if="wizardStatus === 'onPublishAssessment'"
                  class="alert alert-info shadow-lg my-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
                     <span>After you're done, you can publish it.<br/> Specify the minutes that you would like students to answer the assessment. <br/> After that, click the publish button to continue</span>
                 </div>
             </div>
-            <div v-if="wizardStatus === 'onStartAssessment'"
+            <div v-else-if="wizardStatus === 'onStartSession'"
+                 class="alert alert-info shadow-lg my-4">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span>Great! Now go back to topic menu to start the session</span>
+                </div>
+            </div>
+            <div v-else-if="wizardStatus === 'onEndAssessment'"
                  class="alert alert-info shadow-lg mt-10">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
                     <span>
-                    Click the Start button to Start!
+                    Since the Assessment is not time specified event. <br/>
+                        You can end it by clicking the end button.
                </span>
                 </div>
             </div>
+            <button @click.prevent="router.get(route('topic.show',props.topicModal))"
+                    class="btn btn-secondary mt-10">Back to Topic
+            </button>
         </TitleCard>
         <!--        <Card title="Assessment">-->
         <!--            <div class="card-actions justify-center my-2">-->
@@ -147,8 +158,10 @@ const sendPublish = () => {
     form.post(route('assessment.publish'))
 }
 
-const toStartAssessment = () => {
-    router.get();
+const toEndAssessment = () => {
+    router.get(route('end.assessment.session'), {
+        assessment_id: props.assessmentModal.id
+    });
 }
 
 onMounted(() => {

@@ -157,14 +157,44 @@ class AssessmentController extends Controller
     {
         $assessmentModal = Assessment::find($request->input('assessment_id'));
 
-        $topicModal = $assessmentModal->topic()->first()->id;
+        $topicModal = $assessmentModal->topic()->first();
+
+        $topic = Topic::find($topicModal->id)->getStudents()->pluck('id');
+
+        $assessmentModal->users()->attach($topicModal->getStudents()->pluck('id'));
 
         $assessmentModal->update([
             'is_publish' => 1,
             'time' => $request->input('time')
         ]);
 
+        if (Auth::user()->wizard_status === 'onPublishAssessment') {
+            Auth::user()->update([
+                'wizard_status' => 'onEndAssessment'
+            ]);
+        }
+
         return redirect()->route('topic.show', $topicModal)
             ->with('alertMessage', 'Assessment Publish Successfully');
+    }
+
+    public function endAssessmentSession(Request $request) //assessment_id
+    {
+        $assessmentModal = Assessment::find($request->input('assessment_id'));
+        $topicModal = $assessmentModal->topic()->first();
+        $classroomModal = $topicModal->classroom()->first();
+
+        $assessmentModal->update([
+            'is_complete' => 1,
+        ]);
+
+        if (Auth::user()->wizard_status === 'onEndAssessment') {
+            Auth::user()->update([
+                'wizard_status' => 'onShowArchive'
+            ]);
+        }
+
+        return redirect()->route('classroom.show',$classroomModal)
+            ->with('alertMessage','End Assessment Successfully');
     }
 }

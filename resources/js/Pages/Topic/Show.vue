@@ -92,12 +92,23 @@
                </span>
             </div>
         </div>
-        <div v-if="wizardStatus === 'onStartAssessment'"
+        <div v-else-if="wizardStatus === 'onStartAssessment'"
              class="alert alert-info shadow-lg mt-10">
             <div>
                 <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
                 <span>
                     Click back to the Assessment Page
+               </span>
+            </div>
+        </div>
+        <div v-else-if="wizardStatus === 'onEndAssessment'"
+             class="alert alert-info shadow-lg mt-10">
+            <div>
+                <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                <span>
+                    You have publish the Assessment! <br/>
+                    Now you just have to wait your student to finish the assessment. <br/>
+                    To end the assessment time period, go to assessment page.
                </span>
             </div>
         </div>

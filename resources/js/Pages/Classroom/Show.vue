@@ -27,13 +27,23 @@
             <div class="state shadow bg-base-100">
                 <div class="stat">
                     <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
-                    class="stat-figure btn btn-circle btn-accent">
+                          class="stat-figure btn btn-circle btn-accent">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                     </Link>
                     <div class="stat-title">Total Archive</div>
                     <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
                     <div class="stat-desc">Click the button to see Archive</div>
                 </div>
+            </div>
+        </div>
+        <div v-if="wizardStatus === 'onShowArchive'"
+             class="alert alert-info shadow-lg my-4">
+            <div>
+                <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                <span>If you have completed both jigsaw learning session and assessment, <br/>
+                That topic will be moved to archive. <br/>
+                    Click the archive button to continue
+                </span>
             </div>
         </div>
         <TitleCard :title="props.classroom.name"

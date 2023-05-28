@@ -222,8 +222,18 @@ class TopicController extends Controller
 
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
+
+        $assessmentModal = $topic->assessment()->first();
+        $questionAnswerModal = $assessmentModal->questions()->with('answers')->get();
+
+        $studentAssessmentModal = Assessment::find($assessmentModal->id)->users()
+            ->withPivot('marks')
+            ->get();
+
         return inertia('Topic/Archive/Show',
-            compact('topic', 'expertGroupModal', 'jigsawGroupModal', 'moduleModal', 'studentModal'));
+            compact('topic', 'expertGroupModal',
+                'jigsawGroupModal', 'moduleModal', 'studentModal'
+                , 'assessmentModal', 'questionAnswerModal', 'studentAssessmentModal'));
     }
 
     public function topicFirstStep(StoreTopicRequest $request)

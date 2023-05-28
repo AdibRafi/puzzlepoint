@@ -1,10 +1,18 @@
 <template>
-    <Head title="Archive" />
+    <Head title="Archive"/>
     <Layout>
         <Card title="DEVELOPER">
             <p>{{ topicModal }}</p>
         </Card>
         <TitleCard :title="props.classroomModal.name">
+            <div v-if="wizardStatus === 'onShowArchive'"
+                 class="alert alert-info shadow-lg mb-4">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span>Here will be the archive of the completed topics. <br/>
+                    Click the completed topic to continue</span>
+                </div>
+            </div>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div v-for="topicData in props.topicModuleModal" :key="topicData"
                      @click.prevent="showArchiveTopic(topicData.id)"
@@ -36,7 +44,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
-import {Head, Link, router} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -46,7 +54,9 @@ const props = defineProps({
     topicModuleModal: Object,
 })
 
+const wizardStatus = usePage().props.auth.user.wizard_status;
+
 const showArchiveTopic = (id) => {
-    router.get(route('topic.archive.show',id))
+    router.get(route('topic.archive.show', id))
 }
 </script>

@@ -258,7 +258,7 @@ class SessionController extends Controller
 
         if (Auth::user()->wizard_status === 'onStartSession') {
             Auth::user()->update([
-                'wizard_status' => 'onStartAssessment'
+                'wizard_status' => 'onPublishAssessment'
             ]);
         }
 
