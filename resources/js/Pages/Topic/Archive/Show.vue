@@ -9,7 +9,9 @@
                  class="alert alert-info shadow-lg mb-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span>Great! Now you can click the created topic</span>
+                    <span>Here this will be the information about the topics. <br/>
+                        Scroll down to continue.
+                    </span>
                 </div>
             </div>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
@@ -104,6 +106,14 @@
                 </div>
             </div>
             <div class="divider my-10">Assessment</div>
+            <div v-if="wizardStatus === 'onShowArchive'"
+                 class="alert alert-info shadow-lg mb-4">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span>Here you can look the assessment <br/>
+                    Click the user button to see in detail</span>
+                </div>
+            </div>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div class="stats shadow bg-base-100 border-2">
                     <div class="stat">
@@ -122,16 +132,39 @@
                         <div class="stat-title">Total Student Complete</div>
                         <div class="stat-value">{{ numCompleteAssessmentStudent }}</div>
                     </div>
-                    <input type="checkbox" id="modal" class="modal-toggle" />
-                    <div class="modal">
-                        <div class="modal-box">
-                            <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-                            <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-                            <div class="modal-action">
-                                <label for="modal" class="btn">Yay!</label>
+                    <input type="checkbox" id="modal" class="modal-toggle"/>
+                    <label for="modal" class="modal cursor-pointer">
+                        <label class="modal-box relative" for="">
+                            <div class="overflow-x-auto">
+                                <table class="table w-full">
+                                    <thead>
+                                    <tr>
+                                        <th class="w-3/4">Name</th>
+                                        <th>Marks</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="studentData in studentsCompleteAssessment" :key="studentData">
+                                        <td>{{ studentData.name }}</td>
+                                        <td>
+                                            <div class="badge badge-success">
+                                                {{ studentData.mark }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr v-for="studentData in studentsNotCompleteAssessment" :key="studentData">
+                                        <td>{{ studentData.name }}</td>
+                                        <td>
+                                            <div class="badge badge-error">
+                                                {{ studentData.mark }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    </div>
+                        </label>
+                    </label>
                 </div>
             </div>
             <div class="divider my-10">Question</div>
@@ -142,11 +175,24 @@
                             <div class="stat-figure text-secondary">
                                 <font-awesome-icon icon="fa-solid fa-clipboard" size="xl"/>
                             </div>
-                            <div class="stat-title text-xl">{{questionData.name}}</div>
+                            <div class="stat-title text-xl">{{ questionData.name }}</div>
                             <div v-for="answerData in questionData.answers" :key="answerData"
-                                class="stat-title">{{answerData.name}}</div>
+                                 class="stat-title">{{ answerData.name }}
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div v-if="wizardStatus === 'onShowArchive'"
+                 class="alert alert-info shadow-lg mt-4">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span>You have complete the tutorial! <br/>
+                    Press the button to return to main menu</span>
+                </div>
+                <div class="flex-none">
+                    <button @click.prevent="router.get(route('end.wizard'))"
+                        class="btn btn-ghost">Finish Tutorial</button>
                 </div>
             </div>
         </TitleCard>
@@ -177,9 +223,9 @@ import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import CardTable from "@/Components/CardTable.vue";
-import {Head, usePage} from "@inertiajs/vue3";
+import {Head, router, usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     topic: Object,
@@ -191,6 +237,9 @@ const props = defineProps({
     questionAnswerModal: Object,
     studentAssessmentModal: Object,
 })
+
+const studentsCompleteAssessment = reactive([]);
+const studentsNotCompleteAssessment = reactive([]);
 
 const numCompleteAssessmentStudent = ref(0);
 const isModuleExpand = ref(false);
@@ -205,6 +254,15 @@ console.log(props.studentAssessmentModal[0].pivot.marks)
 for (let i = 0; i < props.studentAssessmentModal.length; i++) {
     if (props.studentAssessmentModal[i].pivot.marks !== null) {
         numCompleteAssessmentStudent.value++;
+        studentsCompleteAssessment.push({
+            name: props.studentAssessmentModal[i].name,
+            mark: props.studentAssessmentModal[i].pivot.marks,
+        })
+    } else {
+        studentsNotCompleteAssessment.push({
+            name: props.studentAssessmentModal[i].name,
+            mark: 'Not Complete',
+        });
     }
 }
 </script>

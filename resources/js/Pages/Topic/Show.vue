@@ -92,7 +92,7 @@
                </span>
             </div>
         </div>
-        <div v-else-if="wizardStatus === 'onStartAssessment'"
+        <div v-else-if="wizardStatus === 'onPublishAssessment'"
              class="alert alert-info shadow-lg mt-10">
             <div>
                 <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>

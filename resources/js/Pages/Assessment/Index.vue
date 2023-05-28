@@ -23,7 +23,8 @@
                      class="stats shadow bg-base-100 border-2">
                     <div class="stat">
                         <div @click.prevent="sendPublish"
-                             class="stat-figure btn btn-circle btn-primary">
+                             :class="'stat-figure btn btn-circle btn-primary ' +
+                              (wizardStatus === 'onCreateAssessment'? 'btn-disabled': '')">
                             <font-awesome-icon icon="fa-solid fa-upload" size="xl"/>
                         </div>
                         <div class="stat-title">Publish</div>
@@ -61,7 +62,7 @@
                  class="alert alert-info shadow-lg my-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span>After you're done, you can publish it.<br/> Specify the minutes that you would like students to answer the assessment. <br/> After that, click the publish button to continue</span>
+                    <span>Since you already create a question, You can publish it.<br/> Specify the minutes that you would like students to answer the assessment. <br/> After that, click the publish button to continue</span>
                 </div>
             </div>
             <div v-else-if="wizardStatus === 'onStartSession'"

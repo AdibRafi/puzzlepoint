@@ -46,6 +46,15 @@
                 </span>
             </div>
         </div>
+        <div v-else-if="wizardStatus === 'onPublishAssessment'"
+             class="alert alert-info shadow-lg my-4">
+            <div>
+                <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                <span>Great! You have completed the jigsaw learning session! <br />
+                    Click the topic to continue.
+                </span>
+            </div>
+        </div>
         <TitleCard :title="props.classroom.name"
                    top-right-button-label="Edit Class"
                    @button-function="router.get(route('classroom.edit',props.classroom.id))"
