@@ -13,7 +13,7 @@
                     Click the completed topic to continue</span>
                 </div>
             </div>
-            <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+            <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                 <div v-for="topicData in props.topicModuleModal" :key="topicData"
                      @click.prevent="showArchiveTopic(topicData.id)"
                      class="stats shadow bg-base-100 hover:bg-base-200 hover:cursor-pointer">
