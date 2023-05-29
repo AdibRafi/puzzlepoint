@@ -8,30 +8,41 @@
       <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
          <p>{{ classroomData.name }}</p>
       </Card>
-      <TitleCard title="thing">
-         <div class="overflow-x-auto">
-            <table class="table w-full">
-               <!-- head -->
-               <thead>
-               <tr>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Message</th>
-               </tr>
-               </thead>
-               <tbody>
-               <!-- row 1 -->
-               <tr v-for="(message,index) in messages" :key="message">
-                  <th>{{ index + 1 }}</th>
-                  <td>{{message.name}}</td>
-                  <td>{{message.messageInput}}</td>
-               </tr>
-               </tbody>
-            </table>
-         </div>
-         <InputText input-type="text" label-title="Message" v-model="inputMessage"/>
-         <button @click="addMessage" class="btn btn-primary w-full mt-6">Add</button>
-      </TitleCard>
+       <div class="carousel w-full">
+           <div id="slide1" class="carousel-item relative w-full">
+               <vue-pdf-embed source="modules/M1.pdf" :page="1"
+               width="1000"/>
+<!--               <embed src="/modules/M1.pdf" class="w-full" />-->
+               <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                   <a href="#slide4" class="btn btn-circle">❮</a>
+                   <a href="#slide2" class="btn btn-circle">❯</a>
+               </div>
+           </div>
+           <div id="slide2" class="carousel-item relative w-full">
+               <vue-pdf-embed source="modules/M1.pdf" :page="2"
+                              width="1000"/>
+               <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                   <a href="#slide1" class="btn btn-circle">❮</a>
+                   <a href="#slide3" class="btn btn-circle">❯</a>
+               </div>
+           </div>
+           <div id="slide3" class="carousel-item relative w-full">
+               <vue-pdf-embed source="modules/M1.pdf" :page="3"
+                              width="1000"/>
+               <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                   <a href="#slide2" class="btn btn-circle">❮</a>
+                   <a href="#slide4" class="btn btn-circle">❯</a>
+               </div>
+           </div>
+           <div id="slide4" class="carousel-item relative w-full">
+               <vue-pdf-embed source="modules/M1.pdf" :page="4"
+                              width="1000"/>
+               <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                   <a href="#slide3" class="btn btn-circle">❮</a>
+                   <a href="#slide1" class="btn btn-circle">❯</a>
+               </div>
+           </div>
+       </div>
    </Layout>
 </template>
 
