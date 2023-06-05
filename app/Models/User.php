@@ -44,53 +44,83 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-   use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-   /**
-    * The attributes that are mass assignable.
-    *
-    * @var array<int, string>
-    */
-   protected $guarded = [];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [];
 
-   /**
-    * The attributes that should be hidden for serialization.
-    *
-    * @var array<int, string>
-    */
-   protected $hidden = [
-      'password',
-      'remember_token',
-   ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-   /**
-    * The attributes that should be cast.
-    *
-    * @var array<string, string>
-    */
-   protected $casts = [
-      'email_verified_at' => 'datetime',
-   ];
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
 //    protected $with = ['classrooms'];
 
-   public function classrooms(): BelongsToMany
-   {
-      return $this->belongsToMany(Classroom::class, 'classroom_user');
-   }
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_user');
+    }
 
-   public function groups(): BelongsToMany
-   {
-      return $this->belongsToMany(Group::class);
-   }
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class);
+    }
 
-   public function assessments(): BelongsToMany
-   {
-      return $this->belongsToMany(Assessment::class);
-   }
+    public function assessments(): BelongsToMany
+    {
+        return $this->belongsToMany(Assessment::class);
+    }
 
-   public function attendances(): HasMany
-   {
-      return $this->hasMany(Attendance::class);
-   }
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+
+//    public function generateCode()
+//    {
+//        $code = rand(100000, 999999);
+//
+//        UserCode::updateOrCreate([
+//            ['user_id' => auth()->user()->id],
+//            ['code' => $code],
+//
+//        ]);
+//
+//        $receiverNumber = auth()->user()->phone;
+//        $message = "2FA login code is " . $code;
+//
+//        try {
+//
+//            $account_sid = getenv("TWILIO_SID");
+//            $auth_token = getenv("TWILIO_TOKEN");
+//            $twilio_number = getenv("TWILIO_FROM");
+//
+//            $client = new Client($account_sid, $auth_token);
+//            $client->messages->create($receiverNumber, [
+//                'from' => $twilio_number,
+//                'body' => $message]);
+//
+//        } catch (Exception $e) {
+//            info("Error: ". $e->getMessage());
+//        }
+//    }
 }
