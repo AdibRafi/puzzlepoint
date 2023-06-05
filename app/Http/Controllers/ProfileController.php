@@ -52,6 +52,7 @@ class ProfileController extends Controller
     {
         Auth::user()->update([
             'wizard_status' => 'done',
+            'is_wizard_complete' => 1,
         ]);
     }
 
@@ -61,5 +62,13 @@ class ProfileController extends Controller
 
        return \redirect()->route('classroom.index')
            ->with('alertMessage','You have complete the tutorial! Happy Teaching!!!');
+    }
+
+    public function wizardPageUpdate()
+    {
+        if (Auth::user()->wizard_status === 'onCreateTopic') {
+            return inertia();
+        }
+        return null;
     }
 }

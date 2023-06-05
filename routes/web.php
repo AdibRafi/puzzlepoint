@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\Auth\TwoFAController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\OptionController;
@@ -100,5 +101,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 });
+
+Route::get('2fa', [TwoFAController::class, 'index'])->name('2fa.index');
+Route::post('2fa', [TwoFAController::class, 'store'])->name('2fa.store');
+Route::get('2fa/reset', [TwoFAController::class, 'resend'])->name('2fa.resend');
 
 require __DIR__ . '/auth.php';
