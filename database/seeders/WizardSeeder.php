@@ -19,6 +19,7 @@ class WizardSeeder extends Seeder
             'password' => bcrypt('test1234'),
             'type' => 'lecturer',
             'wizard_status' => 'onCreateClassroom',
+            'phone_number' => 60132581379,
             'is_wizard_complete' => 0
         ]);
 

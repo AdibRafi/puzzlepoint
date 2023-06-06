@@ -11,6 +11,8 @@ use App\Models\Module;
 use App\Models\Question;
 use App\Models\Topic;
 use App\Models\User;
+use App\Notifications\TwoFactorVerification;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use phpDocumentor\Reflection\Types\Collection;
@@ -25,100 +27,114 @@ class TestController extends Controller
         return inertia('Test', compact('data'));
     }
 
-    public function store(Request $request) //topic_id / groupMethod / timeMethod / tm{}
+    public function store(Request $request)
     {
-        $topicModal = Topic::find($request->input('topic_id'));
-        $modulesId = $topicModal->modules()->pluck('id');
-        $numOfModules = $topicModal->no_of_modules;
-        //distribution logic
-        $usersId = $topicModal->getStudents()->pluck('id')->shuffle();
-//        dd(count($usersId));
-//        dd($topicModal->id);
-//        dd($modulesId);
+        $topicModuleModal = Topic::find(1)->load('modules');
+        $studentAttendModal = $topicModuleModal->getAttendStudents();
+        $studentAbsentModal = $topicModuleModal->getAbsentStudents();
 
+        if ($topicModuleModal->is_expert_form === 0) {
 
-        //START JG logic
+            //todo: PRIORITY, distribution thing
+            //todo: PRIORITY, do group distribute >= 28 student
+            $studentAttendModal = $studentAttendModal->shuffle();
+            $numOfModules = $topicModuleModal->no_of_modules;
+            $modulesId = $topicModuleModal->modules->pluck('id');
 
+            (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
 
-        (int)$totalGroup = floor(count($usersId) / $numOfModules);
+            if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+                $numOfModules *= 2;
+//                $totalGroup /= 2;
+                $modulesId = $modulesId->merge($modulesId);
+            }
+
+            $splitUser = $studentAttendModal->split($numOfModules);
+
+//            dd(count($splitUser[0]) >= 7);
+            if (count($splitUser[0]) >= 7) {
+                $numOfModules *= 2;
+                $modulesId = $modulesId->merge($modulesId)->sort();
+                $splitUser = $studentAttendModal->split($numOfModules);
+            }
+
+            for ($j = 0; $j < $numOfModules; $j++) {
+                $group = new Group();
+                $group->name = 'expert' . $j;
+                $group->type = 'expert';
+                $group->topic()->associate($topicModuleModal->id);
+                $group->module()->associate($modulesId[$j]);
+                $group->save();
+
+                $group->users()->attach($splitUser->pop());
+                $topicModuleModal->update(['is_expert_form' => 1]);
+            }
+        }
+        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
+            ->where('type', '=', 'expert')->get();
+
+        $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->with('users')->withCount('users')->get();
+        $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
+
+        $remainderUser = collect();
+        $lessGroup = $expertGroupModal->min('users_count');
+        for ($i = 0; $i < count($expertGroupModal); $i++) {
+            if ($expertGroupModal[$i]->users_count > $lessGroup) {
+                $user = $expertGroupModal[$i]->users()->get()->pop();
+                $remainderUser->push($user);
+                $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
+                    return $value->id == $user->id;
+                });
+            }
+        }
+
+        $numOfModules = $topicModuleModal->no_of_modules;
+        $modulesId = $topicModuleModal->modules->pluck('id');
+
+        (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
+
         if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
         }
-        //todo: check if remainder need (because using pop())
-        $totalRemainder = count($usersId) % $numOfModules;
-//        if ($totalRemainder !== 0) {
-//            $remainderIdJ = $usersId->take($totalRemainder);
-//            $remainderIdE = clone $remainderIdJ;
-//        } else {
-//            $remainderIdJ = null;
-//            $remainderIdE = null;
-//        }
+        $splitUser = $expertUserModal->split($numOfModules);
 
-        //CHECK NUMBER USER AND MODULE ID BEFORE EXECUTE
-        $splitUserIdJ = $usersId->split($totalGroup);
-        $splitUserIdE = clone $splitUserIdJ;
-
-
-        for ($i = 0; $i < $totalGroup; $i++) {
-            $group = new Group();
-            $group->name = 'jigsaw' . $i;
-            $group->type = 'jigsaw';
-            $group->topic()->associate($topicModal->id);
-            $group->save();
-
-            if ($splitUserIdJ !== null) {
-                $group->users()->attach($splitUserIdJ->pop());
-            }
-//            if ($remainderIdJ !== null) {
-//                $group->users()->attach($remainderIdJ->pop());
-//            }
-        }
-
-        for ($i = 0; $i < $numOfModules; $i++) {
-            $group = new Group();
-            $group->name = 'expert' . $i;
-            $group->type = 'expert';
-            $group->topic()->associate($topicModal->id);
-            $group->module()->associate($modulesId[$i]);
-            $group->save();
-            for ($j = 0; $j < count($splitUserIdE); $j++) {
-                if ($splitUserIdE !== null) {
-                    $group->users()->attach($splitUserIdE[$j]->pop());
+        if ($topicModuleModal->is_jigsaw_form === 0) {
+            for ($j = 0; $j < $totalGroup; $j++) {
+                if ($splitUser !== null) {
+                    $group = new Group();
+                    $group->name = 'jigsaw' . $j;
+                    $group->type = 'jigsaw';
+                    $group->topic()->associate($topicModuleModal->id);
+                    $group->save();
+                    for ($k = 0; $k < $numOfModules; $k++) {
+                        $group->users()->attach($splitUser[$k]->pop());
+                    }
+                    if ($remainderUser !== null) {
+                        $group->users()->attach($remainderUser->pop());
+                    }
                 }
             }
-//            if ($remainderIdE !== null) {
-//                $group->users()->attach($remainderIdE->pop());
-//            }
-        }
-        // FOR TESTING ATTENDANCE PURPOSE
-
-        for ($i = 0; $i < count(Topic::find(1)->getStudents()); $i++) {
-            $attendance = new Attendance();
-            $attendance->user()->associate($usersId[$i]);
-            $attendance->topic()->associate($topicModal->id);
-            $attendance->date = date('Y/m/d');
-            $attendance->attend_status = 'present';
-            $attendance->save();
+            $topicModuleModal->update(['is_jigsaw_form' => 1]);
         }
 
-        $r = User::find(1)->groups()->pluck('id');
-        dd($r);
-//        dd(Group::find(10)->modules()->wherePivot('group_type', '=', 'expert')->get());
-//        dd(Group::find(80)->users()->pluck('name'));
-
-        dd($topicModal->modules()->pluck('id'));
+        $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
 
 
-        dd($usersId);
-        return redirect()->route('test.index');
+        $topic_id = 1;
+        return redirect()->route('display.group',compact('topic_id'))
+            ->with('alertMessage', 'Done create Group');
     }
 
     public function displayGroup(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $expertGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'expert')->get();
+        $expertGroupUserModal = $topicModal->groups()
+            ->with('users.attendances')
+            ->with('module')
+            ->where('type', '=', 'expert')
+            ->get();
         $jigsawGroupUserModal = $topicModal->groups()->with('users.attendances')->where('type', '=', 'jigsaw')->get();
         $absentStudentModal = $topicModal->getAbsentStudents();
 
@@ -167,6 +183,10 @@ class TestController extends Controller
         dd($absentStudentModal);
 
 
+    }
 
+    public function smsTest()
+    {
+        Auth::user()->notify(new TwoFactorVerification());
     }
 }

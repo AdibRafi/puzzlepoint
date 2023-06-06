@@ -33,6 +33,7 @@
             <div v-for="groupData in props.expertGroupUserModal" class="card w-96 bg-base-100 shadow-xl m-2">
                 <div class="card-body">
                     <h2 class="card-title">{{ groupData.name }}</h2>
+                    <p class="text-sm font-bold">{{groupData.module.name}}</p>
                     <p>number = {{ groupData.users.length }}</p>
                     <div v-for="userData in groupData.users">
                         <p v-if="userData.attendances[0].attend_status === 'absent'" class="text-red-600">{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>

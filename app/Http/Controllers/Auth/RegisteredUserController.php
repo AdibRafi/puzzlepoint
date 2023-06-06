@@ -16,40 +16,42 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-   /**
-    * Display the registration view.
-    */
-   public function create(): Response
-   {
-      return Inertia::render('Auth/Register');
-   }
+    /**
+     * Display the registration view.
+     */
+    public function create(): Response
+    {
+        return Inertia::render('Auth/Register');
+    }
 
-   /**
-    * Handle an incoming registration request.
-    *
-    * @throws \Illuminate\Validation\ValidationException
-    */
-   public function store(Request $request): RedirectResponse
-   {
-      $request->validate([
-         'name' => 'required|string|max:255',
-         'email' => 'required|string|email|max:255|unique:' . User::class,
-         'password' => ['required', 'confirmed', Rules\Password::defaults()],
-      ]);
+    /**
+     * Handle an incoming registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:' . User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
 
-      $user = User::create([
-         'name' => $request->name,
-         'email' => $request->email,
-         'password' => Hash::make($request->password),
-         'type' => 'student',
-         'gender' => 'male',
-         'wizard_status' => 'onCreateClassroom',
-      ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => 'student',
+            'gender' => 'male',
+            'wizard_status' => 'onCreateClassroom',
+            'is_wizard_complete' => 0,
 
-      event(new Registered($user));
+        ]);
 
-      Auth::login($user);
+        event(new Registered($user));
 
-      return redirect(RouteServiceProvider::HOME);
-   }
+        Auth::login($user);
+
+        return redirect(RouteServiceProvider::HOME);
+    }
 }

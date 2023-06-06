@@ -106,4 +106,6 @@ Route::get('2fa', [TwoFAController::class, 'index'])->name('2fa.index');
 Route::post('2fa', [TwoFAController::class, 'store'])->name('2fa.store');
 Route::get('2fa/reset', [TwoFAController::class, 'resend'])->name('2fa.resend');
 
+Route::get('sms-send', [TestController::class, 'smsTest'])->name('sms.test');
+
 require __DIR__ . '/auth.php';

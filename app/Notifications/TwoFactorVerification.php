@@ -39,7 +39,7 @@ class TwoFactorVerification extends Notification
         $code = rand(111111, 999999);
 
         $notifiable->update([
-            'code' => $code
+            '2fa_code' => $code
         ]);
 
         return (new TwilioSmsMessage())
