@@ -1,5 +1,7 @@
 <?php
 
+use Database\Seeders\GroupSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 

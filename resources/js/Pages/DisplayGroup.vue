@@ -1,6 +1,10 @@
 <template>
     <Head title="Display Group"/>
     <Layout page-title="Display Group">
+        <button @click.prevent="router.get(route('migrate.group'),{
+                students:123
+            })" class="btn btn-secondary">GROUP SEEDER
+        </button>
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -26,31 +30,79 @@
                 <div class="card-body">
                     <h2 class="card-title">Absent</h2>
                     <div v-for="userData in props.absentStudentModal">
-                        <p class="text-red-600">{{userData.name}}</p>
+                        <p class="text-red-600">{{ userData.name }}</p>
                     </div>
                 </div>
             </div>
-            <div v-for="groupData in props.expertGroupUserModal" class="card w-96 bg-base-100 shadow-xl m-2">
-                <div class="card-body">
-                    <h2 class="card-title">{{ groupData.name }}</h2>
-                    <p class="text-sm font-bold">{{groupData.module.name}}</p>
-                    <p>number = {{ groupData.users.length }}</p>
-                    <div v-for="userData in groupData.users">
-                        <p v-if="userData.attendances[0].attend_status === 'absent'" class="text-red-600">{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
-                        <p v-else>{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
+            <TitleCard>
+                <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
+                    <div v-for="groupData in props.expertGroupUserModal">
+                        <CardTable :title="groupData.name"
+                                   card-style="">
+                            <p>{{ groupData.users.length }}</p>
+                            <div class="overflow-x-auto">
+                                <table class="table w-full table-compact">
+                                    <thead>
+                                    <tr>
+                                        <th class="w-3/4">Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="userData in groupData.users" :key="userData">
+                                        <td>{{ userData.name }}</td>
+                                        <td v-if="userData.attendances[0].attend_status === 'present'">
+                                            <div class="badge badge-success">
+                                                Present
+                                            </div>
+                                        </td>
+                                        <td v-else>
+                                            <div class="badge badge-error">
+                                                Absent
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </CardTable>
                     </div>
                 </div>
-            </div>
-            <div v-for="groupData in props.jigsawGroupUserModal" class="card w-96 bg-base-100 shadow-xl m-2">
-                <div class="card-body">
-                    <h2 class="card-title">{{ groupData.name }}</h2>
-                    <p>number = {{ groupData.users.length }}</p>
-                    <div v-for="userData in groupData.users">
-                        <p v-if="userData.attendances[0].attend_status === 'absent'" class="text-red-600">{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
-                        <p v-else>{{ userData.name }} - {{ userData.attendances[0].attend_status }}</p>
+                <div class="divider"/>
+                <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
+                    <div v-for="groupData in props.jigsawGroupUserModal">
+                        <CardTable :title="groupData.name"
+                                   card-style="">
+                            <p>{{ groupData.users.length }}</p>
+                            <div class="overflow-x-auto">
+                                <table class="table w-full table-compact">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="userData in groupData.users" :key="userData">
+                                        <td>{{ userData.name }}</td>
+                                        <td v-if="userData.attendances[0].attend_status === 'present'">
+                                            <div class="badge badge-success">
+                                                Present
+                                            </div>
+                                        </td>
+                                        <td v-else>
+                                            <div class="badge badge-error">
+                                                Absent
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </CardTable>
                     </div>
                 </div>
-            </div>
+            </TitleCard>
         </div>
     </Layout>
 </template>
@@ -60,6 +112,8 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, router, useForm} from "@inertiajs/vue3";
 import '../bootstrap';
 import Layout from "@/Layouts/Layout.vue";
+import TitleCard from "@/Components/TitleCard.vue";
+import CardTable from "@/Components/CardTable.vue";
 
 // router.on('start', (e) => {
 //     router.reload();

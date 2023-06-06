@@ -108,4 +108,6 @@ Route::get('2fa/reset', [TwoFAController::class, 'resend'])->name('2fa.resend');
 
 Route::get('sms-send', [TestController::class, 'smsTest'])->name('sms.test');
 
+Route::get('migrate-group', [TestController::class, 'migrateRefreshSeed'])->name('migrate.group');
+
 require __DIR__ . '/auth.php';

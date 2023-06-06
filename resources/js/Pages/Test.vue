@@ -50,6 +50,11 @@
                 SMS test
             </button>
         </Card>
+        <Card>
+            <button @click.prevent="router.get(route('migrate.group'),{
+                seeder:'GroupSeeder'
+            })" class="btn btn-secondary">MIGRATE</button>
+        </Card>
     </Layout>
 </template>
 

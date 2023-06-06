@@ -16,8 +16,9 @@ class GroupSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(int $studentNum): void
     {
+
         //fixed user
         User::factory()->create([
             'name' => 'adib',
@@ -74,7 +75,7 @@ class GroupSeeder extends Seeder
             );
         });
 
-        User::factory(39)->create();
+        User::factory($studentNum)->create();
 
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->syncWithoutDetaching(
