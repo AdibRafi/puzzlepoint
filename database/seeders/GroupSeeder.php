@@ -16,7 +16,7 @@ class GroupSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(int $studentNum): void
+    public function run(int $studentNum, bool $has_studentTest, int $modules): void
     {
 
         //fixed user
@@ -56,16 +56,18 @@ class GroupSeeder extends Seeder
             'tm2' => '30'
         ]);
 
-        Module::factory(4)->create([
+        Module::factory($modules)->create([
             'topic_id' => 1,
         ]);
 
-        User::factory()->create([
-            'name' => 'STUDENT TEST',
-            'email' => 'test@gmail.com',
-            'password' => bcrypt('test1234'),
-            'type' => 'student',
-        ]);
+        if ($has_studentTest) {
+            User::factory()->create([
+                'name' => 'STUDENT TEST',
+                'email' => 'test@gmail.com',
+                'password' => bcrypt('test1234'),
+                'type' => 'student',
+            ]);
+        }
 
         $classrooms = Classroom::all();
 

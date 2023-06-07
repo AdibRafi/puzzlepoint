@@ -157,7 +157,7 @@ class TestController extends Controller
 
     public function displayGroup(Request $request) //topic_id
     {
-        $topicModal = Topic::find($request->input('topic_id'));
+        $topicModal = Topic::find($request->input('topic_id'))->load('modules');
         $expertGroupUserModal = $topicModal->groups()
             ->with('users.attendances')
             ->with('module')
@@ -172,9 +172,11 @@ class TestController extends Controller
             ->orderBy('users_count', 'desc')
             ->get();
         $absentStudentModal = $topicModal->getAbsentStudents();
+        $totalStudents = $topicModal->getStudents();
 
 
-        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'absentStudentModal', 'jigsawGroupUserModal'));
+        return inertia('DisplayGroup', compact('topicModal', 'expertGroupUserModal', 'absentStudentModal', 'jigsawGroupUserModal',
+            'totalStudents'));
     }
 
     public function displayGroupModified(Request $request)//topic_id
@@ -225,10 +227,12 @@ class TestController extends Controller
         Auth::user()->notify(new TwoFactorVerification());
     }
 
-    public function migrateRefreshSeed(Request $request) //students
+    public function migrateRefreshSeed(Request $request) //students, modules, fixed_student
     {
         Artisan::call('group:seed', [
             '--students' => $request->input('students'),
+            '--modules' => $request->input('modules'),
+            '--fixed_student' => $request->input('fixed_student')
         ]);
 
         return back()->with('alertMessage', 'Successfully Migrate using GroupSeeder');

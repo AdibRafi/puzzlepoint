@@ -1,10 +1,29 @@
 <template>
     <Head title="Display Group"/>
     <Layout page-title="Display Group">
-        <button @click.prevent="router.get(route('migrate.group'),{
-                students:123
+        <Card>
+            {{ is_fixedStudent }}
+            <InputText label-title="Number of students"
+                       v-model="numStudents"/>
+            <InputText label-title="Number of modules"
+                       v-model="numModules"/>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">Include studentTest</span>
+                    <input type="checkbox"
+                           class="checkbox"
+                           v-model="is_fixedStudent"/>
+                </label>
+            </div>
+            <template #actions>
+                <button @click.prevent="router.get(route('migrate.group'),{
+                students:numStudents,
+                modules:4,
+                fixed_student:true,
             })" class="btn btn-secondary">GROUP SEEDER
-        </button>
+                </button>
+            </template>
+        </Card>
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -22,18 +41,12 @@
                     <p>id = {{ props.topicModal.id }}</p>
                     <p>EG = {{ props.expertGroupUserModal.length }}</p>
                     <p>JG = {{ props.jigsawGroupUserModal.length }}</p>
+                    <p>total students = {{ props.totalStudents.length }}</p>
+                    <p>total modules = {{ props.topicModal.modules.length}}</p>
                 </div>
             </div>
         </div>
         <div class="flex flex-wrap">
-            <div class="card w-96 bg-base-100 shadow-xl m-2">
-                <div class="card-body">
-                    <h2 class="card-title">Absent</h2>
-                    <div v-for="userData in props.absentStudentModal">
-                        <p class="text-red-600">{{ userData.name }}</p>
-                    </div>
-                </div>
-            </div>
             <TitleCard>
                 <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                     <div v-for="groupData in props.expertGroupUserModal">
@@ -114,6 +127,10 @@ import '../bootstrap';
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import CardTable from "@/Components/CardTable.vue";
+import Card from "@/Components/Card.vue";
+import InputText from "@/Components/InputText.vue";
+import {ref} from "vue";
+import Checkbox from "@/Components/Archives/Checkbox.vue";
 
 // router.on('start', (e) => {
 //     router.reload();
@@ -124,6 +141,7 @@ const props = defineProps({
     expertGroupUserModal: Object,
     jigsawGroupUserModal: Object,
     absentStudentModal: Object,
+    totalStudents: Object,
 
 })
 
@@ -134,6 +152,10 @@ const form = useForm({
     tm: {},
 
 })
+
+const numStudents = ref();
+const numModules = ref();
+const is_fixedStudent = ref(false);
 </script>
 
 <style scoped>

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Database\Seeders\GroupSeeder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GroupSeedCommand extends Command
 {
@@ -12,7 +13,7 @@ class GroupSeedCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'group:seed {--students=}';
+    protected $signature = 'group:seed {--students=} {--modules=} {--fixed_student=}';
 
     /**
      * The console command description.
@@ -27,7 +28,10 @@ class GroupSeedCommand extends Command
     public function handle()
     {
         $this->call('migrate:refresh');
-        (new GroupSeeder())->run($this->option('students'));
+        (new GroupSeeder())->run($this->option('students'),
+            $this->option('fixed_student'),
+            $this->option('modules'));
+        $this->output->write('Done migrate and seed', true);
         return 0;
     }
 }
