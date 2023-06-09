@@ -31,7 +31,7 @@ class GroupSeedCommand extends Command
         (new GroupSeeder())->run($this->option('students'),
             $this->option('fixed_student'),
             $this->option('modules'));
-        $this->output->write('Done migrate and seed', true);
+        $this->output->info('Done migrate and seed');
         return 0;
     }
 }

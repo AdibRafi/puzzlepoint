@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use App\Notifications\TwoFactorVerification;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,13 +30,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
-        $request->session()->regenerate();
+        $user = User::find(Auth::id());
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if ($user->getAttribute('has_verified_2fa') === 1) {
+            $user->notify(new TwoFactorVerification());
+            return inertia('Auth/Verify2FA', compact('user'));
+        } else {
+
+            $request->session()->regenerate();
+
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
 
     /**
@@ -49,5 +59,25 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function check2Fa(LoginRequest $request) //code
+    {
+        $codeInput = (int)$request->input('code');
+        $codeFromDB = Auth::user()->getAttribute('2fa_code');
+
+
+        Auth::guard('web')->logout();
+//        dd($codeInput);
+
+        if ($codeInput === $codeFromDB) {
+            $request->authenticate();
+
+            $request->session()->regenerate();
+
+            return redirect()->intended(RouteServiceProvider::HOME);
+        } else {
+            return back()->withErrors(['errors' => 'Wrong Code']);
+        }
     }
 }

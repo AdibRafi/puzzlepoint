@@ -24,6 +24,7 @@ class UserFactory extends Factory
             'password' => $this->faker->password, // password
 //            'password' => bcrypt('test1234'),
             '2fa_code' => $this->faker->numerify('######'),
+            'has_verified_2fa' => 0,
             'bio' => $this->faker->paragraph(1),
             'type' => 'student',
             'remember_token' => Str::random(10),

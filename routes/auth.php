@@ -59,3 +59,5 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+Route::post('check-2fa', [AuthenticatedSessionController::class, 'check2Fa'])->name('check.2fa');

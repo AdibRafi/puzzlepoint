@@ -23,9 +23,10 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+//        dd($request->input('phone_number'));
         $request->user()->save();
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('classroom.index')
             ->with('alertMessage', 'Profile update successfully');
     }
 
@@ -70,5 +71,23 @@ class ProfileController extends Controller
             return inertia();
         }
         return null;
+    }
+
+    public function verify2FA(Request $request)
+    {
+        $user = Auth::user();
+        $codeFromInput = $request->input('code');
+        $codeFromDB = $user->getAttribute('2fa_code');
+
+        if ($codeFromInput === $codeFromDB){
+            $user->update([
+                'has_verified_2fa' => 1,
+            ]);
+            return redirect()->route('classroom.index')
+                ->with('alertMessage', 'Two factor authorization successfully');
+        }
+        else{
+            return back()->with('warningMessage', 'You have enter the wrong verify code');
+        }
     }
 }

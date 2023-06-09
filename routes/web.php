@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('end-wizard', [ProfileController::class, 'endWizard'])->name('end.wizard');
+    Route::get('verify-2fa', [ProfileController::class, 'verify2FA'])->name('verify.2fa');
 
     Route::group(['prefix' => 'session'], function () {
         Route::get('start', [SessionController::class, 'lecturerIndexSession'])->name('lecturer.session.index');
