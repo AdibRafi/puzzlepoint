@@ -50,7 +50,7 @@
              class="alert alert-info shadow-lg my-4">
             <div>
                 <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                <span>Great! You have completed the jigsaw learning session! <br />
+                <span>Great! You have completed the jigsaw learning session! <br/>
                     Click the topic to continue.
                 </span>
             </div>
@@ -70,11 +70,14 @@
                 </div>
             </div>
             <h2 class="card-title">List of Created Topics</h2>
-            <div v-for="data in topicModal" :key="data">
-                <Card :title="data.name" @click="goTopic(data.id)"
-                      class="cursor-pointer hover:bg-base-200 w-1/2">
-                    <p>Modules = {{ data.no_of_modules }}</p>
-                </Card>
+            <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                <div v-for="data in topicModal" :key="data">
+                    <CardClick :title="data.name"
+                               :is_new="data.is_new"
+                               @click="goTopic(data.id)">
+                        <p>Modules = {{ data.no_of_modules }}</p>
+                    </CardClick>
+                </div>
             </div>
         </TitleCard>
         <!--      <Card :title="props.classroom.name">-->
@@ -161,6 +164,7 @@ import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import CardClick from "@/Components/CardClick.vue";
 
 const props = defineProps({
     classroom: Object,

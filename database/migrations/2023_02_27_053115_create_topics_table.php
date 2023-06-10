@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -24,7 +23,7 @@ return new class extends Migration
             $table->string('status');
             $table->boolean('is_expert_form');
             $table->boolean('is_jigsaw_form');
-            $table->boolean('is_ready');
+            $table->boolean('is_new');
             $table->boolean('is_start');
             $table->boolean('is_complete');
             $table->timestamps();

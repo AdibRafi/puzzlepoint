@@ -1,0 +1,7 @@
+#nprogress .spinner {
+    margin-right: 20px;
+    margin-top: 55px;
+}
+#nprogress .spinner-icon {
+    width: 2.5em;
+}

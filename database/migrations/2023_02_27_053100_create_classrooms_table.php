@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('subject_code');
-            $table->string('join_code');
+            $table->string('join_code')->unique();
+            $table->boolean('is_new');
             $table->timestamps();
         });
     }

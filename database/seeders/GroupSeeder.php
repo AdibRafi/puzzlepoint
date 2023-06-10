@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Assessment;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Module;
@@ -16,7 +17,7 @@ class GroupSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(int $studentNum, bool $has_studentTest, int $modules): void
+    public function run(int $studentNum, int $modules, bool $has_studentTest): void
     {
 
         //fixed user
@@ -25,27 +26,33 @@ class GroupSeeder extends Seeder
             'email' => 'adibtest@gmail.com',
             'password' => bcrypt('test1234'),
             'type' => 'lecturer',
-            'wizard_status' => 'onCreateClassroom',
-            'is_wizard_complete' => 0
+            'wizard_status' => 'done',
+            'is_wizard_complete' => 1
         ]);
         Classroom::factory()->create([
             'name' => 'classroomTest',
-            'subject_code' => 'codeTest'
+            'subject_code' => 'codeTest',
+            'is_new' => 1,
         ]);
 
         Topic::factory()->create([
             'classroom_id' => 1,
             'name' => 'topicTest',
             'date_time' => now(),
-            'no_of_modules' => 4,
+            'no_of_modules' => $modules,
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
             'status' => 'onReady',
             'is_expert_form' => 0,
             'is_jigsaw_form' => 0,
-            'is_ready' => 1,
+            'is_new' => 1,
             'is_start' => 0,
             'is_complete' => 0,
+        ]);
+
+        Assessment::factory()->create([
+            'topic_id' => Topic::first()->id,
+
         ]);
 
         Option::factory()->create([
@@ -60,7 +67,7 @@ class GroupSeeder extends Seeder
             'topic_id' => 1,
         ]);
 
-        if ($has_studentTest) {
+        if ($has_studentTest === true) {
             User::factory()->create([
                 'name' => 'STUDENT TEST',
                 'email' => 'test@gmail.com',

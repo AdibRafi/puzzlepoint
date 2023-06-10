@@ -20,6 +20,12 @@
             </div>
             <div class="divider"/>
             <div v-if="user.phone_number === null">
+
+                <!--todo: put icon (make it nice)-->
+
+
+
+                <font-awesome-icon icon="fa-solid fa-user-secret" size="xl"/>
                 <div class="alert inline-block">
                     <font-awesome-icon icon="fa-solid fa-circle-exclamation"
                                        class="inline-block"/>

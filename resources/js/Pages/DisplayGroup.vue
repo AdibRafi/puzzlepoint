@@ -18,12 +18,13 @@
             <template #actions>
                 <button @click.prevent="router.get(route('migrate.group'),{
                 students:numStudents,
-                modules:4,
-                fixed_student:true,
+                modules:numModules,
+                fixed_student:is_fixedStudent,
             })" class="btn btn-secondary">GROUP SEEDER
                 </button>
             </template>
         </Card>
+
         <div class="flex flex-wrap">
             <form @submit.prevent="form.post(route('test.store'))">
                 <div class="card w-96 bg-base-100 shadow-xl">
@@ -42,7 +43,7 @@
                     <p>EG = {{ props.expertGroupUserModal.length }}</p>
                     <p>JG = {{ props.jigsawGroupUserModal.length }}</p>
                     <p>total students = {{ props.totalStudents.length }}</p>
-                    <p>total modules = {{ props.topicModal.modules.length}}</p>
+                    <p>total modules = {{ props.topicModal.modules.length }}</p>
                 </div>
             </div>
         </div>

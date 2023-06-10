@@ -58,7 +58,7 @@ class TopicController extends Controller
         $topic->transition_time = $topicInput['transition_time'];
         $topic->is_expert_form = 0;
         $topic->is_jigsaw_form = 0;
-        $topic->is_ready = 0;
+        $topic->is_new = 1;
         $topic->is_complete = 0;
         $topic->is_start = 0;
         $topic->date_time = $startedAt;
@@ -137,6 +137,10 @@ class TopicController extends Controller
      */
     public function show(Topic $topic)
     {
+        $topic->update([
+            'is_new' => 0,
+        ]);
+
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
         $assessmentModal = $topic->assessment()->exists() ?

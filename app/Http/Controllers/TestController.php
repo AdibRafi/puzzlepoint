@@ -229,10 +229,12 @@ class TestController extends Controller
 
     public function migrateRefreshSeed(Request $request) //students, modules, fixed_student
     {
+//        dd($request->all());
+
         Artisan::call('group:seed', [
             '--students' => $request->input('students'),
             '--modules' => $request->input('modules'),
-            '--fixed_student' => $request->input('fixed_student')
+            '--fixed_student' => (int)$request->input('fixed_student'),
         ]);
 
         return back()->with('alertMessage', 'Successfully Migrate using GroupSeeder');

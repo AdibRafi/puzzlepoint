@@ -28,7 +28,7 @@ class TopicFactory extends Factory
             'status' => $this->faker->randomElement(['onModule', 'onOption', 'onVerify']),
             'is_expert_form' => $this->faker->boolean,
             'is_jigsaw_form' => $this->faker->boolean,
-            'is_ready' => $this->faker->boolean,
+            'is_new' => $this->faker->boolean,
             'is_start' => $this->faker->boolean,
             'is_complete' => $this->faker->boolean,
         ];

@@ -41,6 +41,7 @@ class ClassroomController extends Controller
         $classroom->name = $request->input('name');
         $classroom->subject_code = $request->input('subject_code');
         $classroom->join_code = Str::random(6);
+        $classroom->is_new = 1;
         $classroom->save();
 
         auth()->user()->classrooms()->attach($classroom->id);
@@ -63,6 +64,10 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
+        $classroom->update([
+            'is_new' => 0,
+        ]);
+
         $topicModal = $classroom->topics()
             ->where('is_complete', '=', 0)
             ->orWhere('is_complete','=',1)

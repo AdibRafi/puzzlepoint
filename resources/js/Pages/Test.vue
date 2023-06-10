@@ -8,6 +8,9 @@
         <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <p>{{ classroomData.name }}</p>
         </Card>
+
+<!--        Todo: Put websocket on slides then put inside the EG n JG-->
+
         <div class="carousel w-full">
             <div id="slide1" class="carousel-item relative w-full">
                 <vue-pdf-embed source="modules/M1.pdf" :page="1"

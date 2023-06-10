@@ -27,10 +27,12 @@ class GroupSeedCommand extends Command
      */
     public function handle()
     {
+//        dd((bool)$this->option('fixed_student'));
+
         $this->call('migrate:refresh');
         (new GroupSeeder())->run($this->option('students'),
-            $this->option('fixed_student'),
-            $this->option('modules'));
+            $this->option('modules'),
+            (bool)$this->option('fixed_student'));
         $this->output->info('Done migrate and seed');
         return 0;
     }

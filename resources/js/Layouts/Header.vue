@@ -2,7 +2,7 @@
     <div class="navbar flex justify-between bg-base-100 z-10 shadow-md">
         <div>
             <label v-if="$page.props.auth.user.is_wizard_complete === 1"
-                for="left-sidebar-drawer"
+                   for="left-sidebar-drawer"
                    class="btn btn-primary drawer-button lg:hidden">
                 <font-awesome-icon icon="fa-solid fa-bars"
                                    class="h-5 inline-block w-5"/>
@@ -19,10 +19,8 @@
                 <option value="emerald">Emerald</option>
             </select>
             <div class="dropdown dropdown-end ml-4">
-                <label tabIndex="0" class="btn btn-ghost btn-circle avatar">
-                    <div class="w-10 rounded-full">
-                        <img src="https://placeimg.com/80/80/people" alt="profile"/>
-                    </div>
+                <label tabIndex="0" class="btn btn-primary btn-circle">
+                    <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
                 </label>
                 <ul tabIndex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
