@@ -19,7 +19,7 @@
             </div>
             <div class="stats shadow bg-base-100">
                 <div class="stat">
-                    <div class="stat-figure text-primary">
+                    <div class="stat-figure text-secondary">
                         <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
                     </div>
                     <div class="stat-title">Total Students</div>
@@ -57,7 +57,7 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-primary btn-circle ' + (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'')"
                         @click.prevent="toAssessment(props.topic.id)">
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
@@ -70,7 +70,7 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-accent btn-circle ' + (wizardStatus === 'onCreateAssessment' || isSessionComplete ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-primary btn-circle ' + (wizardStatus === 'onCreateAssessment' || isSessionComplete ? 'btn-disabled':'')"
                         @click.prevent="openSession">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                     </div>

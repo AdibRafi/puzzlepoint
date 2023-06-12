@@ -21,13 +21,8 @@
             <div class="divider"/>
             <div v-if="user.phone_number === null">
 
-                <!--todo: put icon (make it nice)-->
-
-
-
-                <font-awesome-icon icon="fa-solid fa-user-secret" size="xl"/>
                 <div class="alert inline-block">
-                    <font-awesome-icon icon="fa-solid fa-circle-exclamation"
+                    <font-awesome-icon icon="fa-solid fa-user-secret" size="xl"
                                        class="inline-block"/>
                     <span
                         class="inline-block ml-4">If you want Two Factor Authorization, Fill in the phone number first.</span>

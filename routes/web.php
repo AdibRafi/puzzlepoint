@@ -72,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('topic-archive/{topic}', [TopicController::class, 'topicArchiveShow'])->name('topic.archive.show');
     Route::post('topic-first-step', [TopicController::class, 'topicFirstStep'])->name('topic.first.step');
     Route::post('topic-second-step', [TopicController::class, 'topicSecondStep'])->name('topic.second.step');
+    Route::post('topic-wizard-step', [TopicController::class, 'topicWizardStep'])->name('topic.wizard.step');
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -1,6 +1,6 @@
 <template>
     <Head title="Dashboard"/>
-    <Layout title="Classroom">
+    <Layout page-title="Classroom">
         <div v-if="wizardStatus !== 'onCreateClassroom'">
             <TitleCard title="Classroom" top-right-button-label="Add Class"
                        v-if="$page.props.auth.user.type === 'lecturer'"
@@ -9,7 +9,7 @@
                      class="alert alert-info shadow-lg">
                     <div>
                         <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                        <span>Great! Click the Classroom that you created</span>
+                        <span class="ml-2">Great! Click the Classroom that you created</span>
                     </div>
                 </div>
                 <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">

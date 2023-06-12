@@ -83,44 +83,9 @@
                 </div>
             </div>
             <button @click.prevent="router.get(route('topic.show',props.topicModal))"
-                    class="btn btn-secondary mt-10">Back to Topic
+                    class="btn btn-accent mt-10">Back to Topic
             </button>
         </TitleCard>
-        <!--        <Card title="Assessment">-->
-        <!--            <div class="card-actions justify-center my-2">-->
-        <!--                <Link :href="route('question.create',{assessment_id:props.assessmentModal.id})"-->
-        <!--                      class="btn btn-primary">Create Question-->
-        <!--                </Link>-->
-        <!--            </div>-->
-        <!--            <div class="card-actions justify-center">-->
-        <!--                <button class="btn btn-warning"-->
-        <!--                        @click="destroyAssessment(props.assessmentModal.id)">-->
-        <!--                    Delete Assessment-->
-        <!--                </button>-->
-        <!--            </div>-->
-        <!--            <div class="divider"/>-->
-        <!--            <form @submit.prevent="form.post(route('assessment.publish'))">-->
-        <!--                <InputForm label-name="Time"-->
-        <!--                           input-type="number"-->
-        <!--                           input-placeholder="in minutes" class="mb-4"-->
-        <!--                           v-model="form.time"/>-->
-        <!--                <button type="submit" :disabled="form.processing" class="btn btn-accent">-->
-        <!--                    Publish-->
-        <!--                </button>-->
-        <!--            </form>-->
-        <!--        </Card>-->
-        <!--        <Card class="my-4">-->
-        <!--            <h2 class="card-title">List of Question</h2>-->
-        <!--        </Card>-->
-        <!--        <Card :title="quesData.name" v-for="quesData in questionAnswerModal" class="my-4">-->
-        <!--            <p>type: {{ quesData.type }}</p>-->
-        <!--            <div v-for="ansData in quesData.answers">-->
-        <!--                <p>{{ ansData.name }}</p>-->
-        <!--            </div>-->
-        <!--            <template #actions>-->
-        <!--                <Link :href="route('question.edit',quesData)" class="btn btn-accent">Edit question</Link>-->
-        <!--            </template>-->
-        <!--        </Card>-->
     </Layout>
 </template>
 

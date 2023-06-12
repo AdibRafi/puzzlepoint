@@ -2,35 +2,13 @@
    <div class="drawer-side">
       <label for="left-sidebar-drawer"
              class="drawer-overlay"/>
-      <ul class="menu pt-2 w-80 bg-base-100 text-base-content">
-         <button class="btn btn-ghost bg-base-300  btn-circle z-50 top-0 right-0 mt-4 mr-2 absolute lg:hidden"
-                 @click="close">
-            <font-awesome-icon icon="fa-solid fa-xmark"
-                               class="h-5 inline-block w-5"/>
-         </button>
+      <ul class="menu pt-16 lg:pt-2 w-80 h-full bg-base-100 text-base-content">
          <li class="mb-2 font-semibold text-xl">
             <Link :href="route('classroom.index')">
                <img class="mask mask-squircle w-10" src="/PuzzlePointLogo.png" alt="Logo"/>
                PuzzlePoint
             </Link>
          </li>
-         <!--         <li>-->
-         <!--            <Link :href="route('display.group',{topic_id:1})"-->
-         <!--                  :class="route().current('display.group') ? activeRoute : inactiveRoute">-->
-         <!--               Display Group-->
-         <!--               <span v-if="route().current('display.group')" :class="activeRouteSpan"-->
-         <!--                     aria-hidden="true"/>-->
-         <!--            </Link>-->
-         <!--         </li>-->
-         <!--         <li>-->
-         <!--            <Link :href="route('test.index')"-->
-         <!--                  :class="route().current('test.index') ? activeRoute : inactiveRoute">-->
-         <!--               Test-->
-         <!--               <span v-if="route().current('test.index')"-->
-         <!--                     :class="activeRouteSpan"-->
-         <!--                     aria-hidden="true"/>-->
-         <!--            </Link>-->
-         <!--         </li>-->
          <li>
             <Link :href="route('profile.edit')"
                   :class="route().current('profile.edit') ? activeRoute : inactiveRoute">
@@ -69,10 +47,9 @@
          <div class="divider"/>
          <li>
             <div class="flex-col">
-               <div class="w-full" @click="setIsExpanded">
-                  DEVELOPER
-                  <font-awesome-icon icon="fa-solid fa-angle-down"
-                                     :class="'w-5 h-5 mt-1 float-right delay-400 duration-500 transition-all ' + (isExpanded ? 'rotate-180' : '')"/>
+                <div class="w-full" @click="setIsExpanded">
+                    DEVELOPER
+
                </div>
                <div :class="'w-full ' + (isExpanded ? '' : 'hidden')">
                   <ul class="menu menu-compact">

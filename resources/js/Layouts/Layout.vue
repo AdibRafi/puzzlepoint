@@ -1,11 +1,11 @@
 <template>
-    <div class="drawer drawer-mobile">
+    <div class="drawer lg:drawer-open">
         <input id="left-sidebar-drawer" type="checkbox"
                class="drawer-toggle">
         <PageContent :page-title="pageTitle">
             <slot/>
         </PageContent>
-        <LeftSidebar v-if="$page.props.auth.user.is_wizard_complete === 1"/>
+        <LeftSidebar />
     </div>
 </template>
 

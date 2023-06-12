@@ -23,7 +23,7 @@ class WizardSeeder extends Seeder
             'is_wizard_complete' => 0
         ]);
 
-        User::factory(19)->create([
+        User::factory(20)->create([
             'type' => 'studentDummy',
             'wizard_status' => 'dummy',
             'is_wizard_complete' => 1

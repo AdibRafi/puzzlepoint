@@ -249,4 +249,47 @@ class TopicController extends Controller
     {
         //just check validate
     }
+
+    public function topicWizardStep(Request $request) //steps
+    {
+        $steps = $request->input('steps');
+        if ($steps === 1) {
+            $request->validate([
+                'name' => 'required'
+            ], [
+                'name.required' => 'Please fill in Topic Name'
+            ]);
+        } elseif ($steps === 2) {
+            $request->validate([
+                'no_of_modules' => 'required'
+            ], [
+                'no_of_modules.required' => 'Please select the desired Number of Modules'
+            ]);
+        } elseif ($steps === 3) {
+            $request->validate([
+                'max_time_expert' => 'required'
+            ], [
+                'max_time_expert.required' => 'Please specify the time for Expert Session'
+            ]);
+        } elseif ($steps === 4) {
+            $request->validate([
+                'max_time_jigsaw' => 'required'
+            ], [
+                'max_time_jigsaw.required' => 'Please specify the time for Jigsaw Session'
+            ]);
+        } elseif ($steps === 5) {
+            $request->validate([
+                'transition_time' => 'required'
+            ], [
+                'transition_time.required' => 'Please specify the transition time'
+            ]);
+        } elseif ($steps === 6) {
+            $request->validate([
+                'date_time' => 'required'
+            ], [
+                'date_time.required' => 'Please specify the date to start the topic'
+            ]);
+        }
+
+    }
 }

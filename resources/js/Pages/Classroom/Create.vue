@@ -8,7 +8,7 @@
                class="alert alert-info shadow-lg">
                <div>
                   <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                  <span>Fill in Classroom Name and Subject Code</span>
+                  <span class="ml-4">Fill in Classroom Name and Subject Code</span>
                </div>
             </div>
             <InputText label-title="Classroom Name" v-model="form.name"/>
