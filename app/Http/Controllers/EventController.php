@@ -6,6 +6,8 @@ use App\Events\MoveExpertSession;
 use App\Events\MoveJigsawSession;
 use App\Events\StudentAttendance;
 use App\Events\TimeSession;
+use App\Events\UpdateExpertSession;
+use App\Events\UpdateJigsawSession;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +32,28 @@ class EventController extends Controller
         broadcast(new StudentAttendance(Auth::user()->name . ' is present'));
     }
 
-    public function timeSession($minuteCounter, $secondCounter,
-                                $transitionMinuteCounter, $transitionSecondCounter)
+
+    public function updateTime(Request $request) //time related, sessionType
     {
-        TimeSession::dispatch($minuteCounter, $secondCounter, $transitionMinuteCounter, $transitionSecondCounter);
+//        dd($request->all());
+        $minuteCounter = $request->input('minuteCounter');
+        $secondCounter = $request->input('secondCounter');
+        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
+        $transitionSecondCounter = $request->input('transitionSecondCounter');
+
+        if ($request->input('sessionType') === 'expert') {
+            UpdateExpertSession::dispatch($minuteCounter, $secondCounter,
+                $transitionMinuteCounter, $transitionSecondCounter);
+        } else {
+            $moduleMinuteCounter = $request->input('moduleMinuteCounter');
+            $moduleSecondCounter = $request->input('moduleSecondCounter');
+            $moduleNumber = $request->input('moduleNumber');
+
+            UpdateJigsawSession::dispatch($minuteCounter, $secondCounter,
+                $transitionMinuteCounter, $transitionSecondCounter,
+                $moduleMinuteCounter, $moduleSecondCounter, $moduleNumber);
+
+        }
     }
 
     public function moveExpert(): void

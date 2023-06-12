@@ -7,6 +7,8 @@ use App\Events\MoveExpertSession;
 use App\Events\MoveJigsawSession;
 use App\Events\StudentAttendance;
 use App\Events\TimeSession;
+use App\Events\UpdateExpertSession;
+use App\Events\UpdateJigsawSession;
 use App\Models\Attendance;
 use App\Models\Group;
 use App\Models\Topic;
@@ -14,6 +16,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use function Sodium\add;
 
 class SessionController extends Controller
 {
@@ -142,8 +145,15 @@ class SessionController extends Controller
 
         MoveJigsawSession::dispatch();
 
+        $optionModule = $topicModuleModal->option()->first();
+
+        $tm = [];
+        for ($l = 0; $l < $topicModuleModal->no_of_modules; $l++) {
+            $tm[$l] = $optionModule->getAttribute('tm' . ($l + 1));
+        }
+
         return inertia('Session/Lecturer/Jigsaw', compact('topicModuleModal',
-            'jigsawGroupUserModal', 'studentAttendModal', 'studentAbsentModal'));
+            'jigsawGroupUserModal', 'studentAttendModal', 'studentAbsentModal', 'tm'));
     }
 
     private function initiateStudentSessionModal($topic_id, $groupType)
@@ -235,17 +245,27 @@ class SessionController extends Controller
         $group->users()->attach($userId);
     }
 
-    public function updateTime(Request $request) //time related
-    {
-//        dd($request->all());
-        $minuteCounter = $request->input('minuteCounter');
-        $secondCounter = $request->input('secondCounter');
-        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
-        $transitionSecondCounter = $request->input('transitionSecondCounter');
-
-        TimeSession::dispatch($minuteCounter, $secondCounter,
-            $transitionMinuteCounter, $transitionSecondCounter);
-    }
+//    public function updateTime(Request $request) //time related, sessionType
+//    {
+////        dd($request->all());
+//        $minuteCounter = $request->input('minuteCounter');
+//        $secondCounter = $request->input('secondCounter');
+//        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
+//        $transitionSecondCounter = $request->input('transitionSecondCounter');
+//
+//        if ($request->input('sessionType') === 'expert') {
+//            UpdateExpertSession::dispatch($minuteCounter, $secondCounter,
+//                $transitionMinuteCounter, $transitionSecondCounter);
+//        } else {
+//            $moduleMinuteCounter = $request->input('moduleMinuteCounter');
+//            $moduleSecondCounter = $request->input('moduleSecondCounter');
+//
+//            UpdateJigsawSession::dispatch($minuteCounter, $secondCounter,
+//                $transitionMinuteCounter, $transitionSecondCounter,
+//                $moduleMinuteCounter, $moduleSecondCounter);
+//
+//        }
+//    }
 
     public function lecturerEndSession(Request $request) //topic_id
     {

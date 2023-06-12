@@ -9,7 +9,11 @@
         <TimerDisplayStatic :minute-counter="minuteCounter"
                             :second-counter="secondCounter"
                             :transition-minute-counter="transitionMinuteCounter"
-                            :transition-second-counter="transitionSecondCounter"/>
+                            :transition-second-counter="transitionSecondCounter"
+                            :module-minute-counter="moduleMinuteCounter"
+                            :module-second-counter="moduleSecondCounter"
+                            :module-number="moduleNum"/>
+
         <Card title="Your Group Members">
             <p v-for="userData in props.groupUserModal.users" :key="userData">
                 {{ userData.name }}
@@ -36,6 +40,9 @@ const minuteCounter = ref(0);
 const secondCounter = ref(0);
 const transitionMinuteCounter = ref(0);
 const transitionSecondCounter = ref(0);
+const moduleMinuteCounter = ref(0);
+const moduleSecondCounter = ref(0);
+const moduleNum = ref();
 
 
 onMounted(() => {

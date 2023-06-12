@@ -90,30 +90,30 @@
                 </table>
             </div>
         </TitleCard>
-<!--        <Card title="Expert Session">-->
-<!--            <p>{{ props.topicModuleModal.name }}</p>-->
-<!--        </Card>-->
-<!--        <TimerDisplay :initiate-minute="minuteCounter" :initiate-second="secondCounter"-->
-<!--                      :initiate-transition-minute="transitionMinuteCounter"-->
-<!--                      :initiate-transition-second="transitionSecondCounter"/>-->
-<!--        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
-<!--            <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-<!--               class="text-red-500">{{ userData.name }}</p>-->
-<!--        </Card>-->
-<!--        <div v-for="groupData in props.expertGroupUserModal">-->
-<!--            <Card :title="groupData.name">-->
-<!--                <div v-for="userData in groupData.users">-->
-<!--                    <p>{{ userData.name }}</p>-->
-<!--                </div>-->
-<!--            </Card>-->
-<!--        </div>-->
-<!--        <Card>-->
-<!--            <Link :href="route('lecturer.session.jigsaw',-->
-<!--            {topic_id:props.topicModuleModal.id})"-->
-<!--                  class="btn btn-primary">-->
-<!--                Next to Jigsaw-->
-<!--            </Link>-->
-<!--        </Card>-->
+        <!--        <Card title="Expert Session">-->
+        <!--            <p>{{ props.topicModuleModal.name }}</p>-->
+        <!--        </Card>-->
+        <!--        <TimerDisplay :initiate-minute="minuteCounter" :initiate-second="secondCounter"-->
+        <!--                      :initiate-transition-minute="transitionMinuteCounter"-->
+        <!--                      :initiate-transition-second="transitionSecondCounter"/>-->
+        <!--        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
+        <!--            <p v-for="userData in props.studentAbsentModal" :key="userData"-->
+        <!--               class="text-red-500">{{ userData.name }}</p>-->
+        <!--        </Card>-->
+        <!--        <div v-for="groupData in props.expertGroupUserModal">-->
+        <!--            <Card :title="groupData.name">-->
+        <!--                <div v-for="userData in groupData.users">-->
+        <!--                    <p>{{ userData.name }}</p>-->
+        <!--                </div>-->
+        <!--            </Card>-->
+        <!--        </div>-->
+        <!--        <Card>-->
+        <!--            <Link :href="route('lecturer.session.jigsaw',-->
+        <!--            {topic_id:props.topicModuleModal.id})"-->
+        <!--                  class="btn btn-primary">-->
+        <!--                Next to Jigsaw-->
+        <!--            </Link>-->
+        <!--        </Card>-->
     </SessionLayout>
 </template>
 
@@ -202,6 +202,7 @@ const interval = setInterval(() => {
     }
     console.log('idk')
     router.post(route('update.time'), {
+        sessionType: 'expert',
         minuteCounter: minuteCounter.value,
         secondCounter: secondCounter.value,
         transitionMinuteCounter: transitionMinuteCounter.value,

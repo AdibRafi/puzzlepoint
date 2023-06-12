@@ -60,7 +60,11 @@ class GroupSeeder extends Seeder
             'group_distribution' => 'none',
             'time_method' => 'even',
             'tm1' => '30',
-            'tm2' => '30'
+            'tm2' => '30',
+            'tm3' => '30',
+            'tm4' => '30',
+            'tm5' => '30',
+            'tm6' => '30',
         ]);
 
         Module::factory($modules)->create([

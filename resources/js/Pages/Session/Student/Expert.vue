@@ -53,8 +53,8 @@ window.Echo.channel('move-jigsaw-channel')
         router.get(route('student.session.jigsaw', {topic_id: props.topicModal.id}))
     });
 
-window.Echo.channel('time-session-channel')
-    .listen('TimeSession', (e) => {
+window.Echo.channel('update-expert-session')
+    .listen('UpdateExpertSession', (e) => {
         // console.log(e);
         minuteCounter.value = e.minuteCounter;
         secondCounter.value = e.secondCounter;

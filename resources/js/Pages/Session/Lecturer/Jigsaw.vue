@@ -18,11 +18,13 @@
                    top-right-button-label="Add 1 Minute"
                    @button-function="addOneMinute">
 
-            <!--todo: Add another time for modules time-->
-
-            <TimerDisplayStatic :minute-counter="minuteCounter" :second-counter="secondCounter"
+            <TimerDisplayStatic :minute-counter="minuteCounter"
+                                :second-counter="secondCounter"
                                 :transition-minute-counter="transitionMinuteCounter"
-                                :transition-second-counter="transitionSecondCounter"/>
+                                :transition-second-counter="transitionSecondCounter"
+                                :module-minute-counter="moduleMinuteCounter"
+                                :module-second-counter="moduleSecondCounter"
+                                :module-number="moduleNum"/>
             <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                 <div v-for="groupData in props.jigsawGroupUserModal">
                     <CardTable :title="groupData.name"
@@ -93,56 +95,6 @@
                 </table>
             </div>
         </TitleCard>
-        <!--        <Card title="Expert Session">-->
-        <!--            <p>{{ props.topicModuleModal.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <TimerDisplay :initiate-minute="minuteCounter" :initiate-second="secondCounter"-->
-        <!--                      :initiate-transition-minute="transitionMinuteCounter"-->
-        <!--                      :initiate-transition-second="transitionSecondCounter"/>-->
-        <!--        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
-        <!--            <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-        <!--               class="text-red-500">{{ userData.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <div v-for="groupData in props.expertGroupUserModal">-->
-        <!--            <Card :title="groupData.name">-->
-        <!--                <div v-for="userData in groupData.users">-->
-        <!--                    <p>{{ userData.name }}</p>-->
-        <!--                </div>-->
-        <!--            </Card>-->
-        <!--        </div>-->
-        <!--        <Card>-->
-        <!--            <Link :href="route('lecturer.session.jigsaw',-->
-        <!--            {topic_id:props.topicModuleModal.id})"-->
-        <!--                  class="btn btn-primary">-->
-        <!--                Next to Jigsaw-->
-        <!--            </Link>-->
-        <!--        </Card>-->
-        <!--        <Card title="Jigsaw Session" class="my-4">-->
-        <!--            <p>{{ props.topicModuleModal.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <Card title="Timer" class="my-4">-->
-        <!--            <p>Normal</p>-->
-        <!--            <p class="justify-center flex text-2xl">{{ minuteCounter }}:{{ secondCounter }}</p>-->
-        <!--            <p>Transition</p>-->
-        <!--            <p class="justify-center flex text-2xl">{{ transitionMinuteCounter }}:{{ transitionSecondCounter }}</p>-->
-        <!--        </Card>-->
-        <!--        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'" class="my-4">-->
-        <!--            <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-        <!--               class="text-red-500">{{ userData.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <div v-for="groupData in props.jigsawGroupUserModal">-->
-        <!--            <Card :title="groupData.name" class="my-4">-->
-        <!--                <div v-for="userData in groupData.users">-->
-        <!--                    <p>{{ userData.name }}</p>-->
-        <!--                </div>-->
-        <!--            </Card>-->
-        <!--        </div>-->
-        <!--        <Card>-->
-        <!--            <Link :href="route('lecturer.session.end',{topic_id:props.topicModuleModal.id})"-->
-        <!--                  class="btn btn-primary">-->
-        <!--                End Session-->
-        <!--            </Link>-->
-        <!--        </Card>-->
     </SessionLayout>
 </template>
 
@@ -164,14 +116,20 @@ const props = defineProps({
     jigsawGroupUserModal: Object,
     studentAttendModal: Object,
     studentAbsentModal: Object,
+    tm: Object,
 })
 
 const minuteCounter = ref(props.topicModuleModal.max_time_jigsaw);
 const secondCounter = ref(0);
 const transitionMinuteCounter = ref(props.topicModuleModal.transition_time);
 const transitionSecondCounter = ref(0);
+const moduleMinuteCounter = ref(props.tm[0]);
+const moduleSecondCounter = ref(0);
+const moduleNum = ref(1);
 
 const wizardStatus = usePage().props.auth.user.wizard_status
+
+console.log(props.tm)
 
 const addOneMinute = () => {
     minuteCounter.value++;
@@ -212,9 +170,20 @@ const interval = setInterval(() => {
     if (transitionMinuteCounter.value === 0 && transitionSecondCounter.value === 0) {
         if (secondCounter.value > 0) {
             secondCounter.value--;
+
+            moduleSecondCounter.value--;
         } else {
             secondCounter.value = 59;
             minuteCounter.value--;
+
+            if (moduleMinuteCounter.value === 0 && moduleSecondCounter.value === 0) {
+                props.tm.shift();
+                moduleMinuteCounter.value = props.tm[0];
+                moduleNum.value++;
+            }
+
+            moduleSecondCounter.value = 59;
+            moduleMinuteCounter.value--;
         }
     } else {
         if (transitionSecondCounter.value > 0) {
@@ -227,10 +196,14 @@ const interval = setInterval(() => {
 
     console.log('jigsaw update Time')
     router.post(route('update.time'), {
+        sessionType: 'jigsaw',
         minuteCounter: minuteCounter.value,
         secondCounter: secondCounter.value,
         transitionMinuteCounter: transitionMinuteCounter.value,
-        transitionSecondCounter: transitionSecondCounter.value
+        transitionSecondCounter: transitionSecondCounter.value,
+        moduleMinuteCounter: moduleMinuteCounter.value,
+        moduleSecondCounter: moduleSecondCounter.value,
+        moduleNumber: moduleNum.value
     }, {
         preserveScroll: true,
     });
