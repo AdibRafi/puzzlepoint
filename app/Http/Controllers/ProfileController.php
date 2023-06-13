@@ -78,6 +78,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $codeFromInput = $request->input('code');
         $codeFromDB = $user->getAttribute('2fa_code');
+        dd($codeFromDB);
 
         if ($codeFromInput === $codeFromDB){
             $user->update([
