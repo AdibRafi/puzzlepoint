@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('name');
             $table->dateTime('date_time');
             $table->integer('no_of_modules');
+            $table->integer('max_session');
+            $table->integer('max_buffer');
             $table->integer('max_time_expert');
             $table->integer('max_time_jigsaw');
             $table->integer('transition_time');

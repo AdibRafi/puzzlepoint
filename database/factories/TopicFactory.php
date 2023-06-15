@@ -22,6 +22,8 @@ class TopicFactory extends Factory
             'name' => $this->faker->text(10),
             'date_time' => $this->faker->dateTime,
             'no_of_modules' => $this->faker->numberBetween(2, 6),
+            'max_session' => $this->faker->numberBetween(20, 120),
+            'max_buffer' => $this->faker->numberBetween(1, 30),
             'max_time_expert' => $this->faker->numberBetween(1, 100),
             'max_time_jigsaw' => $this->faker->numberBetween(1, 100),
             'transition_time' => $this->faker->numberBetween(2, 5),

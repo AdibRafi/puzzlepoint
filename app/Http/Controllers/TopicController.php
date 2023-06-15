@@ -13,6 +13,7 @@ use App\Models\Option;
 use App\Models\Topic;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -31,9 +32,14 @@ class TopicController extends Controller
      */
     public function create(Request $request) //classroom_id
     {
-        //todo: kena encrypt
-        $classroom_id = $request->input('classroom_id');
-        return inertia('Topic/Create', compact('classroom_id'));
+        $classroomModal = Classroom::find($request->input('classroom_id'))
+            ->loadCount([
+                'users',
+                'users as users_count' => function ($query) {
+                    $query->where('type', '=', 'student');
+                }
+            ]);
+        return inertia('Topic/Create', compact('classroomModal'));
     }
 
     /**
@@ -53,6 +59,8 @@ class TopicController extends Controller
         $topic = new Topic();
         $topic->name = $topicInput['name'];
         $topic->no_of_modules = $topicInput['no_of_modules'];
+        $topic->max_session = 0;
+        $topic->max_buffer = 0;
         $topic->max_time_expert = $topicInput['max_time_expert'];
         $topic->max_time_jigsaw = $topicInput['max_time_jigsaw'];
         $topic->transition_time = $topicInput['transition_time'];
@@ -103,7 +111,6 @@ class TopicController extends Controller
         $option->save();
         $topic->update([
             'status' => 'onReady',
-            'is_ready' => 1,
         ]);
 
         $attendanceStatus = 'absent';
@@ -283,9 +290,11 @@ class TopicController extends Controller
             ]);
         } elseif ($steps === 5) {
             $request->validate([
-                'transition_time' => 'required'
+                'max_session' => 'required',
+                'max_buffer' => 'required'
             ], [
-                'transition_time.required' => 'Please specify the transition time'
+                'max_session.required' => 'Please specify the overall time session',
+                'max_buffer.required' => 'Please specify the buffer time',
             ]);
         } elseif ($steps === 6) {
             $request->validate([

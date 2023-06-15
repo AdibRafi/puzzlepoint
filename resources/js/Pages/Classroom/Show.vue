@@ -79,10 +79,6 @@
             </div>
         </div>
         <TitleCard :title="props.classroom.name"
-                   top-right-button-label="Add Student"
-                   @button-function="router.get(route('classroom.add-student.create'),{
-                       classroom_id:props.classroom.id
-                   })"
                    :desc-title="props.classroom.join_code"
                    :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->

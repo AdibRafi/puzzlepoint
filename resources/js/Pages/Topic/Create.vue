@@ -222,6 +222,7 @@
                 <li :class="'step ' + (formStep >= 3 ? 'step-primary':'')">Modules Detail</li>
                 <li :class="'step ' + (formStep >= 4 ? 'step-primary':'')">Option</li>
                 <li :class="'step ' + (formStep >= 5 ? 'step-primary':'')">Time Session</li>
+                <li :class="'step ' + (formStep >= 6 ? 'step-primary':'')">Overview</li>
             </ul>
             <TitleCard title="Name and Date" v-if="formStep === 1">
                 <h2 class="card-title">Tutorial</h2>
@@ -298,7 +299,7 @@
                                    v-model="moduleData.learning_objectives"/>
                         <input type="file"
                                class="file-input file-input-bordered
-                                      file-input-primary mt-4"
+                                      file-input-primary mt-4 w-full"
                                @input="module.file_path = $event.target.files[0]"/>
                     </div>
                 </div>
@@ -443,15 +444,15 @@
                 <p>And realistically, student will come a bit late, so let say we have 30 minute buffer time.</p>
                 <br/>
                 <p>Then we suggest of doing...</p>
-                <div class="grid mt-2 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-6">
+                <div class="grid mt-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
                     <div class="stat w-full border-2">
                         <div class="stat-title">Expert Session</div>
-                        <div class="stat-value">30 Minutes</div>
+                        <div class="stat-value">29 Minutes</div>
                         <div class="stat-desc">Duration for the expert session</div>
                     </div>
                     <div class="stat w-full border-2">
                         <div class="stat-title">Jigsaw Session</div>
-                        <div class="stat-value">60 Minutes</div>
+                        <div class="stat-value">58 Minutes</div>
                         <div class="stat-desc">Duration for the jigsaw session</div>
                     </div>
                     <div class="stat w-full border-2">
@@ -467,38 +468,93 @@
                 </div>
                 <br/>
                 <p>Try for yourself!</p>
-                <div class="grid mt-2 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-6">
-                    <InputText label-title="How long is your class? (in minutes)"/>
-                    <InputText label-title="How long is the buffer time? (in minutes)"/>
-                </div>
+                <TimeCalculator :number-of-modules="form.topic.no_of_modules"
+                                :number-of-students="props.classroomModal.users_count"
+                                @out-data="getTime"/>
                 <br/>
 
-
-                <InputText label-title="Maximum Time for Jigsaw Session"
-                           input-type="number"
-                           v-model="form.topic.max_time_jigsaw"/>
                 <div v-for="error in errors"
                      class="alert alert-error w-full shadow-lg mt-4">
                     <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
                     <p>{{ error.valueOf() }}</p>
                 </div>
                 <button @click.prevent="nextStep"
-                        class="btn btn-primary float-right mt-10">
+                        class="btn btn-primary float-right">
                     Proceed
                 </button>
             </TitleCard>
-            <TitleCard title="Add Topic" v-if="formStep === 6">
-                <InputText label-title="Date and Time to Start the Topic"
-                           input-type="datetime-local"
-                           v-model="form.topic.date_time"/>
+            <TitleCard title="Overview" v-if="formStep === 6">
+                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Topic Name</div>
+                        <div class="stat-value">{{ form.topic.name }}</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Date and Time</div>
+                        <div class="stat-value">{{ displayTime }}</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Number of Modules</div>
+                        <div class="stat-value">{{ form.topic.no_of_modules }}</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Grouping Method</div>
+                        <div class="stat-value">{{ form.option.groupMethod }}</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Time Method for jigsaw session</div>
+                        <div class="stat-value">{{ form.option.timeMethod }}</div>
+                    </div>
+                </div>
+                <div class="divider">Time Session</div>
+                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Total Time</div>
+                        <div class="stat-value">{{form.topic.max_session}} Minutes</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Buffer Time</div>
+                        <div class="stat-value">{{form.topic.max_buffer}} Minutes</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Expert Session</div>
+                        <div class="stat-value">{{ form.topic.max_time_expert }} Minutes</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Jigsaw Session</div>
+                        <div class="stat-value">{{ form.topic.max_time_jigsaw }} Minutes</div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Time for Student Present</div>
+
+                        <!--todo: need to display for uneven-->
+
+                        <div v-if="form.option.timeMethod==='even'"
+                             class="stat-value">{{ form.option.tm[0] }} Minutes
+                        </div>
+                    </div>
+                    <div class="stat w-full border-2">
+                        <div class="stat-title">Transition Time</div>
+                        <div class="stat-value">{{ form.topic.transition_time }} Minutes</div>
+                    </div>
+                </div>
+                <div class="divider">Modules</div>
+                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div v-for="(moduleData,index) in form.modules" :key="moduleData">
+                        <div class="stat w-full border-2">
+                            <div class="stat-title">Module {{ index + 1 }}</div>
+                            <div class="stat-value">{{ moduleData.name }}</div>
+                        </div>
+                    </div>
+                </div>
                 <div v-for="error in errors"
                      class="alert alert-error w-full shadow-lg mt-4">
                     <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
                     <p>{{ error.valueOf() }}</p>
                 </div>
-                <button @click.prevent="nextStep"
+                <button @click.prevent="submit"
                         class="btn btn-primary float-right mt-10">
-                    Proceed
+                    Submit Topic
                 </button>
             </TitleCard>
         </div>
@@ -514,6 +570,7 @@ import {Head, router, usePage} from "@inertiajs/vue3";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import TimeCalculator from "@/Components/TimeCalculator.vue";
 
 
 const formStep = ref(1);
@@ -522,14 +579,18 @@ const wizardStatus = usePage().props.auth.user.wizard_status
 
 
 const props = defineProps({
-    classroom_id: Object,
+    classroomModal: Object,
     errors: Object,
+    studentModal: Object,
+
 })
 
 const topic = reactive({
     name: '',
     date_time: '',
     no_of_modules: '',
+    max_session: '',
+    max_buffer: '',
     max_time_expert: '',
     max_time_jigsaw: '',
     transition_time: '',
@@ -553,20 +614,19 @@ const option = reactive({
 })
 
 const form = useForm({
-    classroom_id: props.classroom_id,
+    classroom_id: props.classroomModal.id,
     topic: topic,
     modules: modules,
     option: option,
 })
 
-const noOfStudents = ref(null);
 
 const dummyData = {
     'name': 'Mathematics',
     'no_of_modules': 4,
     'modules': ['Addition', 'Subtraction', 'Multiplication', 'Division'],
-    'max_expert_time': 30,
-    'max_jigsaw_time': 60,
+    'max_expert_time': 29,
+    'max_jigsaw_time': 58,
 }
 if (!usePage().props.auth.user.is_wizard_complete) {
     form.topic.name = dummyData.name;
@@ -574,6 +634,31 @@ if (!usePage().props.auth.user.is_wizard_complete) {
     form.topic.max_time_expert = dummyData.max_expert_time;
     form.topic.max_time_jigsaw = dummyData.max_jigsaw_time;
 }
+
+const formatDate = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+    return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+}
+
+const getTime = (value) => {
+    console.log(value)
+    form.topic.max_session = value.outSession;
+    form.topic.max_buffer = value.outBuffer;
+    form.topic.max_time_expert = value.outExpert;
+    form.topic.max_time_jigsaw = value.outJigsaw;
+    form.topic.transition_time = value.outTransition;
+    for (let i = 0; i < 6; i++) {
+        tm[i] = value.outStudentPresent;
+    }
+}
+
+const displayTime = ref(null);
 
 const unevenTimeFunction = () => {
     tm[1] = 0
@@ -645,10 +730,12 @@ const nextStep = () => {
         } else if (formStep.value === 5) {
             router.post(route('topic.wizard.step'), {
                 steps: 5,
-                transition_time: form.topic.transition_time,
+                max_session: form.topic.max_session,
+                max_buffer: form.topic.max_buffer,
             }, {
                 onSuccess: () => {
                     formStep.value++
+                    displayTime.value = formatDate(new Date(form.topic.date_time))
                 }
             })
         } else if (formStep.value === 6) {
