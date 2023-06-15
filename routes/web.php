@@ -57,6 +57,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/module/editIndex', [ModuleController::class, 'updateIndex'])->name('module.updateIndex');
     Route::get('/option/editIndex', [OptionController::class, 'editIndex'])->name('option.editIndex');
     Route::post('/option/editIndex', [OptionController::class, 'updateIndex'])->name('option.updateIndex');
+    Route::get('/classroom/add-student', [ClassroomController::class, 'addStudentCreate'])->name('classroom.add-student.create');
+    Route::post('/classroom/add-student', [ClassroomController::class, 'addStudentStore'])->name('classroom.add-student.store');
 
     Route::resource('classroom', ClassroomController::class);
     Route::resource('topic', TopicController::class);

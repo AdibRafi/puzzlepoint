@@ -48,7 +48,7 @@ class ClassroomController extends Controller
 
         if (Auth::user()->wizard_status === 'onCreateClassroom') {
             Auth::user()->update([
-                'wizard_status' => 'onCreateTopic'
+                'wizard_status' => 'onAddStudent'
             ]);
             User::where('type', '=', 'student')->each(function ($user) use ($classroom) {
                 $user->classrooms()->attach($classroom->id);
@@ -70,7 +70,7 @@ class ClassroomController extends Controller
 
         $topicModal = $classroom->topics()
             ->where('is_complete', '=', 0)
-            ->orWhere('is_complete','=',1)
+            ->orWhere('is_complete', '=', 1)
             ->whereHas('assessment', function ($query) {
                 $query->where('is_complete', '=', 0);
             })
@@ -79,12 +79,16 @@ class ClassroomController extends Controller
 //        dd($topicModal);
         $topicArchiveModal = $classroom->topics()
             ->where('is_complete', '=', 1)
-            ->whereHas('assessment',function ($query){
+            ->whereHas('assessment', function ($query) {
                 $query->where('is_complete', '=', 1);
-            })
+            })->get();
+
+        $studentModal = $classroom->users()
+            ->where('type', '=', 'student')
             ->get();
         return inertia('Classroom/Show',
-            compact('classroom', 'topicModal', 'topicArchiveModal'));
+            compact('classroom', 'topicModal',
+                'topicArchiveModal', 'studentModal'));
     }
 
     /**
@@ -116,5 +120,44 @@ class ClassroomController extends Controller
 
         return redirect()->route('classroom.index')
             ->with('alertMessage', 'Classroom deleted successfully');
+    }
+
+    public function addStudentCreate(Request $request) //classroom_id
+    {
+//        dd($request->all());
+        $classroom_id = $request->input('classroom_id');
+        return inertia('Classroom/AddStudent', compact('classroom_id'));
+    }
+
+    public function addStudentStore(Request $request) //name, email, numGenerateStudents, classroom_id
+    {
+        if (Auth::user()->wizard_status === 'onAddStudent') {
+            $request->validate([
+                'numGenerateStudents' => 'required'
+            ], [
+                'numGenerateStudents.required' => 'Please specify the number you want the dummy students',
+            ]);
+            $user = User::factory($request->input('numGenerateStudents'))->create([
+                'type' => 'student'
+            ]);
+            Classroom::find($request->input('classroom_id'))->users()->attach($user);
+
+            Auth::user()->update([
+                'wizard_status' => 'onCreateTopic'
+            ]);
+        } else {
+            $request->validate([
+                'name' => 'required'
+            ], [
+                'name.required' => 'Please Enter Student Name'
+            ]);
+
+            User::create([
+                'name' => $request->input('name'),
+                'type' => 'student',
+            ]);
+        }
+
+        return redirect()->route('classroom.show', $request->input('classroom_id'))->with('alertMessage', 'Add Student Successfully');
     }
 }

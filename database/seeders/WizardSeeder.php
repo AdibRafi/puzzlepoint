@@ -23,10 +23,10 @@ class WizardSeeder extends Seeder
             'is_wizard_complete' => 0
         ]);
 
-        User::factory(20)->create([
-            'type' => 'studentDummy',
-            'wizard_status' => 'dummy',
-            'is_wizard_complete' => 1
-        ]);
+//        User::factory(20)->create([
+//            'type' => 'studentDummy',
+//            'wizard_status' => 'student',
+//            'is_wizard_complete' => 1
+//        ]);
     }
 }

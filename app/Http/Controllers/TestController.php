@@ -37,7 +37,6 @@ class TestController extends Controller
         if ($topicModuleModal->is_expert_form === 0) {
 
             //todo: PRIORITY, distribution thing
-            //todo: PRIORITY, do group distribute >= 28 student
             $studentAttendModal = $studentAttendModal->shuffle();
             $numOfModules = $topicModuleModal->no_of_modules;
             $modulesId = $topicModuleModal->modules->pluck('id');

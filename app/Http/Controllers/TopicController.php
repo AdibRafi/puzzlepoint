@@ -255,9 +255,11 @@ class TopicController extends Controller
         $steps = $request->input('steps');
         if ($steps === 1) {
             $request->validate([
-                'name' => 'required'
+                'name' => 'required',
+                'date_time' => 'required'
             ], [
-                'name.required' => 'Please fill in Topic Name'
+                'name.required' => 'Please fill in Topic Name',
+                'date_time.required' => 'Please Specify the date'
             ]);
         } elseif ($steps === 2) {
             $request->validate([
@@ -267,15 +269,17 @@ class TopicController extends Controller
             ]);
         } elseif ($steps === 3) {
             $request->validate([
-                'max_time_expert' => 'required'
+                'modules.*.name' => 'required'
             ], [
-                'max_time_expert.required' => 'Please specify the time for Expert Session'
+                'modules.*.name.required' => 'Please fill in all modules name'
             ]);
         } elseif ($steps === 4) {
             $request->validate([
-                'max_time_jigsaw' => 'required'
+                'option.groupMethod' => 'required',
+                'option.timeMethod' => 'required',
             ], [
-                'max_time_jigsaw.required' => 'Please specify the time for Jigsaw Session'
+                'option.groupMethod.required' => 'Please specify the group method',
+                'option.timeMethod.required' => 'Please specify the time method',
             ]);
         } elseif ($steps === 5) {
             $request->validate([

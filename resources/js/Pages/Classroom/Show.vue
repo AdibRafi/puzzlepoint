@@ -6,11 +6,12 @@
                 <div class="state shadow bg-base-100">
                     <div class="stat">
                         <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
-                              class="stat-figure btn btn-circle btn-primary">
+                              :class="'stat-figure btn btn-circle ' +
+                              (wizardStatus === 'onCreateTopic' || isWizardComplete ? 'btn-primary':'btn-disabled')">
                             <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
                         </Link>
                         <div class="stat-title">Total Topic</div>
-                        <div class="stat-value">{{ topicModal.length }}</div>
+                        <div class="stat-value">{{ props.topicModal.length }}</div>
                         <div class="stat-desc">
                             To add more, Click the + Button
                         </div>
@@ -27,12 +28,34 @@
             <div class="state shadow bg-base-100">
                 <div class="stat">
                     <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
-                          :class="'stat-figure btn btn-circle ' + (wizardStatus === 'onCreateTopic' ? 'btn-disabled':'btn-primary')">
+                          :class="'stat-figure btn btn-circle ' +
+                          (wizardStatus === 'onShowArchive' || isWizardComplete ? 'btn-primary':'btn-disabled')">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                     </Link>
                     <div class="stat-title">Total Archive</div>
                     <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
                     <div class="stat-desc">Click the button to see Archive</div>
+                </div>
+            </div>
+            <div class="state shadow bg-base-100">
+                <div class="stat">
+                    <Link :href="route('classroom.add-student.create',{
+                        classroom_id: props.classroom.id
+                    })"
+                          :class="'stat-figure btn btn-circle ' +
+                          (wizardStatus === 'onAddStudent' || isWizardComplete ? 'btn-primary':'btn-disabled')">
+                        <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
+                    </Link>
+                    <div class="stat-title">Total Student</div>
+                    <div class="stat-value">{{ props.studentModal.length }}</div>
+                    <div class="stat-desc">Click the button to add students</div>
+                </div>
+                <div v-if="wizardStatus === 'onAddStudent'"
+                     class="alert alert-info shadow-lg">
+                    <div>
+                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                        <span class="ml-4">Now Click the + Button to add Student</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,10 +79,12 @@
             </div>
         </div>
         <TitleCard :title="props.classroom.name"
-                   :top-right-button-label="wizardStatus !== 'onCreateTopic'?'Edit Class':''"
-                   @button-function="router.get(route('classroom.edit',props.classroom.id))"
+                   top-right-button-label="Add Student"
+                   @button-function="router.get(route('classroom.add-student.create'),{
+                       classroom_id:props.classroom.id
+                   })"
                    :desc-title="props.classroom.join_code"
-                   :tooltip-desc-text="wizardStatus === 'onCreateTopic' ? 'Share this code to student to join' : ''">
+                   :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->
 
             <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
@@ -95,10 +120,12 @@ const props = defineProps({
     classroom: Object,
     topicModal: Object,
     topicArchiveModal: Object,
+    studentModal: Object,
 
 })
 
-const wizardStatus = usePage().props.auth.user.wizard_status
+const wizardStatus = usePage().props.auth.user.wizard_status;
+const isWizardComplete = usePage().props.auth.user.is_wizard_complete;
 
 const goTopic = (id) => {
     router.get(route('topic.show', id))

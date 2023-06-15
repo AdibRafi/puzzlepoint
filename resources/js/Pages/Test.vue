@@ -2,50 +2,53 @@
     <Head title="Test"/>
     <Layout page-title="Test Page">
         <Card title="DEVELOPER"/>
-        <TitleCard top-margin="mt-6" title="testlol"
-                   top-right-button-label="idk"
-                   @click="t"/>
+
+        <TitleCard>
+            <TimeCalculator number-of-modules="4"
+                            number-of-students="40"/>
+        </TitleCard>
+
         <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
             <p>{{ classroomData.name }}</p>
         </Card>
 
-<!--        Todo: Put websocket on slides then put inside the EG n JG-->
+        <!--        Todo: Put websocket on slides then put inside the EG n JG-->
 
-        <div class="carousel w-full">
-            <div id="slide1" class="carousel-item relative w-full">
-                <vue-pdf-embed source="modules/M1.pdf" :page="1"
-                               width="1000"/>
-                <!--               <embed src="/modules/M1.pdf" class="w-full" />-->
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                    <a href="#slide4" class="btn btn-circle">❮</a>
-                    <a href="#slide2" class="btn btn-circle">❯</a>
-                </div>
-            </div>
-            <div id="slide2" class="carousel-item relative w-full">
-                <vue-pdf-embed source="modules/M1.pdf" :page="2"
-                               width="1000"/>
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                    <a href="#slide1" class="btn btn-circle">❮</a>
-                    <a href="#slide3" class="btn btn-circle">❯</a>
-                </div>
-            </div>
-            <div id="slide3" class="carousel-item relative w-full">
-                <vue-pdf-embed source="modules/M1.pdf" :page="3"
-                               width="1000"/>
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                    <a href="#slide2" class="btn btn-circle">❮</a>
-                    <a href="#slide4" class="btn btn-circle">❯</a>
-                </div>
-            </div>
-            <div id="slide4" class="carousel-item relative w-full">
-                <vue-pdf-embed source="modules/M1.pdf" :page="4"
-                               width="1000"/>
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                    <a href="#slide3" class="btn btn-circle">❮</a>
-                    <a href="#slide1" class="btn btn-circle">❯</a>
-                </div>
-            </div>
-        </div>
+        <!--        <div class="carousel w-full">-->
+        <!--            <div id="slide1" class="carousel-item relative w-full">-->
+        <!--                <vue-pdf-embed source="modules/M1.pdf" :page="1"-->
+        <!--                               width="800"/>-->
+        <!--                &lt;!&ndash;               <embed src="/modules/M1.pdf" class="w-full" />&ndash;&gt;-->
+        <!--                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">-->
+        <!--                    <a href="#slide4" class="btn btn-circle">❮</a>-->
+        <!--                    <a href="#slide2" class="btn btn-circle">❯</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div id="slide2" class="carousel-item relative w-full">-->
+        <!--                <vue-pdf-embed source="modules/M1.pdf" :page="2"-->
+        <!--                               width="800"/>-->
+        <!--                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">-->
+        <!--                    <a href="#slide1" class="btn btn-circle">❮</a>-->
+        <!--                    <a href="#slide3" class="btn btn-circle">❯</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div id="slide3" class="carousel-item relative w-full">-->
+        <!--                <vue-pdf-embed source="modules/M1.pdf" :page="3"-->
+        <!--                               width="800"/>-->
+        <!--                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">-->
+        <!--                    <a href="#slide2" class="btn btn-circle">❮</a>-->
+        <!--                    <a href="#slide4" class="btn btn-circle">❯</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div id="slide4" class="carousel-item relative w-full">-->
+        <!--                <vue-pdf-embed source="modules/M1.pdf" :page="4"-->
+        <!--                               width="800"/>-->
+        <!--                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">-->
+        <!--                    <a href="#slide3" class="btn btn-circle">❮</a>-->
+        <!--                    <a href="#slide1" class="btn btn-circle">❯</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <Card>
             <button type="submit"
                     @click.prevent="router.get(route('sms.test'))"
@@ -56,7 +59,8 @@
         <Card>
             <button @click.prevent="router.get(route('migrate.group'),{
                 seeder:'GroupSeeder'
-            })" class="btn btn-secondary">MIGRATE</button>
+            })" class="btn btn-secondary">MIGRATE
+            </button>
         </Card>
     </Layout>
 </template>
@@ -71,6 +75,7 @@ import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {useStore} from 'vuex'
 import InputText from "@/Components/InputText.vue";
+import TimeCalculator from "@/Components/TimeCalculator.vue";
 
 const t = () => {
     console.log('tah')
