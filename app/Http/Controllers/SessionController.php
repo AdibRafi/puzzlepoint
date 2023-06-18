@@ -11,11 +11,14 @@ use App\Events\UpdateExpertSession;
 use App\Events\UpdateJigsawSession;
 use App\Models\Attendance;
 use App\Models\Group;
+use App\Models\Module;
 use App\Models\Topic;
 use App\Models\User;
 use Auth;
+use Date;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use function Sodium\add;
 
 class SessionController extends Controller
@@ -33,6 +36,10 @@ class SessionController extends Controller
     {
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+
+        $date = Carbon::now();
+        $formatedDate = $date->format('Y-m-d H:i:s');
+        dd($formatedDate);
 
         $topicModuleModal->update([
             'is_start' => 1,
@@ -78,8 +85,12 @@ class SessionController extends Controller
                 $topicModuleModal->update(['is_expert_form' => 1]);
             }
         }
-        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
-            ->where('type', '=', 'expert')->get();
+        $expertGroupUserModal = $topicModuleModal->groups()
+            ->with('users.attendances')
+            ->where('type', '=', 'expert')
+            ->with('module')
+            ->get();
+
 
         MoveExpertSession::dispatch();
 
@@ -121,6 +132,32 @@ class SessionController extends Controller
         }
         $splitUser = $expertUserModal->split($numOfModules);
 
+        //todo: put pivot for moduleID for jigsaw group
+
+        Group::find($splitUser[0][0]->groups()->first()->id)
+            ->users()->updateExistingPivot(3, [
+                'module_id' => 1,
+                'module_name' => 'test',
+            ]);
+
+//        $a = $topicModuleModal->groups()
+//            ->where('id', '=', 6)
+//            ->with('users', function ($q) {
+//                $q->where('id', '=', 12);
+//            })->get();
+//        dd($a);
+
+//        dd($splitUser[0][0]->groups()
+//            ->where('topic_id','=',$topicModuleModal->id)
+//            ->first());
+
+//        dd($splitUser[0][0]->groups()
+//            ->withPivot('module_id')
+//            ->withPivot('module_name')
+//            ->first()
+//        );
+//        dd(Module::find(6)->name);
+
         if ($topicModuleModal->is_jigsaw_form === 0) {
             for ($j = 0; $j < $totalGroup; $j++) {
                 if ($splitUser !== null) {
@@ -130,7 +167,15 @@ class SessionController extends Controller
                     $group->topic()->associate($topicModuleModal->id);
                     $group->save();
                     for ($k = 0; $k < $numOfModules; $k++) {
-                        $group->users()->attach($splitUser[$k]->pop());
+                        $userToPop = $splitUser[$k]->pop();
+                        $userModuleId = $userToPop->groups()
+                            ->where('topic_id', '=', $topicModuleModal->id)
+                            ->first()->module_id;
+                        $group->users()->attach($userToPop);
+                        $group->users()->updateExistingPivot($userToPop->id, [
+                            'module_id' => $userModuleId,
+                            'module_name' => Module::find($userModuleId)->name,
+                        ]);
                     }
                     if ($remainderUser !== null) {
                         $group->users()->attach($remainderUser->pop());
@@ -139,9 +184,14 @@ class SessionController extends Controller
             }
             $topicModuleModal->update(['is_jigsaw_form' => 1]);
         }
-
-        $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
-
+//        dd(Group::find(12)->users()->withPivot('module_id')->withPivot('module_name')->get());
+        $jigsawGroupUserModal = $topicModuleModal->groups()
+            ->where('type', '=', 'jigsaw')
+            ->with('users', function ($q) {
+                $q->withPivot('module_id')
+                    ->withPivot('module_name');
+            })
+            ->get();
 
         MoveJigsawSession::dispatch();
 

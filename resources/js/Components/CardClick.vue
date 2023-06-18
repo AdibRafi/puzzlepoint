@@ -1,12 +1,11 @@
 <template>
     <div class="indicator">
-        <div class="card w-96 bg-base-100 shadow-xl my-4 hover:bg-base-200 cursor-pointer">
-            <span v-if="is_new" class="indicator-item badge badge-success">New</span>
-            <div class="card-body">
-                <h2 class="card-title">{{ props.title }}</h2>
-                <slot/>
-                <div class="card-actions justify-end">
-                    <slot name="actions"/>
+        <div class="shadow bg-base-100 border-2 w-80">
+            <div class="stat hover:bg-base-200 cursor-pointer p-4">
+                <div class="">
+                    <span v-if="is_new" class="indicator-item badge badge-success">New</span>
+                    <h2 class="card-title">{{ props.title }}</h2>
+                    <slot/>
                 </div>
             </div>
         </div>

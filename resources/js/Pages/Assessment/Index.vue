@@ -1,11 +1,13 @@
 <template xmlns="http://www.w3.org/1999/html">
     <Head title="Assessment"/>
     <Layout page-title="Assessment">
-        <Card title="DEVELOPER" class="mb-4">
-            <p>Assessment Object</p>
-            <p>{{ props.assessmentModal }}</p>
-        </Card>
-        <TitleCard :title="props.topicModal.name" top-right-button-label="Edit Assessment"
+        <!--        <Card title="DEVELOPER" class="mb-4">-->
+        <!--            <p>Assessment Object</p>-->
+        <!--            <p>{{ props.assessmentModal }}</p>-->
+        <!--        </Card>-->
+        <TitleCard :title="props.topicModal.name"
+                   :top-right-button-label="$page.props.auth.user.is_wizard_complete
+                   ? 'Edit Assessment' : '' "
                    @button-function="">
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div class="stats shadow bg-base-100 border-2">
@@ -23,8 +25,8 @@
                      class="stats shadow bg-base-100 border-2">
                     <div class="stat">
                         <div @click.prevent="sendPublish"
-                             :class="'stat-figure btn btn-circle btn-primary ' +
-                              (wizardStatus === 'onCreateAssessment'? 'btn-disabled': '')">
+                             :class="'stat-figure btn btn-circle ' +
+                              (wizardStatus !== 'onPublishAssessment' ? 'btn-disabled': 'btn-primary')">
                             <font-awesome-icon icon="fa-solid fa-upload" size="xl"/>
                         </div>
                         <div class="stat-title">Publish</div>
@@ -55,7 +57,7 @@
                  class="alert alert-info shadow-lg my-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span>This will be Assessment Page. <br/> Click the Question Button.</span>
+                    <span class="ml-4">This will be Assessment Page. <br/> Click the Question Button.</span>
                 </div>
             </div>
             <div v-else-if="wizardStatus === 'onPublishAssessment'"

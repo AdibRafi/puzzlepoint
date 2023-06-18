@@ -24,14 +24,7 @@
                     </div>
                     <div class="stat-title">Total Students</div>
                     <div class="stat-value">{{ props.studentModal.length }}</div>
-                    <div v-if="wizardStatus === 'onStartSession'"
-                         class="stat-desc text-info">
-                        For this tutorial, we will be using dummy student
-                    </div>
-                    <div v-else
-                         class="stat-desc">
-                        .
-                    </div>
+                    <div class="stat-desc">In this Classroom</div>
                 </div>
             </div>
             <div class="stats shadow bg-base-100">
@@ -57,7 +50,8 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-primary btn-circle ' + (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-circle ' +
+                        (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'btn-primary')"
                         @click.prevent="toAssessment(props.topic.id)">
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
@@ -70,13 +64,15 @@
             <div class="stats shadow bg-base-100">
                 <div class="stat">
                     <div
-                        :class="'stat-figure btn btn-primary btn-circle ' + (wizardStatus === 'onCreateAssessment' || isSessionComplete ? 'btn-disabled':'')"
+                        :class="'stat-figure btn btn-circle ' +
+                        ((wizardStatus !== 'onStartSession' && !isWizardComplete) || isSessionComplete ? 'btn-disabled':'btn-primary')"
                         @click.prevent="openSession">
                         <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                     </div>
                     <div class="stat-title">Start Session</div>
                     <div class="stat-value text-2xl">{{ dateTime }}</div>
-                    <div class="stat-desc">Click button and it will bring you <br/>to the next page</div>
+                    <div class="stat-desc">Click button and it will bring you
+                        <br/>to the session page</div>
                 </div>
             </div>
         </div>
@@ -84,8 +80,8 @@
              class="alert alert-info shadow-lg mt-10">
             <div>
                 <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                <span class="whitespace-pre-line">
-                  {{wizardStatus==='onStartSession'?
+                <span class="whitespace-pre-line ml-4">
+                  {{ wizardStatus === 'onStartSession' ?
                     'Click the Start Session Button to Continue'
                     :
                     'This will be the topic info. \n For this tutorial, you will be create an assessment first.\n Click the assessment button to continue'}}
@@ -151,6 +147,7 @@ const isModuleExpand = ref(false);
 const wizardStatus = usePage().props.auth.user.wizard_status
 const isSessionComplete = props.topic.is_complete;
 const isAssessmentComplete = props.assessmentModal.is_complete;
+const isWizardComplete = usePage().props.auth.user.is_wizard_complete;
 
 const setModuleExpand = () => {
     isModuleExpand.value = !isModuleExpand.value

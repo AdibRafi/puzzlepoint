@@ -25,7 +25,7 @@
                                 :module-minute-counter="moduleMinuteCounter"
                                 :module-second-counter="moduleSecondCounter"
                                 :module-number="moduleNum"/>
-            <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
+            <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div v-for="groupData in props.jigsawGroupUserModal">
                     <CardTable :title="groupData.name"
                                card-style="">
@@ -34,11 +34,13 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Module</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="userData in groupData.users" :key="userData">
                                     <td>{{ userData.name }}</td>
+                                    <td>{{ userData.pivot.module_name }}</td>
                                 </tr>
                                 </tbody>
                             </table>

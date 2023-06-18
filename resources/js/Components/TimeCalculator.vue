@@ -9,6 +9,16 @@
                        input-type="number"
                        v-model="inputData.bufferDuration"/>
             <div class="stat w-full border-2">
+                <div class="stat-title">Jigsaw Learning Session</div>
+                <div class="stat-value">{{ inputData.classDuration }} Minutes</div>
+                <div class="stat-desc">Duration for the whole session</div>
+            </div>
+            <div class="stat w-full border-2">
+                <div class="stat-title">Buffer Time</div>
+                <div class="stat-value">{{ displayBufferSession }} Minutes</div>
+                <div class="stat-desc">Duration available before starting the session</div>
+            </div>
+            <div class="stat w-full border-2">
                 <div class="stat-title">Expert Session</div>
                 <div class="stat-value">{{ session.expert }} Minutes</div>
                 <div class="stat-desc">Duration for the expert session</div>
@@ -53,7 +63,7 @@ const props = defineProps({
 
 const inputData = reactive({
     classDuration: 120,
-    bufferDuration: null,
+    bufferDuration: 0,
 })
 
 const session = reactive({
@@ -62,6 +72,9 @@ const session = reactive({
     studentPresent: null,
     transition: null,
 })
+
+const displayWholeSession = ref();
+const displayBufferSession = ref(0);
 
 const emit = defineEmits(['outData']);
 const generateTime = () => {
@@ -74,9 +87,13 @@ const generateTime = () => {
     } else if (props.numberOfStudents >= 70) {
         session.transition = 5;
     }
-    inputData.classDuration -= (session.transition * 2);
+    displayBufferSession.value = inputData.bufferDuration;
 
-    let availableTime = Math.round((inputData.classDuration - inputData.bufferDuration) / 3);
+    displayWholeSession.value = inputData.classDuration;
+    displayWholeSession.value -= (session.transition * 2);
+
+
+    let availableTime = Math.round((displayWholeSession.value - inputData.bufferDuration) / 3);
     session.expert = availableTime;
     session.jigsaw = availableTime * 2;
     session.studentPresent = Math.round((availableTime * 2) / props.numberOfModules);

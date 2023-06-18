@@ -43,14 +43,12 @@ class QuestionController extends Controller
 //        dd($request->input('answer.right_answer'));
 //        dd($request->all());
         $assessment_id = $request->input('assessment_id');
-        //todo: validate request
         $question = new Question();
         $question->assessment()->associate($assessment_id);
         $question->name = $request->input('name');
         $question->type = $request->input('type');
         $question->save();
 
-        //todo need to add right_answer
         $ansInput = $request->input('answer.name');
         for ($i = 1; $i < count($request->input('answer.name')) + 1; $i++) {
             $answer = new Answer();

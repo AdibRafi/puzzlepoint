@@ -3,7 +3,7 @@
     <Layout :page-title="props.classroom.name">
         <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
             <div>
-                <div class="state shadow bg-base-100">
+                <div class="shadow bg-base-100">
                     <div class="stat">
                         <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
                               :class="'stat-figure btn btn-circle ' +

@@ -24,6 +24,7 @@
                 <div v-for="groupData in props.expertGroupUserModal">
                     <CardTable :title="groupData.name"
                                card-style="">
+                        <p>{{groupData.module.name}}</p>
                         <div class="overflow-x-auto">
                             <table class="table w-full table-compact">
                                 <thead>
@@ -135,7 +136,6 @@ const props = defineProps({
     studentAttendModal: Object,
     studentAbsentModal: Object,
     expertGroupUserModal: Object,
-
 })
 
 const minuteCounter = ref(props.topicModuleModal.max_time_expert);

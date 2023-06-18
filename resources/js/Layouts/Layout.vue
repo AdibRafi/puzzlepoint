@@ -5,7 +5,7 @@
         <PageContent :page-title="pageTitle">
             <slot/>
         </PageContent>
-        <LeftSidebar />
+        <LeftSidebar v-if="$page.props.auth.user.is_wizard_complete"/>
     </div>
 </template>
 
@@ -24,5 +24,4 @@ onMounted(() => {
     themeChange(false);
 })
 
-console.log(usePage().props.auth.user.is_wizard_complete)
 </script>

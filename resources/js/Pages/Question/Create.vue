@@ -1,21 +1,21 @@
 <template>
     <Head title="Question"/>
     <Layout>
-        <Card title="DEVELOPER">
-            <p>q type = {{ form.type }}</p>
-            <p>radioNum = {{ radioAnsNumber }}</p>
-            <p>checkNum = {{ checkAnsNumber }}</p>
-            <p>q name = {{ form.name }}</p>
-            <p>ans name ={{ form.answer.name }}</p>
-            <p>ans rightAns = {{ form.answer.right_answer }}</p>
-        </Card>
+        <!--        <Card title="DEVELOPER">-->
+        <!--            <p>q type = {{ form.type }}</p>-->
+        <!--            <p>radioNum = {{ radioAnsNumber }}</p>-->
+        <!--            <p>checkNum = {{ checkAnsNumber }}</p>-->
+        <!--            <p>q name = {{ form.name }}</p>-->
+        <!--            <p>ans name ={{ form.answer.name }}</p>-->
+        <!--            <p>ans rightAns = {{ form.answer.right_answer }}</p>-->
+        <!--        </Card>-->
         <TitleCard title="Add Question">
             <form @submit.prevent="form.post(route('question.store'))">
                 <div v-if="wizardStatus === 'onCreateAssessment'"
                      class="alert alert-info shadow-lg mb-4">
                     <div>
                         <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                        <span>Choose one either you want single or multiple answers</span>
+                        <span class="ml-4">Choose one either you want single or multiple answers</span>
                     </div>
                 </div>
                 <ul class="grid w-full gap-6 md:grid-cols-2">
@@ -47,11 +47,16 @@
                     </li>
                 </ul>
                 <div class="divider"/>
-                <div
-                    :class="wizardStatus === 'onCreateAssessment'?'tooltip tooltip-info tooltip-open tooltip-bottom w-full':''"
-                    data-tip="Write your question here">
-                    <InputText label-title="Question" v-model="form.name"/>
+                <InputText label-title="Question" v-model="form.name"/>
+                <div v-if="wizardStatus === 'onCreateAssessment'"
+                     class="alert alert-info shadow-lg mt-4">
+                    <div>
+                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                        <span class="ml-4">Try write any question and answers. <br/>
+                        To choose the right answers, tick the right box</span>
+                    </div>
                 </div>
+                <!--todo: fix bug on small area can be click on InputText-->
                 <div v-if="form.type ==='radio'">
                     <div v-for="ansItem in radioAnsNumber">
                         <div class="inline-block mr-4 mt-12">
@@ -59,10 +64,7 @@
                                    :value="ansItem"
                                    v-model="form.answer.right_answer">
                         </div>
-                        <div :class="'inline-block w-3/4 ' +
-                        (wizardStatus === 'onCreateAssessment' ?
-                        'tooltip tooltip-info tooltip-right tooltip-open':'')"
-                             data-tip="Write your answers here">
+                        <div class="inline-block w-3/4">
                             <InputText container-style="input-md"
                                        :label-title="'Answer ' + ansItem"
                                        class=""
@@ -89,10 +91,7 @@
                                    :value="ansItem"
                                    v-model="form.answer.right_answer[ansItem]">
                         </div>
-                        <div :class="'inline-block w-3/4 ' +
-                        (wizardStatus === 'onCreateAssessment' ?
-                        'tooltip tooltip-info tooltip-right tooltip-open':'')"
-                             data-tip="Write your answers here">
+                        <div class="inline-block w-3/4">
                             <InputText container-style="input-md"
                                        :label-title="'Answer ' + ansItem"
                                        class="my-0.5"
@@ -133,8 +132,10 @@
                 </button>
                 <div :class="'float-right mx-2 ' +
                 (wizardStatus === 'onStartSession' ? 'tooltip tooltip-info tooltip-open tooltip-left':'')"
-                data-tip="If you're done, Click here to return to assessment page">
-                    <Link :href="route('assessment.index',{assessment_id:props.assessment_id})"
+                     data-tip="If you're done, Click here to return to assessment page">
+                    <Link v-if="wizardStatus === 'onStartSession' || $page.props.auth.user.is_wizard_complete" :href="route('assessment.index',{
+                        assessment_id:props.assessment_id
+                    })"
                           class="btn btn-secondary">
                         Back to Assessment
                     </Link>
