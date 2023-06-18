@@ -45,8 +45,21 @@
                     </table>
                 </div>
                 <div class="divider mb-6"/>
-                <div :class="'float-right ' + (wizardStatus === 'onStartSession' ?
-             'tooltip tooltip-open tooltip-info tooltip-left':'')"
+                <div class="float-left shadow bg-base-100 border-2 w-80">
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <font-awesome-icon icon="fa-solid fa-hourglass" size="xl"/>
+                        </div>
+                        <div class="stat-title">Time After Buffer</div>
+                        <div class="stat-value">{{props.timeAddBuffer}}</div>
+                        <div class="stat-desc">
+                            You can start early if you like
+                        </div>
+                    </div>
+                </div>
+                <div :class="'float-right ' +
+                (wizardStatus === 'onStartSession' ?
+                'tooltip tooltip-open tooltip-info tooltip-left':'')"
                      :data-tip="(wizardStatus=== 'onStartSession' ?
                  'Click here to continue':'')">
                     <button class="btn btn-primary" @click="proceedExpert">Proceed to Expert Session</button>
@@ -65,38 +78,38 @@
                 <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>
             </Card>
         </div>
-<!--        <div v-if="$page.props.auth.user.type === 'lecturer'">-->
-<!--            <Card :title="props.topicModuleModal.name">-->
-<!--                <p>Module: </p>-->
-<!--                <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">-->
-<!--                    {{ moduleData.name }}-->
-<!--                </p>-->
-<!--                <p>Expert Time = {{ props.topicModuleModal.max_time_expert }}</p>-->
-<!--                <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>-->
-<!--                <p>Total Student = {{ props.studentAttendModal.length + props.studentAbsentModal.length }}</p>-->
-<!--            </Card>-->
-<!--            <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
-<!--                <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-<!--                   class="text-red-500">{{ userData.name }}</p>-->
-<!--            </Card>-->
-<!--            <Card :title="'Present, '+props.studentAttendModal.length+' students'">-->
-<!--                <p v-for="userData in props.studentAttendModal" :key="userData">-->
-<!--                    {{ userData.name }}-->
-<!--                </p>-->
-<!--            </Card>-->
-<!--            <Card>-->
-<!--                <Link :href="route('lecturer.session.expert',{-->
-<!--                    topic_id:props.topicModuleModal.id,-->
-<!--                    minuteCounter: props.topicModuleModal.max_time_expert,-->
-<!--                    secondCounter: 0,-->
-<!--                    transitionMinuteCounter: props.topicModuleModal.transition_time,-->
-<!--                    transitionSecondCounter:0,-->
-<!--                })"-->
-<!--                      class="btn btn-primary">Start-->
-<!--                    Expert Session-->
-<!--                </Link>-->
-<!--            </Card>-->
-<!--        </div>-->
+        <!--        <div v-if="$page.props.auth.user.type === 'lecturer'">-->
+        <!--            <Card :title="props.topicModuleModal.name">-->
+        <!--                <p>Module: </p>-->
+        <!--                <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">-->
+        <!--                    {{ moduleData.name }}-->
+        <!--                </p>-->
+        <!--                <p>Expert Time = {{ props.topicModuleModal.max_time_expert }}</p>-->
+        <!--                <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>-->
+        <!--                <p>Total Student = {{ props.studentAttendModal.length + props.studentAbsentModal.length }}</p>-->
+        <!--            </Card>-->
+        <!--            <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
+        <!--                <p v-for="userData in props.studentAbsentModal" :key="userData"-->
+        <!--                   class="text-red-500">{{ userData.name }}</p>-->
+        <!--            </Card>-->
+        <!--            <Card :title="'Present, '+props.studentAttendModal.length+' students'">-->
+        <!--                <p v-for="userData in props.studentAttendModal" :key="userData">-->
+        <!--                    {{ userData.name }}-->
+        <!--                </p>-->
+        <!--            </Card>-->
+        <!--            <Card>-->
+        <!--                <Link :href="route('lecturer.session.expert',{-->
+        <!--                    topic_id:props.topicModuleModal.id,-->
+        <!--                    minuteCounter: props.topicModuleModal.max_time_expert,-->
+        <!--                    secondCounter: 0,-->
+        <!--                    transitionMinuteCounter: props.topicModuleModal.transition_time,-->
+        <!--                    transitionSecondCounter:0,-->
+        <!--                })"-->
+        <!--                      class="btn btn-primary">Start-->
+        <!--                    Expert Session-->
+        <!--                </Link>-->
+        <!--            </Card>-->
+        <!--        </div>-->
     </SessionLayout>
 </template>
 
@@ -113,17 +126,18 @@ const props = defineProps({
     topicModuleModal: Object,
     studentAttendModal: Object,
     studentAbsentModal: Object,
+    timeAddBuffer: Object,
 })
 
 const wizardStatus = usePage().props.auth.user.wizard_status
 
 const proceedExpert = () => {
-    router.get(route('lecturer.session.expert',{
-        topic_id:props.topicModuleModal.id,
+    router.get(route('lecturer.session.expert', {
+        topic_id: props.topicModuleModal.id,
         minuteCounter: props.topicModuleModal.max_time_expert,
         secondCounter: 0,
         transitionMinuteCounter: props.topicModuleModal.transition_time,
-        transitionSecondCounter:0,
+        transitionSecondCounter: 0,
     }))
 }
 

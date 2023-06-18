@@ -37,15 +37,16 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        $date = Carbon::now();
-        $formatedDate = $date->format('Y-m-d H:i:s');
-        dd($formatedDate);
+        $timeFromDb = Carbon::parse($topicModuleModal->date_time);
+
+        $timeAddBuffer = $timeFromDb->addMinutes($topicModuleModal->max_buffer)->format('H:i');
 
         $topicModuleModal->update([
             'is_start' => 1,
         ]);
 
-        return inertia('Session/Index', compact('topicModuleModal', 'studentAttendModal', 'studentAbsentModal'));
+        return inertia('Session/Index', compact('topicModuleModal',
+            'studentAttendModal', 'studentAbsentModal', 'timeAddBuffer'));
 
     }
 
@@ -54,6 +55,23 @@ class SessionController extends Controller
 
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
+
+        $timeFromDb = Carbon::parse($topicModuleModal->date_time);
+        $timeNow = Carbon::now();
+
+        $diff = $timeNow->diff($timeFromDb);
+
+        $remainderTime = ($topicModuleModal->max_buffer) - $diff->i;
+
+        if ($remainderTime > 0) {
+            $splitTime = floor($remainderTime / 2);
+            $topicModuleModal->update([
+                'max_session' => ($topicModuleModal->max_session + $remainderTime),
+                'max_time_expert' => ($topicModuleModal->max_time_expert + $splitTime),
+                'max_time_jigsaw' => ($topicModuleModal->max_time_jigsaw + $splitTime),
+            ]);
+        }
+
 
         if ($topicModuleModal->is_expert_form === 0) {
 
@@ -178,7 +196,19 @@ class SessionController extends Controller
                         ]);
                     }
                     if ($remainderUser !== null) {
-                        $group->users()->attach($remainderUser->pop());
+                        $userToPop = $remainderUser->pop();
+//                        dd($userToPop->id);
+                        if ($userToPop !== null){
+                            $userModal = User::find($userToPop->id);
+                            $userModuleId = $userModal->groups()
+                                ->where('topic_id', '=', $topicModuleModal->id)
+                                ->first()->module_id;
+                            $group->users()->attach($userToPop);
+                            $group->users()->updateExistingPivot($userModal->id, [
+                                'module_id' => $userModuleId,
+                                'module_name' => Module::find($userModuleId)->name,
+                            ]);
+                        }
                     }
                 }
             }

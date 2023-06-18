@@ -40,6 +40,8 @@ class GroupSeeder extends Seeder
             'name' => 'topicTest',
             'date_time' => now(),
             'no_of_modules' => $modules,
+            'max_session' => 120,
+            'max_buffer' => 30,
             'max_time_expert' => 30,
             'max_time_jigsaw' => 60,
             'status' => 'onReady',
