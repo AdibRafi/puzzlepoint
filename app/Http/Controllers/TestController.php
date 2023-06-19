@@ -78,8 +78,10 @@ class TestController extends Controller
                 $topicModuleModal->update(['is_expert_form' => 1]);
             }
         }
-        $expertGroupUserModal = $topicModuleModal->groups()->with('users.attendances')
-            ->where('type', '=', 'expert')->get();
+        $expertGroupUserModal = $topicModuleModal->groups()
+            ->with('users.attendances')
+            ->where('type', '=', 'expert')
+            ->get();
 
         $expertGroupModal = $topicModuleModal->groups()
             ->where('type', '=', 'expert')
@@ -122,14 +124,29 @@ class TestController extends Controller
                 $group->topic()->associate($topicModuleModal->id);
                 $group->save();
                 for ($k = 0; $k < $numOfModules; $k++) {
-                    $group->users()->attach($splitUser[$k]->pop());
+                    $userToPop = $splitUser[$k]->pop();
+                    $userModuleId = $userToPop->groups()
+                        ->where('topic_id', '=', $topicModuleModal->id)
+                        ->first()->module_id;
+                    $group->users()->attach($userToPop);
+                    $group->users()->updateExistingPivot($userToPop->id, [
+                        'module_id' => $userModuleId,
+                        'module_name' => Module::find($userModuleId)->name,
+                    ]);
                 }
                 if ($remainderUser !== null) {
-                    $group->users()->attach($remainderUser->pop());
-                }
-                if ($splitUser === null) {
-                    dd($splitUser);
-                    break;
+                    $userToPop = $remainderUser->pop();
+                    if ($userToPop !== null) {
+                        $userModal = User::find($userToPop->id);
+                        $userModuleId = $userModal->groups()
+                            ->where('topic_id', '=', $topicModuleModal->id)
+                            ->first()->module_id;
+                        $group->users()->attach($userToPop);
+                        $group->users()->updateExistingPivot($userModal->id, [
+                            'module_id' => $userModuleId,
+                            'module_name' => Module::find($userModuleId)->name,
+                        ]);
+                    }
                 }
             }
 
@@ -139,14 +156,22 @@ class TestController extends Controller
                     ->withCount('users')
                     ->orderBy('users_count', 'asc')
                     ->first();
-//                dd($jigsawGroup);
                 $jigsawGroup->users()->attach($remainderUser->pop());
             }
+            $topicModuleModal->update([
+                'is_jigsaw_form' => 1
+            ]);
         }
         $topicModuleModal->update(['is_jigsaw_form' => 1]);
 
 
-        $jigsawGroupUserModal = $topicModuleModal->groups()->where('type', '=', 'jigsaw')->with('users')->get();
+        $jigsawGroupUserModal = $topicModuleModal->groups()
+            ->where('type', '=', 'jigsaw')
+            ->with('users', function ($q) {
+                $q->withPivot('module_id')
+                    ->withPivot('module_name');
+            })
+            ->get();
 
 
         $topic_id = 1;
@@ -165,7 +190,11 @@ class TestController extends Controller
             ->orderBy('users_count', 'desc')
             ->get();
         $jigsawGroupUserModal = $topicModal->groups()
-            ->with('users.attendances')
+            ->with('users', function ($q) {
+                $q->with('attendances')
+                    ->withPivot('module_id')
+                    ->withPivot('module_name');
+            })
             ->withCount('users')
             ->where('type', '=', 'jigsaw')
             ->orderBy('users_count', 'desc')

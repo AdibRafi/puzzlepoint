@@ -26,6 +26,7 @@ class UserFactory extends Factory
             '2fa_code' => $this->faker->numerify('######'),
             'has_verified_2fa' => 0,
             'bio' => $this->faker->paragraph(1),
+            'is_wizard_complete' => 1,
             'type' => 'student',
             'remember_token' => Str::random(10),
             'gender' => $this->faker->randomElement(['male', 'female']),

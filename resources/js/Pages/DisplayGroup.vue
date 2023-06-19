@@ -1,59 +1,47 @@
 <template>
     <Head title="Display Group"/>
     <Layout page-title="Display Group">
-        <Card>
-            {{ is_fixedStudent }}
-            <InputText label-title="Number of students"
-                       v-model="numStudents"/>
-            <InputText label-title="Number of modules"
-                       v-model="numModules"/>
-            <div class="form-control">
-                <label class="label cursor-pointer">
-                    <span class="label-text">Include studentTest</span>
-                    <input type="checkbox"
-                           class="checkbox"
-                           v-model="is_fixedStudent"/>
-                </label>
-            </div>
-            <template #actions>
-                <button @click.prevent="router.get(route('migrate.group'),{
-                students:numStudents,
-                modules:numModules,
-                fixed_student:is_fixedStudent,
-            })" class="btn btn-secondary">GROUP SEEDER
-                </button>
-            </template>
-        </Card>
-
         <div class="flex flex-wrap">
-            <form @submit.prevent="form.post(route('test.store'))">
-                <div class="card w-96 bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">Press to generate group</h2>
-                        <div class="card-actions justify-end">
-                            <button type="submit" :disabled="form.processing" class="btn btn-primary">Store</button>
+            <TitleCard title="List of Generated Group"
+                       top-right-button-label="Generate Group"
+                       @button-function="form.post(route('test.store'))">
+                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="stat border-2">
+                        <InputText label-title="Number of students"
+                                   v-model="numStudents"/>
+                        <InputText label-title="Number of modules"
+                                   v-model="numModules"/>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">Include studentTest</span>
+                                <input type="checkbox"
+                                       class="checkbox"
+                                       v-model="is_fixedStudent"/>
+                            </label>
                         </div>
+                        <button @click.prevent="router.get(route('migrate.group'),{
+                                students:numStudents,
+                                modules:numModules,
+                                fixed_student:is_fixedStudent,
+                            })" class="btn btn-primary">GROUP SEEDER
+                        </button>
+                    </div>
+                    <div class="stat border-2">
+                        <h2 class="card-title">{{ props.topicModal.name }}</h2>
+                        <p>id = {{ props.topicModal.id }}</p>
+                        <p>EG = {{ props.expertGroupUserModal.length }}</p>
+                        <p>JG = {{ props.jigsawGroupUserModal.length }}</p>
+                        <p>total students = {{ props.totalStudents.length }}</p>
+                        <p>total modules = {{ props.topicModal.modules.length }}</p>
                     </div>
                 </div>
-            </form>
-            <div class="card w-96 bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">{{ props.topicModal.name }}</h2>
-                    <p>id = {{ props.topicModal.id }}</p>
-                    <p>EG = {{ props.expertGroupUserModal.length }}</p>
-                    <p>JG = {{ props.jigsawGroupUserModal.length }}</p>
-                    <p>total students = {{ props.totalStudents.length }}</p>
-                    <p>total modules = {{ props.topicModal.modules.length }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="flex flex-wrap">
-            <TitleCard>
                 <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                     <div v-for="groupData in props.expertGroupUserModal">
                         <CardTable :title="groupData.name"
                                    card-style="">
-                            <p>{{ groupData.users.length }}</p>
+                            <p>Total Student: <span class="font-semibold text-xl">{{ groupData.users.length }}</span>
+                            </p>
+                            <p>Module: <span class="font-semibold text-xl">{{ groupData.module.name }}</span></p>
                             <div class="overflow-x-auto">
                                 <table class="table w-full table-compact">
                                     <thead>
@@ -87,28 +75,20 @@
                     <div v-for="groupData in props.jigsawGroupUserModal">
                         <CardTable :title="groupData.name"
                                    card-style="">
-                            <p>{{ groupData.users.length }}</p>
+                            <p>Total student: <span class="text-xl font-semibold">{{ groupData.users.length }}</span>
+                            </p>
                             <div class="overflow-x-auto">
                                 <table class="table w-full table-compact">
                                     <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Status</th>
+                                        <th>Module</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="userData in groupData.users" :key="userData">
                                         <td>{{ userData.name }}</td>
-                                        <td v-if="userData.attendances[0].attend_status === 'present'">
-                                            <div class="badge badge-success">
-                                                Present
-                                            </div>
-                                        </td>
-                                        <td v-else>
-                                            <div class="badge badge-error">
-                                                Absent
-                                            </div>
-                                        </td>
+                                        <td>{{ userData.pivot.module_name }}</td>
                                     </tr>
                                     </tbody>
                                 </table>

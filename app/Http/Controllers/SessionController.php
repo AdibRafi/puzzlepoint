@@ -56,6 +56,7 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
+        //todo: add another db thing to only run one time
         $timeFromDb = Carbon::parse($topicModuleModal->date_time);
         $timeNow = Carbon::now();
 
@@ -76,7 +77,6 @@ class SessionController extends Controller
         if ($topicModuleModal->is_expert_form === 0) {
 
             //todo: PRIORITY, distribution thing
-            //todo: PRIORITY, do group distribute >= 28 student
             $studentAttendModal = $studentAttendModal->shuffle();
             $numOfModules = $topicModuleModal->no_of_modules;
             $modulesId = $topicModuleModal->modules->pluck('id');
@@ -91,16 +91,28 @@ class SessionController extends Controller
 
             $splitUser = $studentAttendModal->split($numOfModules);
 
+
+//            dd(count($splitUser[0]) >= 7);
+            if (count($splitUser[0]) > 7) {
+                while (count($splitUser[0]) > 7) {
+                    $numOfModules *= 2;
+                    $modulesId = $modulesId->merge($modulesId);
+                    $splitUser = $studentAttendModal->split($numOfModules);
+                }
+            }
+
             for ($j = 0; $j < $numOfModules; $j++) {
                 $group = new Group();
-                $group->name = 'expert' . $j;
+                $group->name = 'expert' . ($j + 1);
                 $group->type = 'expert';
                 $group->topic()->associate($topicModuleModal->id);
                 $group->module()->associate($modulesId[$j]);
                 $group->save();
 
                 $group->users()->attach($splitUser->pop());
-                $topicModuleModal->update(['is_expert_form' => 1]);
+                $topicModuleModal->update([
+                    'is_expert_form' => 1
+                ]);
             }
         }
         $expertGroupUserModal = $topicModuleModal->groups()
@@ -123,8 +135,17 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        $expertGroupModal = $topicModuleModal->groups()->where('type', '=', 'expert')->with('users')->withCount('users')->get();
-        $expertUserModal = Topic::find($request->input('topic_id'))->groups()->where('type', '=', 'expert')->with('users')->get()->pluck('users')->flatten();
+        $expertGroupModal = $topicModuleModal->groups()
+            ->where('type', '=', 'expert')
+            ->with('users')
+            ->withCount('users')
+            ->get();
+        $expertUserModal = Topic::find($request->input('topic_id'))->groups()
+            ->where('type', '=', 'expert')
+            ->with('users')
+            ->get()
+            ->pluck('users')
+            ->flatten();
 
         $remainderUser = collect();
         $lessGroup = $expertGroupModal->min('users_count');
@@ -150,71 +171,54 @@ class SessionController extends Controller
         }
         $splitUser = $expertUserModal->split($numOfModules);
 
-        //todo: put pivot for moduleID for jigsaw group
-
-        Group::find($splitUser[0][0]->groups()->first()->id)
-            ->users()->updateExistingPivot(3, [
-                'module_id' => 1,
-                'module_name' => 'test',
-            ]);
-
-//        $a = $topicModuleModal->groups()
-//            ->where('id', '=', 6)
-//            ->with('users', function ($q) {
-//                $q->where('id', '=', 12);
-//            })->get();
-//        dd($a);
-
-//        dd($splitUser[0][0]->groups()
-//            ->where('topic_id','=',$topicModuleModal->id)
-//            ->first());
-
-//        dd($splitUser[0][0]->groups()
-//            ->withPivot('module_id')
-//            ->withPivot('module_name')
-//            ->first()
-//        );
-//        dd(Module::find(6)->name);
-
+        $loop = count($splitUser[0]);
         if ($topicModuleModal->is_jigsaw_form === 0) {
-            for ($j = 0; $j < $totalGroup; $j++) {
-                if ($splitUser !== null) {
-                    $group = new Group();
-                    $group->name = 'jigsaw' . $j;
-                    $group->type = 'jigsaw';
-                    $group->topic()->associate($topicModuleModal->id);
-                    $group->save();
-                    for ($k = 0; $k < $numOfModules; $k++) {
-                        $userToPop = $splitUser[$k]->pop();
-                        $userModuleId = $userToPop->groups()
+            for ($j = 0; $j < $loop; $j++) {
+                $group = new Group();
+                $group->name = 'jigsaw' . ($j + 1);
+                $group->type = 'jigsaw';
+                $group->topic()->associate($topicModuleModal->id);
+                $group->save();
+                for ($k = 0; $k < $numOfModules; $k++) {
+                    $userToPop = $splitUser[$k]->pop();
+                    $userModuleId = $userToPop->groups()
+                        ->where('topic_id', '=', $topicModuleModal->id)
+                        ->first()->module_id;
+                    $group->users()->attach($userToPop);
+                    $group->users()->updateExistingPivot($userToPop->id, [
+                        'module_id' => $userModuleId,
+                        'module_name' => Module::find($userModuleId)->name,
+                    ]);
+                }
+                if ($remainderUser !== null) {
+                    $userToPop = $remainderUser->pop();
+                    if ($userToPop !== null) {
+                        $userModal = User::find($userToPop->id);
+                        $userModuleId = $userModal->groups()
                             ->where('topic_id', '=', $topicModuleModal->id)
                             ->first()->module_id;
                         $group->users()->attach($userToPop);
-                        $group->users()->updateExistingPivot($userToPop->id, [
+                        $group->users()->updateExistingPivot($userModal->id, [
                             'module_id' => $userModuleId,
                             'module_name' => Module::find($userModuleId)->name,
                         ]);
                     }
-                    if ($remainderUser !== null) {
-                        $userToPop = $remainderUser->pop();
-//                        dd($userToPop->id);
-                        if ($userToPop !== null){
-                            $userModal = User::find($userToPop->id);
-                            $userModuleId = $userModal->groups()
-                                ->where('topic_id', '=', $topicModuleModal->id)
-                                ->first()->module_id;
-                            $group->users()->attach($userToPop);
-                            $group->users()->updateExistingPivot($userModal->id, [
-                                'module_id' => $userModuleId,
-                                'module_name' => Module::find($userModuleId)->name,
-                            ]);
-                        }
-                    }
                 }
             }
-            $topicModuleModal->update(['is_jigsaw_form' => 1]);
+
+            while ($remainderUser->isNotEmpty()) {
+                $jigsawGroup = $topicModuleModal->groups()
+                    ->where('type', '=', 'jigsaw')
+                    ->withCount('users')
+                    ->orderBy('users_count', 'asc')
+                    ->first();
+                $jigsawGroup->users()->attach($remainderUser->pop());
+            }
+            $topicModuleModal->update([
+                'is_jigsaw_form' => 1
+            ]);
         }
-//        dd(Group::find(12)->users()->withPivot('module_id')->withPivot('module_name')->get());
+
         $jigsawGroupUserModal = $topicModuleModal->groups()
             ->where('type', '=', 'jigsaw')
             ->with('users', function ($q) {
@@ -318,34 +322,39 @@ class SessionController extends Controller
 
     private function modifiedGroup($topic_id, $groupType, $userId)
     {
-        $groupModalCount = Topic::find($topic_id)->groups()->where('type', '=', $groupType)->with('users')->withCount('users')->get();
+        $groupModalCount = Topic::find($topic_id)->groups()
+            ->where('type', '=', $groupType)
+            ->with('users')
+            ->withCount('users')
+            ->get();
 
         $minUser = $groupModalCount->min('users_count');
         $group = $groupModalCount->where('users_count', '=', $minUser)->first();
         $group->users()->attach($userId);
     }
 
-//    public function updateTime(Request $request) //time related, sessionType
-//    {
-////        dd($request->all());
-//        $minuteCounter = $request->input('minuteCounter');
-//        $secondCounter = $request->input('secondCounter');
-//        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
-//        $transitionSecondCounter = $request->input('transitionSecondCounter');
-//
-//        if ($request->input('sessionType') === 'expert') {
-//            UpdateExpertSession::dispatch($minuteCounter, $secondCounter,
-//                $transitionMinuteCounter, $transitionSecondCounter);
-//        } else {
-//            $moduleMinuteCounter = $request->input('moduleMinuteCounter');
-//            $moduleSecondCounter = $request->input('moduleSecondCounter');
-//
-//            UpdateJigsawSession::dispatch($minuteCounter, $secondCounter,
-//                $transitionMinuteCounter, $transitionSecondCounter,
-//                $moduleMinuteCounter, $moduleSecondCounter);
-//
-//        }
-//    }
+    public function updateTime(Request $request) //time related, sessionType
+    {
+//        dd($request->all());
+        $minuteCounter = $request->input('minuteCounter');
+        $secondCounter = $request->input('secondCounter');
+        $transitionMinuteCounter = $request->input('transitionMinuteCounter');
+        $transitionSecondCounter = $request->input('transitionSecondCounter');
+
+        if ($request->input('sessionType') === 'expert') {
+            UpdateExpertSession::dispatch($minuteCounter, $secondCounter,
+                $transitionMinuteCounter, $transitionSecondCounter);
+        } else {
+            $moduleMinuteCounter = $request->input('moduleMinuteCounter');
+            $moduleSecondCounter = $request->input('moduleSecondCounter');
+            $moduleNumber = $request->input('moduleNumber');
+
+            UpdateJigsawSession::dispatch($minuteCounter, $secondCounter,
+                $transitionMinuteCounter, $transitionSecondCounter,
+                $moduleMinuteCounter, $moduleSecondCounter, $moduleNumber);
+
+        }
+    }
 
     public function lecturerEndSession(Request $request) //topic_id
     {

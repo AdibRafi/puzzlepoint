@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('bio')->nullable();
             $table->string('type');
             $table->string('gender')->nullable();
-            $table->boolean('is_wizard_complete')->nullable();
+            $table->boolean('is_wizard_complete');
             $table->string('wizard_status')->nullable();
             $table->rememberToken();
             $table->timestamps();

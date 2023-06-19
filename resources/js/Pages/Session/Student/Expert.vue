@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <SessionLayout>
         <Card title="DEVELOPER">
             <p>{{ minuteCounter }}</p>
         </Card>
@@ -21,7 +21,7 @@
                 url:'M1.pdf'
             }"/>
         </Card>
-    </MainLayout>
+    </SessionLayout>
 </template>
 
 <script setup>
@@ -33,6 +33,8 @@ import {router} from "@inertiajs/vue3";
 import {ref} from "vue";
 import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
 import VuePdfEmbed from "vue-pdf-embed";
+import Layout from "@/Layouts/Layout.vue";
+import SessionLayout from "@/Layouts/SessionLayout.vue";
 
 const props = defineProps({
     topicModal: Object,

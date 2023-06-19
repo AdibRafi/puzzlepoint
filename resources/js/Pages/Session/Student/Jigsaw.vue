@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <SessionLayout>
         <Card title="DEVELOPER">
             <!--            <p>{{props.groupUserModal}}</p>-->
         </Card>
@@ -22,7 +22,7 @@
         <Card title="Display Slides here">
 
         </Card>
-    </MainLayout>
+    </SessionLayout>
 </template>
 
 <script setup>
@@ -34,6 +34,8 @@ import {onMounted, ref} from "vue";
 import '../../../bootstrap'
 import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
 import {router} from "@inertiajs/vue3";
+import Layout from "@/Layouts/Layout.vue";
+import SessionLayout from "@/Layouts/SessionLayout.vue";
 
 
 const minuteCounter = ref(0);
@@ -53,13 +55,16 @@ const props = defineProps({
     topicModal: Object,
     groupUserModal: Object,
 });
-window.Echo.channel('time-session-channel')
-    .listen('TimeSession', (e) => {
+window.Echo.channel('update-jigsaw-session')
+    .listen('UpdateJigsawSession', (e) => {
         console.log(e);
         minuteCounter.value = e.minuteCounter;
         secondCounter.value = e.secondCounter;
         transitionMinuteCounter.value = e.transitionMinuteCounter;
         transitionSecondCounter.value = e.transitionSecondCounter;
+        moduleMinuteCounter.value = e.moduleMinuteCounter;
+        moduleSecondCounter.value = e.moduleSecondCounter;
+        moduleNum.value = e.moduleNumber;
     });
 
 window.Echo.channel('end-session-channel')
