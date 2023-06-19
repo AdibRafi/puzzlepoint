@@ -24,7 +24,8 @@
                                 :transition-second-counter="transitionSecondCounter"
                                 :module-minute-counter="moduleMinuteCounter"
                                 :module-second-counter="moduleSecondCounter"
-                                :module-number="moduleNum"/>
+                                :module-number="moduleNum"
+                                session-type="Jigsaw Time"/>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div v-for="groupData in props.jigsawGroupUserModal">
                     <CardTable :title="groupData.name"

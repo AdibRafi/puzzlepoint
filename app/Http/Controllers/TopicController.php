@@ -52,6 +52,7 @@ class TopicController extends Controller
         $optionInput = $request->input('option');
 //      dd($request->all());
 
+
         $startedAt = Carbon::createFromFormat('Y-m-d\TH:i',
             $topicInput['date_time'])->toDateTimeString();
 
@@ -59,8 +60,8 @@ class TopicController extends Controller
         $topic = new Topic();
         $topic->name = $topicInput['name'];
         $topic->no_of_modules = $topicInput['no_of_modules'];
-        $topic->max_session = 0;
-        $topic->max_buffer = 0;
+        $topic->max_session = $topicInput['max_session'];
+        $topic->max_buffer = $topicInput['max_buffer'];
         $topic->max_time_expert = $topicInput['max_time_expert'];
         $topic->max_time_jigsaw = $topicInput['max_time_jigsaw'];
         $topic->transition_time = $topicInput['transition_time'];

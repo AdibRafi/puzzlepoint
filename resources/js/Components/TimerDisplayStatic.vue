@@ -5,7 +5,7 @@
                 <font-awesome-icon icon="fa-solid fa-hourglass-half" size="xl"
                                    :spin="transitionMinuteCounter === 0 && transitionSecondCounter === 0"/>
             </div>
-            <div class="stat-title">Expert Time</div>
+            <div class="stat-title">{{ sessionType }}</div>
             <div class="stat-value">{{ minuteCounter }}:{{ secondCounter }}</div>
         </div>
         <div v-if="moduleNumber" class="stat">
@@ -38,6 +38,6 @@ defineProps({
     moduleMinuteCounter: Number,
     moduleSecondCounter: Number,
     moduleNumber: Number,
-
+    sessionType: String,
 })
 </script>

@@ -19,12 +19,13 @@
                    @button-function="addOneMinute">
             <TimerDisplayStatic :minute-counter="minuteCounter" :second-counter="secondCounter"
                                 :transition-minute-counter="transitionMinuteCounter"
-                                :transition-second-counter="transitionSecondCounter"/>
+                                :transition-second-counter="transitionSecondCounter"
+            session-type="Expert Time"/>
             <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                 <div v-for="groupData in props.expertGroupUserModal">
                     <CardTable :title="groupData.name"
                                card-style="">
-                        <p>{{groupData.module.name}}</p>
+                        <p>{{ groupData.module.name }}</p>
                         <div class="overflow-x-auto">
                             <table class="table w-full table-compact">
                                 <thead>

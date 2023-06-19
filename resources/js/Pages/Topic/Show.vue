@@ -57,7 +57,7 @@
                     </div>
                     <div class="stat-title">Assessment</div>
                     <div class="stat-value">{{ props.assessmentModal.time !== null
-                        ? props.assessmentModal.time : 'Not Started' }}</div>
+                        ? props.assessmentModal.time + ' Minutes' : 'Not Started' }}</div>
                     <div class="stat-desc">To go to assessment page, click button</div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                   {{ wizardStatus === 'onStartSession' ?
                     'Click the Start Session Button to Continue'
                     :
-                    'This will be the topic info. \n For this tutorial, you will be create an assessment first.\n Click the assessment button to continue'}}
+                    'This will be the topic info. \n You will need to create an assessment first before starting the session \n Click the assessment button to continue'}}
                </span>
             </div>
         </div>

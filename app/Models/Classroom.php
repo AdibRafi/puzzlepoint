@@ -32,7 +32,7 @@ class Classroom extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'subject_code','join_code'];
+    protected $fillable = ['name', 'subject_code','join_code','is_new'];
 
     public function users(): BelongsToMany
     {

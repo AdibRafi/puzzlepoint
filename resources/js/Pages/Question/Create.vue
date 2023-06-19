@@ -131,7 +131,7 @@
                     Add into Assessment
                 </button>
                 <div :class="'float-right mx-2 ' +
-                (wizardStatus === 'onStartSession' ? 'tooltip tooltip-info tooltip-open tooltip-left':'')"
+                (wizardStatus === 'onStartSession' ? 'tooltip tooltip-info tooltip-open tooltip-bottom lg:tooltip-left':'')"
                      data-tip="If you're done, Click here to return to assessment page">
                     <Link v-if="wizardStatus === 'onStartSession' || $page.props.auth.user.is_wizard_complete" :href="route('assessment.index',{
                         assessment_id:props.assessment_id
@@ -143,10 +143,8 @@
                 <div v-if="errors" class="mt-6">
                     <div v-for="error in errors"
                          class="alert alert-error w-full shadow-lg mb-4">
-                        <div>
                             <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
                             <p>{{ error.valueOf() }}</p>
-                        </div>
                     </div>
                 </div>
             </form>
