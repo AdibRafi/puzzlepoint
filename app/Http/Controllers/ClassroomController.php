@@ -35,24 +35,53 @@ class ClassroomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreClassroomRequest $request)
+    public function store(Request $request)
     {
-        $classroom = new Classroom();
-        $classroom->name = $request->input('name');
-        $classroom->subject_code = $request->input('subject_code');
-        $classroom->join_code = Str::random(6);
-        $classroom->is_new = 1;
-        $classroom->save();
-
-        auth()->user()->classrooms()->attach($classroom->id);
-
-        if (Auth::user()->wizard_status === 'onCreateClassroom') {
-            Auth::user()->update([
-                'wizard_status' => 'onAddStudent'
+        if (Auth::user()->type === 'student') {
+            $request->validate([
+                'join_code' => 'required'
+            ], [
+                'join_code.required' => 'Please Enter the join code'
             ]);
-            User::where('type', '=', 'student')->each(function ($user) use ($classroom) {
-                $user->classrooms()->attach($classroom->id);
-            });
+
+            $classroom = Classroom::where('join_code', '=', $request->input('join_code'))
+                ->first();
+            if ($classroom === null) {
+                return back()->with('warningMessage', 'The code you enter is not in database');
+            } else {
+                if ($classroom->users()->where('id', '=', Auth::id())->exists()) {
+                    return back()->with('warningMessage', 'You already join this class');
+                } else {
+                    $classroom->users()->attach(Auth::user());
+                    return redirect()->route('classroom.index')
+                        ->with('alertMessage', 'Class successfully added');
+                }
+            }
+        } else {
+            $request->validate([
+                'name' => 'required',
+                'subject_code' => 'required',
+            ], [
+                'name.required' => 'Please Fill in Name',
+                'subject_code.required' => 'Please Fill in Subject Code'
+            ]);
+            $classroom = new Classroom();
+            $classroom->name = $request->input('name');
+            $classroom->subject_code = $request->input('subject_code');
+            $classroom->join_code = Str::random(6);
+            $classroom->is_new = 1;
+            $classroom->save();
+
+            auth()->user()->classrooms()->attach($classroom->id);
+
+            if (Auth::user()->wizard_status === 'onCreateClassroom') {
+                Auth::user()->update([
+                    'wizard_status' => 'onAddStudent'
+                ]);
+                User::where('type', '=', 'student')->each(function ($user) use ($classroom) {
+                    $user->classrooms()->attach($classroom->id);
+                });
+            }
         }
 
         return redirect()->route('classroom.index')

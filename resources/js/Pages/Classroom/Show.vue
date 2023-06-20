@@ -1,30 +1,8 @@
 <template>
     <Head :title="props.classroom.name"/>
     <Layout :page-title="props.classroom.name">
-        <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
-            <div>
-                <div class="shadow bg-base-100">
-                    <div class="stat">
-                        <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
-                              :class="'stat-figure btn btn-circle ' +
-                              (wizardStatus === 'onCreateTopic' || isWizardComplete ? 'btn-primary':'btn-disabled')">
-                            <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
-                        </Link>
-                        <div class="stat-title">Total Topic</div>
-                        <div class="stat-value">{{ props.topicModal.length }}</div>
-                        <div class="stat-desc">
-                            To add more, Click the + Button
-                        </div>
-                    </div>
-                </div>
-                <div v-if="wizardStatus === 'onCreateTopic'"
-                     class="alert alert-info shadow-lg">
-                    <div>
-                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                        <span class="ml-4">Now Click the + Button to add Topic</span>
-                    </div>
-                </div>
-            </div>
+        <div v-if="$page.props.auth.user.type === 'lecturer'"
+             class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
             <div class="state shadow bg-base-100">
                 <div class="stat">
                     <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
@@ -58,6 +36,29 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div class="shadow bg-base-100">
+                    <div class="stat">
+                        <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
+                              :class="'stat-figure btn btn-circle ' +
+                              (wizardStatus === 'onCreateTopic' || isWizardComplete ? 'btn-primary':'btn-disabled')">
+                            <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
+                        </Link>
+                        <div class="stat-title">Total Topic</div>
+                        <div class="stat-value">{{ props.topicModal.length }}</div>
+                        <div class="stat-desc">
+                            To add more, Click the + Button
+                        </div>
+                    </div>
+                </div>
+                <div v-if="wizardStatus === 'onCreateTopic'"
+                     class="alert alert-info shadow-lg">
+                    <div>
+                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                        <span class="ml-4">Now Click the + Button to add Topic</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-if="wizardStatus === 'onShowArchive'"
              class="alert alert-info shadow-lg my-4">
@@ -79,7 +80,7 @@
             </div>
         </div>
         <TitleCard :title="props.classroom.name"
-                   :desc-title="props.classroom.join_code"
+                   :desc-title="$page.props.auth.user.type === 'lecturer' ? props.classroom.join_code : ''"
                    :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->
 

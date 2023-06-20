@@ -3,7 +3,6 @@
     <Layout page-title="Classroom">
         <div v-if="wizardStatus !== 'onCreateClassroom'">
             <TitleCard title="Classroom" top-right-button-label="Add Class"
-                       v-if="$page.props.auth.user.type === 'lecturer'"
                        @button-function="router.get(route('classroom.create'))">
                 <div v-if="wizardStatus === 'onCreateTopic'"
                      class="alert alert-info shadow-lg">
@@ -22,15 +21,15 @@
                     </div>
                 </div>
             </TitleCard>
-            <TitleCard title="Classroom"
-                       v-else-if="$page.props.auth.user.type === 'student'">
-                <div v-for="data in classroomData" :key="data">
-                    <Card :title="data.name" @click="goClassroom(data.id)"
-                          class="cursor-pointer hover:bg-base-200 w-1/2">
-                        <p>{{ data.subject_code }}</p>
-                    </Card>
-                </div>
-            </TitleCard>
+<!--            <TitleCard title="Classroom"-->
+<!--                       v-else-if="$page.props.auth.user.type === 'student'">-->
+<!--                <div v-for="data in classroomData" :key="data">-->
+<!--                    <CardClick :title="data.name" @click="goClassroom(data.id)"-->
+<!--                          class="cursor-pointer hover:bg-base-200">-->
+<!--                        <p>{{ data.subject_code }}</p>-->
+<!--                    </CardClick>-->
+<!--                </div>-->
+<!--            </TitleCard>-->
         </div>
         <div v-else-if="wizardStatus === 'onCreateClassroom'">
             <div v-if="$page.props.auth.user.type === 'lecturer'">
