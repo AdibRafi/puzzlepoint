@@ -17,7 +17,7 @@ class GroupSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(int $studentNum, int $modules, bool $has_studentTest): void
+    public function run(int $studentNum, int $modules, bool $has_studentTest, string $group_type): void
     {
 
         //fixed user
@@ -59,7 +59,7 @@ class GroupSeeder extends Seeder
 
         Option::factory()->create([
             'topic_id' => 1,
-            'group_distribution' => 'none',
+            'group_distribution' => $group_type,
             'time_method' => 'even',
             'tm1' => '30',
             'tm2' => '30',

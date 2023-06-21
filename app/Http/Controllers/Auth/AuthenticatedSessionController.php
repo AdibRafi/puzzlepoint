@@ -34,17 +34,9 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $user = User::find(Auth::id());
+        $request->session()->regenerate();
 
-        if ($user->getAttribute('has_verified_2fa') === 1) {
-            $user->notify(new TwoFactorVerification());
-            return inertia('Auth/Verify2FA', compact('user'));
-        } else {
-
-            $request->session()->regenerate();
-
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

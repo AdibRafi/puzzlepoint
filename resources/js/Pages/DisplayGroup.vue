@@ -19,10 +19,26 @@
                                        v-model="is_fixedStudent"/>
                             </label>
                         </div>
+                        <div class="divider">Group</div>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">Random</span>
+                                <input type="radio" name="radio-10" value="random" class="radio"
+                                       v-model="groupType"/>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">Gender</span>
+                                <input type="radio" name="radio-10" value="gender" class="radio"
+                                       v-model="groupType"/>
+                            </label>
+                        </div>
                         <button @click.prevent="router.get(route('migrate.group'),{
                                 students:numStudents,
                                 modules:numModules,
                                 fixed_student:is_fixedStudent,
+                                group_type:groupType,
                             })" class="btn btn-primary">GROUP SEEDER
                         </button>
                     </div>
@@ -47,12 +63,14 @@
                                     <thead>
                                     <tr>
                                         <th class="w-3/4">Name</th>
+                                        <th>Gender</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="userData in groupData.users" :key="userData">
                                         <td>{{ userData.name }}</td>
+                                        <td>{{ userData.gender }}</td>
                                         <td v-if="userData.attendances[0].attend_status === 'present'">
                                             <div class="badge badge-success">
                                                 Present
@@ -82,12 +100,14 @@
                                     <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Gender</th>
                                         <th>Module</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="userData in groupData.users" :key="userData">
                                         <td>{{ userData.name }}</td>
+                                        <td>{{ userData.gender }}</td>
                                         <td>{{ userData.pivot.module_name }}</td>
                                     </tr>
                                     </tbody>
@@ -137,6 +157,7 @@ const form = useForm({
 const numStudents = ref();
 const numModules = ref();
 const is_fixedStudent = ref(false);
+const groupType = ref('random');
 </script>
 
 <style scoped>

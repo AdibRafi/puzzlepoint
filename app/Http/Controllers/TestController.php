@@ -36,23 +36,48 @@ class TestController extends Controller
 
         if ($topicModuleModal->is_expert_form === 0) {
 
-            //todo: PRIORITY, distribution thing
-            $studentAttendModal = $studentAttendModal->shuffle();
+//            todo: PRIORITY, distribution thing
+
+            if ($topicModuleModal->option()->first()->group_distribution === 'random') {
+                $doneShuffleStudent = $studentAttendModal->shuffle();
+            } else {
+                $groupUsers = $studentAttendModal->groupBy('gender');
+                $shuffledUsers = $groupUsers->map(function ($group) {
+                    return $group->shuffle();
+                });
+
+                $doneShuffleStudent = collect();
+
+                $maleUsers = $shuffledUsers['male'];
+                $femaleUsers = $shuffledUsers['female'];
+
+                $maxCount = max($maleUsers->count(), $femaleUsers->count());
+
+                for ($l = 0; $l < $maxCount; $l++) {
+                    if ($maleUsers->count() > $l) {
+                        $doneShuffleStudent->push($maleUsers[$l]);
+                    }
+                    if ($femaleUsers->count() > $l) {
+                        $doneShuffleStudent->push($femaleUsers[$l]);
+                    }
+                }
+            }
+
+
             $numOfModules = $topicModuleModal->no_of_modules;
             $modulesId = $topicModuleModal->modules->pluck('id');
 
-            (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
+            (int)$totalGroup = floor(count($doneShuffleStudent) / $topicModuleModal->no_of_modules);
 
             if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
                 $numOfModules *= 2;
 //                $totalGroup /= 2;
                 $modulesId = $modulesId->merge($modulesId);
             }
+//            dd($doneShuffleStudent->pluck('gender'));
+            $splitUser = $doneShuffleStudent->split($numOfModules);
 
-            $splitUser = $studentAttendModal->split($numOfModules);
 
-
-//            dd(count($splitUser[0]) >= 7);
             if (count($splitUser[0]) > 7) {
                 while (count($splitUser[0]) > 7) {
                     $numOfModules *= 2;
@@ -60,11 +85,6 @@ class TestController extends Controller
                     $splitUser = $studentAttendModal->split($numOfModules);
                 }
             }
-//            if (count($splitUser[0]) >= 7) {
-//                $numOfModules *= 2;
-//                $modulesId = $modulesId->merge($modulesId)->sort();
-//                $splitUser = $studentAttendModal->split($numOfModules);
-//            }
 
             for ($j = 0; $j < $numOfModules; $j++) {
                 $group = new Group();
@@ -74,7 +94,11 @@ class TestController extends Controller
                 $group->module()->associate($modulesId[$j]);
                 $group->save();
 
-                $group->users()->attach($splitUser->pop());
+                $userToPop = $splitUser->pop();
+
+                for ($m = 0; $m < count($userToPop); $m++) {
+                    $group->users()->attach($userToPop[$m]->id);
+                }
                 $topicModuleModal->update(['is_expert_form' => 1]);
             }
         }
@@ -255,7 +279,7 @@ class TestController extends Controller
         Auth::user()->notify(new TwoFactorVerification());
     }
 
-    public function migrateRefreshSeed(Request $request) //students, modules, fixed_student
+    public function migrateRefreshSeed(Request $request) //students, modules, fixed_student, groupType
     {
 //        dd($request->all());
 
@@ -263,6 +287,7 @@ class TestController extends Controller
             '--students' => $request->input('students'),
             '--modules' => $request->input('modules'),
             '--fixed_student' => (int)$request->input('fixed_student'),
+            '--group_type' => $request->input('group_type')
         ]);
 
         return back()->with('alertMessage', 'Successfully Migrate using GroupSeeder');

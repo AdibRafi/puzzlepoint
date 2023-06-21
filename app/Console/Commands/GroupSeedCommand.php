@@ -13,7 +13,7 @@ class GroupSeedCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'group:seed {--students=} {--modules=} {--fixed_student=}';
+    protected $signature = 'group:seed {--students=} {--modules=} {--fixed_student=} {--group_type=}';
 
     /**
      * The console command description.
@@ -32,7 +32,7 @@ class GroupSeedCommand extends Command
         $this->call('migrate:refresh');
         (new GroupSeeder())->run($this->option('students'),
             $this->option('modules'),
-            (bool)$this->option('fixed_student'));
+            (bool)$this->option('fixed_student'),$this->option('group_type'));
         $this->output->info('Done migrate and seed');
         return 0;
     }

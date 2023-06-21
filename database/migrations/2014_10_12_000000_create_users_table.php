@@ -17,8 +17,6 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->bigInteger('phone_number')->nullable();
-            $table->boolean('has_verified_2fa')->nullable();
-            $table->integer('2fa_code')->nullable();
             $table->string('bio')->nullable();
             $table->string('type');
             $table->string('gender')->nullable();

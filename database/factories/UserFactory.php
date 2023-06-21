@@ -23,8 +23,6 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => $this->faker->password, // password
 //            'password' => bcrypt('test1234'),
-            '2fa_code' => $this->faker->numerify('######'),
-            'has_verified_2fa' => 0,
             'bio' => $this->faker->paragraph(1),
             'is_wizard_complete' => 1,
             'type' => 'student',
