@@ -5,18 +5,6 @@
              class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
             <div class="state shadow bg-base-100">
                 <div class="stat">
-                    <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
-                          :class="'stat-figure btn btn-circle ' +
-                          (wizardStatus === 'onShowArchive' || isWizardComplete ? 'btn-primary':'btn-disabled')">
-                        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
-                    </Link>
-                    <div class="stat-title">Total Archive</div>
-                    <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
-                    <div class="stat-desc">Click the button to see Archive</div>
-                </div>
-            </div>
-            <div class="state shadow bg-base-100">
-                <div class="stat">
                     <Link :href="route('classroom.add-student.create',{
                         classroom_id: props.classroom.id
                     })"
@@ -36,27 +24,37 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <div class="shadow bg-base-100">
-                    <div class="stat">
-                        <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
-                              :class="'stat-figure btn btn-circle ' +
+            <div class="shadow bg-base-100">
+                <div class="stat">
+                    <Link :href="route('topic.create',{classroom_id : props.classroom.id})"
+                          :class="'stat-figure btn btn-circle ' +
                               (wizardStatus === 'onCreateTopic' || isWizardComplete ? 'btn-primary':'btn-disabled')">
-                            <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
-                        </Link>
-                        <div class="stat-title">Total Topic</div>
-                        <div class="stat-value">{{ props.topicModal.length }}</div>
-                        <div class="stat-desc">
-                            To add more, Click the + Button
-                        </div>
+                        <font-awesome-icon icon="fa-solid fa-plus" size="xl"/>
+                    </Link>
+                    <div class="stat-title">Total Topic</div>
+                    <div class="stat-value">{{ props.topicModal.length }}</div>
+                    <div class="stat-desc">
+                        To add more, Click the + Button
                     </div>
                 </div>
-                <div v-if="wizardStatus === 'onCreateTopic'"
-                     class="alert alert-info shadow-lg">
-                    <div>
-                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                        <span class="ml-4">Now Click the + Button to add Topic</span>
-                    </div>
+            </div>
+            <div v-if="wizardStatus === 'onCreateTopic'"
+                 class="alert alert-info shadow-lg">
+                <div>
+                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                    <span class="ml-4">Now Click the + Button to add Topic</span>
+                </div>
+            </div>
+            <div class="state shadow bg-base-100">
+                <div class="stat">
+                    <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
+                          :class="'stat-figure btn btn-circle ' +
+                          (wizardStatus === 'onShowArchive' || isWizardComplete ? 'btn-primary':'btn-disabled')">
+                        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
+                    </Link>
+                    <div class="stat-title">Total Archive</div>
+                    <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
+                    <div class="stat-desc">Click the button to see Archive</div>
                 </div>
             </div>
         </div>

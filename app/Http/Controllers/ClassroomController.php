@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClassroomRequest;
+use App\Imports\UserImport;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Module;
@@ -11,6 +12,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClassroomController extends Controller
 {
@@ -154,39 +156,99 @@ class ClassroomController extends Controller
     public function addStudentCreate(Request $request) //classroom_id
     {
 //        dd($request->all());
-        $classroom_id = $request->input('classroom_id');
-        return inertia('Classroom/AddStudent', compact('classroom_id'));
-    }
-
-    public function addStudentStore(Request $request) //name, email, numGenerateStudents, classroom_id
-    {
-        if (Auth::user()->wizard_status === 'onAddStudent') {
-            $request->validate([
-                'numGenerateStudents' => 'required'
-            ], [
-                'numGenerateStudents.required' => 'Please specify the number you want the dummy students',
-            ]);
-            $user = User::factory($request->input('numGenerateStudents'))->create([
-                'type' => 'student'
-            ]);
-            Classroom::find($request->input('classroom_id'))->users()->attach($user);
-
+        $classroomModal = Classroom::find($request->input('classroom_id'))
+            ->loadCount(['users' => function ($q) {
+                $q->where('type', '=', 'student');
+            }]);
+        if ((Auth::user()->is_wizard_complete === 0 && Auth::user()->wizard_status === 'onAddStudent') && $classroomModal->users_count >= 20) {
             Auth::user()->update([
-                'wizard_status' => 'onCreateTopic'
+                'wizard_status' => 'onCreateTopic',
             ]);
-        } else {
-            $request->validate([
-                'name' => 'required'
-            ], [
-                'name.required' => 'Please Enter Student Name'
-            ]);
-
-            User::create([
-                'name' => $request->input('name'),
-                'type' => 'student',
-            ]);
+            Auth::user()->fresh();
         }
 
-        return redirect()->route('classroom.show', $request->input('classroom_id'))->with('alertMessage', 'Add Student Successfully');
+        return inertia('Classroom/AddStudent', compact('classroomModal'));
+    }
+
+    public function addStudentStore(Request $request) //name, email, file_path, classroom_id
+    {
+        $classroomModal = Classroom::find($request->input('classroom_id'));
+        $classroom_id = $request->input('classroom_id');
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path');
+            $file->move('DummyStudent', $file->getClientOriginalName());
+            $userArr = Excel::toArray(new UserImport(),
+                'DummyStudent/' . $file->getClientOriginalName());
+
+            for ($i = 0; $i < count($userArr[0]); $i++) {
+                if (!$classroomModal->users()
+                    ->where('email', '=', $userArr[0][$i][1])
+                    ->exists()) {
+                    $classroomModal->users()
+                        ->attach(
+                            User::where('email', '=', $userArr[0][$i][1])
+                                ->first()->id
+                        );
+                }
+            }
+            return redirect()->route('classroom.show', $classroomModal)
+                ->with('alertMessage', 'Students Successfully added');
+        } else {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required',
+            ], [
+                'name.required' => 'Please fill in the Student Name',
+                'email.required' => 'Please fill in the Student Email'
+            ]);
+
+            if ($classroomModal->users()
+                ->where('email', '=', $request->input('email'))
+                ->exists()) {
+                return redirect()->route('classroom.add-student.create', compact('classroom_id'))
+                    ->with('warningMessage', 'This student already join this class');
+            } else {
+                $checkUser = User::where('email', '=', $request->input('email'));
+                if (!$checkUser->exists()) {
+                    $checkUser = User::create([
+                        'name' => $request->input('name'),
+                        'email' => $request->input('email'),
+                        'type' => 'student',
+                        'is_wizard_complete' => 1,
+                    ]);
+                }
+                $classroomModal->users()->attach($checkUser);
+                return redirect()->route('classroom.add-student.create', compact('classroom_id'))
+                    ->with('alertMessage', 'Student ' . $checkUser->name . ' Successfully added');
+            }
+        }
+    }
+
+    private function csvToArray($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false) {
+            $header = fgetcsv($handle);
+            while ($row = fgetcsv($handle)) {
+                $data[] = array_combine($header, $row);
+            }
+        }
+        fclose($handle);
+//        $header = null;
+//        $data = array();
+//        if (($handle = fopen($filename, 'r')) !== false) {
+//            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+//                if (!$header)
+//                    $header = $row;
+//                else
+//                    $data[] = array_combine($header, $row);
+//            }
+//            fclose($handle);
+//        }
+
+        return $data;
     }
 }
