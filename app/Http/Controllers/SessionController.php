@@ -56,20 +56,24 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        //todo: add another db thing to only run one time
-        $timeFromDb = Carbon::parse($topicModuleModal->date_time);
-        $timeNow = Carbon::now();
+        if ($topicModuleModal->is_buffer_add === 0) {
+            $timeFromDb = Carbon::parse($topicModuleModal->date_time);
+            $timeNow = Carbon::now();
 
-        $diff = $timeNow->diff($timeFromDb);
+            $diff = $timeNow->diff($timeFromDb);
 
-        $remainderTime = ($topicModuleModal->max_buffer) - $diff->i;
-
-        if ($remainderTime > 0) {
-            $splitTime = floor($remainderTime / 2);
+            $remainderTime = ($topicModuleModal->max_buffer) - $diff->i;
+//          todo: divide with student present on jigsaw session
+            if ($remainderTime > 0) {
+                $splitTime = floor($remainderTime / 2);
+                $topicModuleModal->update([
+                    'max_session' => ($topicModuleModal->max_session + $remainderTime),
+                    'max_time_expert' => ($topicModuleModal->max_time_expert + $splitTime),
+                    'max_time_jigsaw' => ($topicModuleModal->max_time_jigsaw + $splitTime),
+                ]);
+            }
             $topicModuleModal->update([
-                'max_session' => ($topicModuleModal->max_session + $remainderTime),
-                'max_time_expert' => ($topicModuleModal->max_time_expert + $splitTime),
-                'max_time_jigsaw' => ($topicModuleModal->max_time_jigsaw + $splitTime),
+                'is_buffer_add' => 1,
             ]);
         }
 
@@ -77,11 +81,34 @@ class SessionController extends Controller
         if ($topicModuleModal->is_expert_form === 0) {
 
             //todo: PRIORITY, distribution thing
-            $studentAttendModal = $studentAttendModal->shuffle();
+            if ($topicModuleModal->option()->first()->group_distribution === 'random') {
+                $doneShuffleStudent = $studentAttendModal->shuffle();
+            } else {
+                $groupUsers = $studentAttendModal->groupBy('gender');
+                $shuffledUsers = $groupUsers->map(function ($group) {
+                    return $group->shuffle();
+                });
+
+                $doneShuffleStudent = collect();
+
+                $maleUsers = $shuffledUsers['male'];
+                $femaleUsers = $shuffledUsers['female'];
+
+                $maxCount = max($maleUsers->count(), $femaleUsers->count());
+
+                for ($l = 0; $l < $maxCount; $l++) {
+                    if ($maleUsers->count() > $l) {
+                        $doneShuffleStudent->push($maleUsers[$l]);
+                    }
+                    if ($femaleUsers->count() > $l) {
+                        $doneShuffleStudent->push($femaleUsers[$l]);
+                    }
+                }
+            }
             $numOfModules = $topicModuleModal->no_of_modules;
             $modulesId = $topicModuleModal->modules->pluck('id');
 
-            (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
+            (int)$totalGroup = floor(count($doneShuffleStudent) / $topicModuleModal->no_of_modules);
 
             if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
                 $numOfModules *= 2;
@@ -89,7 +116,7 @@ class SessionController extends Controller
                 $modulesId = $modulesId->merge($modulesId);
             }
 
-            $splitUser = $studentAttendModal->split($numOfModules);
+            $splitUser = $doneShuffleStudent->split($numOfModules);
 
 
 //            dd(count($splitUser[0]) >= 7);
@@ -109,7 +136,11 @@ class SessionController extends Controller
                 $group->module()->associate($modulesId[$j]);
                 $group->save();
 
-                $group->users()->attach($splitUser->pop());
+                $userToPop = $splitUser->pop();
+
+                for ($i = 0; $i < count($userToPop); $i++) {
+                    $group->users()->attach($userToPop[$i]->id);
+                }
                 $topicModuleModal->update([
                     'is_expert_form' => 1
                 ]);

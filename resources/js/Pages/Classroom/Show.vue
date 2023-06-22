@@ -1,6 +1,6 @@
 <template>
     <Head :title="props.classroom.name"/>
-    <Layout :page-title="props.classroom.name">
+    <Layout page-title="Class Menu">
         <div v-if="$page.props.auth.user.type === 'lecturer'"
              class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
             <div class="state shadow bg-base-100">
@@ -79,7 +79,9 @@
         </div>
         <TitleCard :title="props.classroom.name"
                    :desc-title="$page.props.auth.user.type === 'lecturer' ? props.classroom.join_code : ''"
-                   :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''">
+                   :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''"
+                   :top-right-button-label="isWizardComplete === 1 ? 'Edit Classroom' : ''"
+                   @button-function="editClassroom">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->
 
             <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
@@ -126,11 +128,8 @@ const goTopic = (id) => {
     router.get(route('topic.show', id))
 }
 
-// console.log(props.topicModal.length);
-const destroyClassroom = (id) => {
-    if (confirm('Are you sure to delete?')) {
-        router.delete(route('classroom.destroy', id))
-    }
+const editClassroom = () => {
+    router.get(route('classroom.edit', props.classroom))
 }
 
 const destroyTopic = (id) => {

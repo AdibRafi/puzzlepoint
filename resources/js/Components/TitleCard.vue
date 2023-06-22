@@ -8,7 +8,7 @@
                     {{ descTitle }}
                 </div>
                 <p class="text-lg"
-                     v-else>{{descTitle}}
+                   v-else>{{ descTitle }}
                 </p>
             </div>
             <div class="inline-block float-right">
@@ -17,7 +17,7 @@
                  (topRightButtonLabel === 'Destroy' ? 'btn-warning ':'btn-primary ') +
                  (tooltipBtnText ? 'tooltip tooltip-left tooltip-open tooltip-info':'')"
                         :data-tip="tooltipBtnText"
-                        @click="$emit('buttonFunction')">{{ topRightButtonLabel }}
+                        @click.prevent="$emit('buttonFunction')">{{ topRightButtonLabel }}
                 </button>
             </div>
         </div>

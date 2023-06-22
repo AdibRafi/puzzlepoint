@@ -26,7 +26,7 @@
                     <div class="stat">
                         <div @click.prevent="sendPublish"
                              :class="'stat-figure btn btn-circle ' +
-                              (wizardStatus !== 'onPublishAssessment' ? 'btn-disabled': 'btn-primary')">
+                              ((wizardStatus === 'onPublishAssessment' || $page.props.auth.user.is_wizard_complete) ? 'btn-primary': 'btn-disabled')">
                             <font-awesome-icon icon="fa-solid fa-upload" size="xl"/>
                         </div>
                         <div class="stat-title">Publish</div>
@@ -52,6 +52,11 @@
                         <div class="stat-desc">Click Button to End</div>
                     </div>
                 </div>
+            </div>
+            <div class="divider"/>
+            <h2 class="card-title">List of Questions</h2>
+            <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+
             </div>
             <div v-if="wizardStatus === 'onCreateAssessment'"
                  class="alert alert-info shadow-lg my-4">

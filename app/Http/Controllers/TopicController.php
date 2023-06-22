@@ -65,6 +65,7 @@ class TopicController extends Controller
         $topic->max_time_expert = $topicInput['max_time_expert'];
         $topic->max_time_jigsaw = $topicInput['max_time_jigsaw'];
         $topic->transition_time = $topicInput['transition_time'];
+        $topic->is_buffer_add = 0;
         $topic->is_expert_form = 0;
         $topic->is_jigsaw_form = 0;
         $topic->is_new = 1;
@@ -163,7 +164,7 @@ class TopicController extends Controller
      */
     public function edit(Topic $topic)
     {
-        //
+        return inertia('Topic/Edit', compact('topic'));
     }
 
     /**

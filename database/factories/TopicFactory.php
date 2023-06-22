@@ -28,6 +28,8 @@ class TopicFactory extends Factory
             'max_time_jigsaw' => $this->faker->numberBetween(1, 100),
             'transition_time' => $this->faker->numberBetween(2, 5),
             'status' => $this->faker->randomElement(['onModule', 'onOption', 'onVerify']),
+            'is_buffer_add' => 0,
+
             'is_expert_form' => $this->faker->boolean,
             'is_jigsaw_form' => $this->faker->boolean,
             'is_new' => $this->faker->boolean,

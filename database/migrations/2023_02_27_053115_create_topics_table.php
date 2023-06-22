@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->integer('max_time_jigsaw');
             $table->integer('transition_time');
             $table->string('status');
+            $table->boolean('is_buffer_add');
             $table->boolean('is_expert_form');
             $table->boolean('is_jigsaw_form');
             $table->boolean('is_new');
