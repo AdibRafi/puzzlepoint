@@ -317,6 +317,48 @@ class TopicController extends Controller
                 'date_time.required' => 'Please specify the date to start the topic'
             ]);
         }
+    }
 
+    public function duplicateTopic(Request $request)
+    {
+        $topicOld = Topic::find($request->input('topic_id'));
+        $topicNew = $topicOld->replicate()->fill([
+            'is_buffer_add' => 0,
+            'is_expert_form' => 0,
+            'is_jigsaw_form' => 0,
+            'is_new' => 1,
+            'is_start' => 0,
+            'is_complete' => 0,
+        ]);
+        $topicNew->save();
+
+        $optionNew = $topicOld->option()->first()->replicate();
+        $optionNew->topic()->associate($topicNew);
+        $optionNew->save();
+
+        $assessmentNew = $topicOld->assessment()->first()->replicate()->fill([
+            'time' => null,
+            'is_publish' => 0,
+            'is_complete' => 0,
+            'publish_end' => null,
+        ]);
+        $assessmentNew->topic()->associate($topicNew);
+        $assessmentNew->save();
+
+
+        $students = $topicNew->getStudents();
+        for ($i = 0; $i < $students->count(); $i++) {
+            $attendance = new Attendance();
+            $attendance->user()->associate($students->get($i));
+            $attendance->topic()->associate($topicNew);
+            $attendance->attend_status = 'absent';
+            $attendance->date = $topicNew->date_time;
+            $attendance->save();
+        }
+
+        $classroom = $topicOld->classroom()->first();
+
+        return redirect()->route('classroom.show', $classroom)
+            ->with('alertMessage', 'Duplicate Topic Successful');
     }
 }
