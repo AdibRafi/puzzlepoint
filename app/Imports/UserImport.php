@@ -21,9 +21,20 @@ class UserImport implements ToModel
             return new User([
                 'name' => $row[0],
                 'email' => $row[1],
+                'gender' => $row[2],
                 'type' => 'student',
                 'is_wizard_complete' => 1,
             ]);
         }
+    }
+
+//    todo: CHECK IF WORKING
+    public function rules()
+    {
+        return [
+            'name' => 'required',
+            'email' => 'required',
+            'gender' => 'required',
+        ];
     }
 }

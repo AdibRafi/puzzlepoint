@@ -186,8 +186,9 @@ class ClassroomController extends Controller
         return inertia('Classroom/AddStudent', compact('classroomModal'));
     }
 
-    public function addStudentStore(Request $request) //name, email, file_path, classroom_id
+    public function addStudentStore(Request $request) //name, email,gender, file_path, classroom_id
     {
+//        dd($request->all());
         $classroomModal = Classroom::find($request->input('classroom_id'));
         $classroom_id = $request->input('classroom_id');
         if ($request->hasFile('file_path')) {
@@ -213,9 +214,11 @@ class ClassroomController extends Controller
             $request->validate([
                 'name' => 'required',
                 'email' => 'required',
+                'gender' => 'required',
             ], [
                 'name.required' => 'Please fill in the Student Name',
-                'email.required' => 'Please fill in the Student Email'
+                'email.required' => 'Please fill in the Student Email',
+                'gender.required' => 'Please choose gender of the Student'
             ]);
 
             if ($classroomModal->users()
@@ -229,6 +232,7 @@ class ClassroomController extends Controller
                     $checkUser = User::create([
                         'name' => $request->input('name'),
                         'email' => $request->input('email'),
+                        'gender' => $request->input('gender'),
                         'type' => 'student',
                         'is_wizard_complete' => 1,
                     ]);
