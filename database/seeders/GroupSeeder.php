@@ -54,7 +54,8 @@ class GroupSeeder extends Seeder
 
         Assessment::factory()->create([
             'topic_id' => Topic::first()->id,
-
+            'is_publish' => 0,
+            'is_complete' => 0,
         ]);
 
         Option::factory()->create([

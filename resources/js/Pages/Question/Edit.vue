@@ -1,164 +1,165 @@
 <template>
     <Head title="Question"/>
-    <MainLayout>
+    <Layout>
         <form @submit.prevent="form.put(route('question.update',props.questionAnswerModal))">
-            <div class="w-96 flex justify-center">
-                <div class="card w-72 bg-base-100 shadow-xl my-2">
-                    <div class="card-body">
-                        <!--todo: (optional) do swap-->
-                        <label class="label cursor-pointer">
-                            <span class="label-text">One Answer</span>
-                            <input type="radio" name="AnsType" id="radioAnsType"
-                                   value="radio"
-                                   class="radio checked:radio-secondary"
-                                   v-model="form.question_type"
-                                   @click="resetAns"
-                                   checked/>
+            <TitleCard title="Edit Question" top-right-button-label="Destroy"
+                       @button-function="destroyQuestion">
+                <ul class="grid w-full gap-6 md:grid-cols-2">
+                    <li>
+                        <input type="radio" id="radio" name="questionType" value="radio"
+                               v-model="form.type" class="hidden peer"
+                               @click="resetAns">
+                        <label for="radio"
+                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                  <span class="block">
+                     <p class="w-full text-lg font-semibold">Single</p>
+                     <p class="w-full">There will be only one answer in a question</p>
+                  </span>
+                            <font-awesome-icon icon="fa-regular fa-square" size="xl"/>
                         </label>
-                        <label class="label cursor-pointer">
-                            <span class="label-text">Multiple Answer</span>
-                            <input type="radio" name="AnsType" id="radioAnsType"
-                                   value="check"
-                                   class="radio checked:radio-secondary"
-                                   @click="resetAns"
-                                   v-model="form.question_type"/>
+                    </li>
+                    <li>
+                        <input type="radio" id="check" name="questionType" value="check"
+                               v-model="form.type" class="hidden peer"
+                               @click="resetAns">
+                        <label for="check"
+                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">Multiple</div>
+                                <div class="w-full">There will be multiple answer in a question</div>
+                            </div>
+                            <font-awesome-icon icon="fa-regular fa-clone" size="xl"/>
                         </label>
-                        <label class="label cursor-pointer">
-                            <span class="label-text">Short answer</span>
-                            <input type="radio" name="AnsType" id="radioAnsType"
-                                   value="input"
-                                   class="radio checked:radio-secondary"
-                                   @click="resetAns"
-                                   v-model="form.question_type"/>
-                        </label>
-                        <label class="label cursor-pointer">
-                            <span class="label-text">Long answer</span>
-                            <input type="radio" name="AnsType" id="radioAnsType"
-                                   value="textarea"
-                                   class="radio checked:radio-secondary"
-                                   @click="resetAns"
-                                   v-model="form.question_type"/>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="card w-96 bg-base-100 shadow-xl my-2">
-                <div class="card-body">
-                    <p>{{ form.question_type }}</p>
-                    <p>{{ radioAnsNumber }}</p>
-                    <p>{{ checkAnsNumber }}</p>
-                    <p>{{ form.question_name }}</p>
-                    <p>{{ form.answer.name }}</p>
-                    <p>{{ form.answer.right_answer }}</p>
-                    <h2 class="card-title">Question</h2>
-                    <InputForm input-placeholder="Type Question Here" v-model="form.question_name"/>
-                    <div class="card-actions flex flex-col">
-                        <div class="form-control">
-                            <div v-if="form.question_type ==='radio'">
-                                <div v-for="ansItem in radioAnsNumber">
-                                    <label class="label cursor-pointer">
-                                        <input type="radio" name="radioAns" class="mr-2 radio" :value="ansItem"
-                                               v-model="form.answer.right_answer">
-                                        <input type="text" :placeholder="ansItem.name"
-                                               class="input input-bordered input-sm w-full max-w-xs"
-                                               v-model="form.answer.name[ansItem]">
-                                    </label>
-                                </div>
-                                <div class="my-2">
-                                        <span @click="radioAnsNumber--"
-                                              class="btn btn-circle float-left inline scale-90">
-                                            <font-awesome-icon icon="fa-solid fa-minus"
-                                                               class="scale-150 p-4"/>
-                                        </span>
-                                    <span @click="radioAnsNumber++"
-                                          class="btn btn-circle float-left inline scale-90">
-                                            <font-awesome-icon icon="fa-solid fa-plus"
-                                                               class="scale-150 p-4"/>
-                                        </span>
-                                </div>
-                            </div>
-                            <div v-else-if="form.question_type ==='check'">
-                                <div v-for="ansItem in checkAnsNumber">
-                                    <label class="label cursor-pointer">
-                                        <input type="checkbox" name="checkAns" class="mr-2 checkbox">
-                                        <input type="text" placeholder="Type your answer here"
-                                               class="input input-bordered input-sm w-full max-w-xs"
-                                               v-model="form.answer.name[ansItem]">
-                                    </label>
-                                </div>
-                                <div class="my-2">
-                                        <span @click="checkAnsNumber--"
-                                              class="btn btn-circle float-left inline scale-90">
-                                            <font-awesome-icon icon="fa-solid fa-minus"
-                                                               class="scale-150 p-4"/>
-                                        </span>
-                                    <span @click="checkAnsNumber++"
-                                          class="btn btn-circle float-left inline scale-90">
-                                            <font-awesome-icon icon="fa-solid fa-plus"
-                                                               class="scale-150 p-4"/>
-                                        </span>
-                                </div>
-                            </div>
-                            <div v-else-if="form.question_type === 'input'">
-                                <InputForm label-name="Answer" input-placeholder="Type answer here"
-                                           v-model="form.answer.name[1]"/>
-                            </div>
-                            <div v-else>
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text">Answer</span>
-                                    </label>
-                                    <textarea class="textarea textarea-bordered textarea-primary h-24 w-72"
-                                              placeholder="Type Here" v-model="form.answer.name[1]"/>
-                                </div>
-                            </div>
+                    </li>
+                </ul>
+                <div class="divider"/>
+                <InputText label-title="Question" v-model="form.name"/>
+                <div v-if="form.type === 'radio'">
+                    <div v-for="(answerData,index) in form.answer">
+                        <div class="inline-block mr-4 mt-12">
+                            <input type="radio" name="radioAns" id="radioAns" class="radio absolute mt-5"
+                                   :value="index"
+                                   v-model="radioRightAnswer">
+                        </div>
+                        <div class="inline-block w-3/4">
+                            <InputText container-style="input-md"
+                                       :label-title="'Answer '"
+                                       v-model="answerData.name"/>
                         </div>
                     </div>
-                    <div class="card-actions justify-end">
-                        <button type="submit" :disabled="form.processing" class="btn btn-primary">Add into assessment
-                        </button>
+                    <div class="mt-16"/>
+                    <!--                    <div class="mt-16">-->
+                    <!--                        <span @click="radioAnsNumber&#45;&#45;"-->
+                    <!--                              class="btn btn-circle float-left inline scale-90">-->
+                    <!--                            <font-awesome-icon icon="fa-solid fa-minus"-->
+                    <!--                                               class="scale-150 p-4"/>-->
+                    <!--                        </span>-->
+                    <!--                        <span @click="radioAnsNumber++"-->
+                    <!--                              class="btn btn-circle float-left inline scale-90">-->
+                    <!--                            <font-awesome-icon icon="fa-solid fa-plus"-->
+                    <!--                                               class="scale-150 p-4"/>-->
+                    <!--                                        </span>-->
+                    <!--                    </div>-->
+                </div>
+                <div v-else-if="form.type ==='check'">
+                    <div v-for="(ansData,index) in form.answer">
+                        <div class="inline-block mr-4 mt-12">
+                            <input type="checkbox" name="checkAns" id="checkAns" class="checkbox absolute mt-5"
+                                   :value="index"
+                                   v-model="checkRightAnswer">
+                        </div>
+                        <div class="inline-block w-3/4">
+                            <InputText container-style="input-md"
+                                       :label-title="'Answer ' + index"
+                                       class="my-0.5"
+                                       v-model="ansData.name"/>
+                        </div>
+                    </div>
+                    <div class="mt-12">
+                        <!--                    <span @click="checkAnsNumber&#45;&#45;"-->
+                        <!--                          class="btn btn-circle float-left inline scale-90">-->
+                        <!--                        <font-awesome-icon icon="fa-solid fa-minus"-->
+                        <!--                                           class="scale-150 p-4"/>-->
+                        <!--                    </span>-->
+                        <!--                        <span @click="checkAnsNumber++"-->
+                        <!--                              class="btn btn-circle float-left inline scale-90">-->
+                        <!--                        <font-awesome-icon icon="fa-solid fa-plus"-->
+                        <!--                                           class="scale-150 p-4"/>-->
+                        <!--                    </span>-->
                     </div>
                 </div>
-            </div>
+                <button class="btn btn-primary float-right" type="submit">
+                    Update Question
+                </button>
+            </TitleCard>
+            <p>{{ form }}</p>
+            <p>{{ form.answer[1].right_answer }}</p>
+            <p>{{checkRightAnswer}}</p>
         </form>
-    </MainLayout>
+    </Layout>
 </template>
 
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, router, useForm} from "@inertiajs/vue3";
 import InputForm from "@/Components/InputForm.vue";
 import {onUpdated, ref} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import Layout from "@/Layouts/Layout.vue";
+import TitleCard from "@/Components/TitleCard.vue";
+import InputText from "@/Components/InputText.vue";
 
 const props = defineProps({
     questionAnswerModal: Object
 })
 
-//todo: find a way to display answers
-//todo: change question_name into just name
+const radioRightAnswer = ref();
+const checkRightAnswer = ref([]);
+
 const form = useForm({
-    question_name: props.questionAnswerModal.name,
-    question_type: props.questionAnswerModal.type,
-    answer: {
-        name: {},
-        right_answer: ''
+    name: props.questionAnswerModal.name,
+    type: props.questionAnswerModal.type,
+    answer: [],
+    radioRightAnswer: radioRightAnswer,
+    checkRightAnswer: checkRightAnswer,
+})
+
+for (let i = 0; i < props.questionAnswerModal.answers.length; i++) {
+    form.answer.push({
+        name: props.questionAnswerModal.answers[i].name,
+        // right_answer: props.questionAnswerModal.answers[i].right_answer
+    })
+    if (props.questionAnswerModal.answers[i].right_answer && props.questionAnswerModal.type === 'radio') {
+        radioRightAnswer.value = i
+    } else if (props.questionAnswerModal.answers[i].right_answer && props.questionAnswerModal.type === 'check') {
+        checkRightAnswer.value.push(i)
     }
-})
-onUpdated(function () {
-    form.reset();
-})
+}
+
+//
+// if (form.type === 'radio') {
+//     for (let i = 0; i < form.questionAnswer.answers.length; i++) {
+//         if (form.questionAnswer.answers[i].right_answer === 1) {
+//             rightAns.value = i;
+//         }
+//     }
+// }
 
 const radioAnsNumber = ref(props.questionAnswerModal.answers.length)
 
-const checkAnsNumber = ref(1)
+const checkAnsNumber = ref(props.questionAnswerModal.answers.length)
 const resetAns = () => {
-    radioAnsNumber.value = 1
-    checkAnsNumber.value = 1
-    form.answer.name = {}
-    form.answer.right_answer = ''
+    // radioAnsNumber.value = 1
+    // checkAnsNumber.value = 1
+    radioRightAnswer.value = null
+    checkRightAnswer.value = []
 }
 
+const destroyQuestion = () => {
+    if (confirm('Are you sure to delete this question?')) {
+        router.delete(route('question.destroy', props.questionAnswerModal))
+    }
+}
 </script>
 
 <style scoped>

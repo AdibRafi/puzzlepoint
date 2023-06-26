@@ -95,7 +95,7 @@ class QuestionController extends Controller
     function edit(Question $question)
     {
         $assessment_id = $question->assessment()->pluck('id')->first();
-        $questionAnswerModal = $question->with('answers')->first();
+        $questionAnswerModal = $question->load('answers');
         return inertia('Question/Edit', compact('assessment_id', 'questionAnswerModal'));
     }
 
@@ -106,6 +106,7 @@ class QuestionController extends Controller
     function update(Request $request, Question $question) //question_name, question_type, answers { name, right_answer}
     {
         //todo: do validated using QuestionStoreRequest (need to create)
+        dd($request->all());
         $question->update([
             'name' => $request->input('question_name'),
             'type' => $request->input('question_type')

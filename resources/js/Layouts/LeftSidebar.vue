@@ -2,7 +2,7 @@
    <div class="drawer-side">
       <label for="left-sidebar-drawer"
              class="drawer-overlay"/>
-      <ul class="menu pt-16 lg:pt-2 w-80 h-full bg-base-100 text-base-content">
+      <ul class="menu pt-16 lg:pt-2 w-64 h-full bg-base-100 text-base-content">
          <li class="mb-2 font-semibold text-xl">
             <Link :href="route('classroom.index')">
                <img class="mask mask-squircle w-10" src="/PuzzlePointLogo.png" alt="Logo"/>
@@ -29,21 +29,21 @@
                      aria-hidden="true"/>
             </Link>
          </li>
-         <div class="divider"/>
-         <li v-if="route().current('classroom.*') || route().current('topic.*') || route().current('module.*') || route().current('option.*') ||
-         route().current('assessment.*')">
-            <Link :href="route('topic.create',
-               {classroom_id:route().params.classroom})"
-                  :class="route().current('topic.create') ? activeRoute : inactiveRoute">
-               Add Topic
-               <span v-if="route().current('topic.create')"
-                     :class="activeRouteSpan"
-                     aria-hidden="true"/>
-            </Link>
-         </li>
-         <li v-else>
-            <p>Please choose a classroom</p>
-         </li>
+<!--         <div class="divider"/>-->
+<!--         <li v-if="route().current('classroom.*') || route().current('topic.*') || route().current('module.*') || route().current('option.*') ||-->
+<!--         route().current('assessment.*')">-->
+<!--            <Link :href="route('topic.create',-->
+<!--               {classroom_id:route().params.classroom})"-->
+<!--                  :class="route().current('topic.create') ? activeRoute : inactiveRoute">-->
+<!--               Add Topic-->
+<!--               <span v-if="route().current('topic.create')"-->
+<!--                     :class="activeRouteSpan"-->
+<!--                     aria-hidden="true"/>-->
+<!--            </Link>-->
+<!--         </li>-->
+<!--         <li v-else>-->
+<!--            <p>Please choose a classroom</p>-->
+<!--         </li>-->
          <div class="divider"/>
          <li>
             <div class="flex-col">

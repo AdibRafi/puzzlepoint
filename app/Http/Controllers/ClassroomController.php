@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClassroomRequest;
 use App\Imports\UserImport;
+use App\Models\Assessment;
 use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\Module;
 use App\Models\User;
 use Auth;
+use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Str;
@@ -21,6 +24,19 @@ class ClassroomController extends Controller
      */
     public function index()
     {
+        //check assessment date
+        $timeFromDb = Assessment::all()->where('publish_end', '>=', Carbon::now())
+            ->where('is_publish', '=', 1);
+        $timeFromDb->each(function ($query) {
+            $query->update([
+                'is_complete' => 1,
+            ]);
+        });
+
+
+//        $timeFromDb = Carbon::parse($timeFromDb);
+//        dd($timeFromDb);
+
         $classroomData = auth()->user()->classrooms()->get();
 
         return inertia('Classroom/Index', compact('classroomData'));

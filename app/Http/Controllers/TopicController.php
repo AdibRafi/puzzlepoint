@@ -152,8 +152,20 @@ class TopicController extends Controller
 
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
-        $assessmentModal = $topic->assessment()->exists() ?
-            $topic->assessment()->first() : null;
+
+        if (Auth::user()->type === 'student') {
+            $pivot = Assessment::find($topic->assessment()->first()->id)
+                ->users()
+                ->where('id', '=', Auth::id())
+                ->withPivot('is_finish')
+                ->first();
+            $assessmentModal = Assessment::find($topic->assessment()->first()->id);
+            $assessmentModal->pivot = $pivot;
+        } else {
+            $assessmentModal = Assessment::find($topic->assessment()->first()->id);
+        }
+
+
         return inertia('Topic/Show',
             compact('topic', 'moduleModal',
                 'studentModal', 'assessmentModal'));

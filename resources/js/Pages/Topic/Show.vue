@@ -54,7 +54,8 @@
                     <div class="stat">
                         <div
                             :class="'stat-figure btn btn-circle ' +
-                        (wizardStatus === 'onStartSession' || isAssessmentComplete ? 'btn-disabled':'btn-primary')"
+                        ((wizardStatus === 'onStartSession' || isAssessmentComplete)
+                         || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot)? 'btn-disabled':'btn-primary')"
                             @click.prevent="toAssessment(props.topic.id)">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
@@ -149,9 +150,7 @@ const formatDate = (date) => {
     return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
 
-// console.log(formatDate(props.topic.date_time))
 const dateTime = formatDate(new Date(props.topic.date_time))
-console.log(dateTime)
 
 const isModuleExpand = ref(false);
 const wizardStatus = usePage().props.auth.user.wizard_status

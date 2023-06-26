@@ -8,7 +8,8 @@
                :placeholder="placeholder || ''"
                @input='$emit("update:modelValue",$event.target.value)'
                class="input input-bordered w-full"
-               :disabled="isDisabled">
+               :disabled="isDisabled"
+               :name="inputName">
     </div>
 </template>
 
@@ -21,5 +22,7 @@ defineProps({
     placeholder: String,
     modelValue: String,
     isDisabled: Boolean,
+    inputName: String,
+
 })
 </script>

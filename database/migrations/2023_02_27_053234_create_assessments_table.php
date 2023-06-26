@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('time')->nullable();
             $table->boolean('is_publish');
             $table->boolean('is_complete');
+            $table->dateTime('publish_start')->nullable();
+            $table->dateTime('publish_end')->nullable();
             $table->timestamps();
         });
     }

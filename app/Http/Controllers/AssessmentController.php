@@ -6,6 +6,7 @@ use App\Models\Assessment;
 use App\Models\Question;
 use App\Models\Topic;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AssessmentController extends Controller
@@ -15,26 +16,50 @@ class AssessmentController extends Controller
      */
     public function index(Request $request) //topic_id OR assessment_id
     {
+//        todo:Clean this up
         $assessmentModal = Assessment::find($request->input('assessment_id'));
+//        dd($request->all());
         $topicModal = Topic::find($request->input('topic_id'));
+
+
         if ($assessmentModal !== null) {
             $topicModal = $assessmentModal->topic()->first();
-            $questionAnswerModal = $assessmentModal->questions()->with('answers')->get();
-            return inertia('Assessment/Index',
-                compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
+            $questionAnswerModal = $assessmentModal
+                ->questions()
+                ->with('answers')
+                ->get();
+
+            if (Auth::user()->type === 'student') {
+                return inertia('Assessment/Student/Index',
+                    compact('topicModal', 'assessmentModal'));
+            } else {
+                return inertia('Assessment/Lecturer/Index',
+                    compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
+            }
         } else if ($topicModal->assessment()->exists()) {
-            $assessmentModal = $topicModal->assessment()->first();
-            $questionAnswerModal = Assessment::find($assessmentModal->id)->questions()->with('answers')->get();
-            return inertia('Assessment/Index',
+            $assessmentModal = $topicModal
+                ->assessment()
+                ->first();
+            $questionAnswerModal = Assessment::find($assessmentModal->id)
+                ->questions()
+                ->with('answers')
+                ->get();
+
+            if (Auth::user()->type === 'student') {
+                return inertia('Assessment/Student/Index',
+                    compact('topicModal', 'assessmentModal'));
+            }
+            return inertia('Assessment/Lecturer/Index',
                 compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
-        } else {
-            $assessmentModal = new Assessment();
-            $assessmentModal->topic()->associate($topicModal->id);
-            $assessmentModal->is_publish = 0;
-            $assessmentModal->save();
-            return inertia('Assessment/Index',
-                compact('assessmentModal', 'topicModal'));
         }
+//        else {
+//            $assessmentModal = new Assessment();
+//            $assessmentModal->topic()->associate($topicModal->id);
+//            $assessmentModal->is_publish = 0;
+//            $assessmentModal->save();
+//            return inertia('Assessment/Index',
+//                compact('assessmentModal', 'topicModal'));
+//        }
 
     }
 
@@ -67,7 +92,7 @@ class AssessmentController extends Controller
      */
     public function edit(Assessment $assessment)
     {
-        //
+        return inertia('Assessment/Lecturer/Edit', compact('assessment'));
     }
 
     /**
@@ -75,7 +100,18 @@ class AssessmentController extends Controller
      */
     public function update(Request $request, Assessment $assessment)
     {
-        //
+//        dd($request->all());
+        $dateTime = Carbon::createFromFormat('Y-m-d\TH:i',
+            $request->input('endPublish'))->toDateTimeString();
+//        dd($dateTime);
+        $assessment->update([
+            'time' => $request->input('time'),
+            'publish_end' => $dateTime,
+        ]);
+
+        $assessment_id = $assessment->id;
+        return redirect()->route('assessment.index', compact('assessment_id'))
+            ->with('alertMessage', 'Update Assessment Successful');
     }
 
     /**
@@ -141,7 +177,11 @@ class AssessmentController extends Controller
             }
         }
 
-        $assessmentId = Question::find($ansInput->pluck('id')[0])->assessment()->first()->pluck('id');
+        $assessmentId = Question::find($ansInput->pluck('id')[0])
+            ->assessment()
+            ->first()
+            ->pluck('id');
+
         $assessmentModal = Assessment::find($assessmentId)->first();
 
         $assessmentModal->users()->updateExistingPivot(Auth::id(), ['marks' => $score]);
@@ -153,19 +193,31 @@ class AssessmentController extends Controller
             ->with('alertMessage', 'You got ' . $score . ' scores');
     }
 
-    public function publishAssessment(Request $request) //assessment_id, time
+    public function publishAssessment(Request $request) //assessment_id, time, publishEndTime
     {
+//        todo: Add security that no date after now()
+
+
         $assessmentModal = Assessment::find($request->input('assessment_id'));
+
+
+        $endPublishDate = Carbon::createFromFormat('Y-m-d\TH:i',
+            $request->input('endPublishTime'))->toDateTimeString();
 
         $topicModal = $assessmentModal->topic()->first();
 
         $topic = Topic::find($topicModal->id)->getStudents()->pluck('id');
 
-        $assessmentModal->users()->attach($topicModal->getStudents()->pluck('id'));
+        $assessmentModal->users()->attach($topicModal->getStudents()->pluck('id'), [
+            'is_finish' => 0,
+
+        ]);
+
 
         $assessmentModal->update([
             'is_publish' => 1,
-            'time' => $request->input('time')
+            'time' => $request->input('time'),
+            'publish_end' => $endPublishDate,
         ]);
 
         if (Auth::user()->wizard_status === 'onPublishAssessment') {
@@ -194,7 +246,7 @@ class AssessmentController extends Controller
             ]);
         }
 
-        return redirect()->route('classroom.show',$classroomModal)
-            ->with('alertMessage','End Assessment Successfully');
+        return redirect()->route('classroom.show', $classroomModal)
+            ->with('alertMessage', 'End Assessment Successfully');
     }
 }

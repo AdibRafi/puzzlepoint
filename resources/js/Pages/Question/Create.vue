@@ -149,112 +149,6 @@
                 </div>
             </form>
         </TitleCard>
-        <!--            <Card title="Question Type">-->
-        <!--                <label class="label cursor-pointer">-->
-        <!--                    <span class="label-text">One Answer</span>-->
-        <!--                    <input type="radio" name="AnsType" id="radioAnsType"-->
-        <!--                           value="radio"-->
-        <!--                           class="radio checked:radio-secondary"-->
-        <!--                           v-model="form.type"-->
-        <!--                           @click="resetAns"-->
-        <!--                           checked/>-->
-        <!--                </label>-->
-        <!--                <label class="label cursor-pointer">-->
-        <!--                    <span class="label-text">Multiple Answer</span>-->
-        <!--                    <input type="radio" name="AnsType" id="radioAnsType"-->
-        <!--                           value="check"-->
-        <!--                           class="radio checked:radio-secondary"-->
-        <!--                           @click="resetAns"-->
-        <!--                           v-model="form.type"/>-->
-        <!--                </label>-->
-        <!--                                        <label class="label cursor-pointer">-->
-        <!--                                            <span class="label-text">Short answer</span>-->
-        <!--                                            <input type="radio" name="AnsType" id="radioAnsType"-->
-        <!--                                                   value="input"-->
-        <!--                                                   class="radio checked:radio-secondary"-->
-        <!--                                                   @click="resetAns"-->
-        <!--                                                   v-model="form.question_type"/>-->
-        <!--                                        </label>-->
-        <!--                                        <label class="label cursor-pointer">-->
-        <!--                                            <span class="label-text">Long answer</span>-->
-        <!--                                            <input type="radio" name="AnsType" id="radioAnsType"-->
-        <!--                                                   value="textarea"-->
-        <!--                                                   class="radio checked:radio-secondary"-->
-        <!--                                                   @click="resetAns"-->
-        <!--                                                   v-model="form.question_type"/>-->
-        <!--                                        </label>-->
-        <!--            </Card>-->
-        <!--            <Card title="Question">-->
-        <!--                <InputForm input-placeholder="Type Question Here" v-model="form.name"/>-->
-        <!--                <div class="card-actions flex flex-col">-->
-        <!--                    <div class="form-control">-->
-        <!--                        <div v-if="form.type ==='radio'">-->
-        <!--                            <div v-for="ansItem in radioAnsNumber">-->
-        <!--                                <label class="label cursor-pointer">-->
-        <!--                                    <input type="radio" name="radioAns" class="mr-2 radio" :value="ansItem"-->
-        <!--                                           v-model="form.answer.right_answer">-->
-        <!--                                    <input type="text" placeholder="Type your answer here"-->
-        <!--                                           class="input input-bordered input-sm w-full max-w-xs"-->
-        <!--                                           v-model="form.answer.name[ansItem]">-->
-        <!--                                </label>-->
-        <!--                            </div>-->
-        <!--                            <div class="my-2">-->
-        <!--                                        <span @click="radioAnsNumber&#45;&#45;"-->
-        <!--                                              class="btn btn-circle float-left inline scale-90">-->
-        <!--                                            <font-awesome-icon icon="fa-solid fa-minus"-->
-        <!--                                                               class="scale-150 p-4"/>-->
-        <!--                                        </span>-->
-        <!--                                <span @click="radioAnsNumber++"-->
-        <!--                                      class="btn btn-circle float-left inline scale-90">-->
-        <!--                                            <font-awesome-icon icon="fa-solid fa-plus"-->
-        <!--                                                               class="scale-150 p-4"/>-->
-        <!--                                        </span>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-        <!--                        <div v-else-if="form.type ==='check'">-->
-        <!--                            <div v-for="ansItem in checkAnsNumber">-->
-        <!--                                <label class="label cursor-pointer">-->
-        <!--                                    <input type="checkbox" name="checkAns" class="mr-2 checkbox"-->
-        <!--                                           v-model="form.answer.right_answer[ansItem]">-->
-        <!--                                    <input type="text" placeholder="Type your answer here"-->
-        <!--                                           class="input input-bordered input-sm w-full max-w-xs"-->
-        <!--                                           v-model="form.answer.name[ansItem]">-->
-        <!--                                </label>-->
-        <!--                            </div>-->
-        <!--                            <div class="my-2">-->
-        <!--                                        <span @click="checkAnsNumber&#45;&#45;"-->
-        <!--                                              class="btn btn-circle float-left inline scale-90">-->
-        <!--                                            <font-awesome-icon icon="fa-solid fa-minus"-->
-        <!--                                                               class="scale-150 p-4"/>-->
-        <!--                                        </span>-->
-        <!--                                <span @click="checkAnsNumber++"-->
-        <!--                                      class="btn btn-circle float-left inline scale-90">-->
-        <!--                                            <font-awesome-icon icon="fa-solid fa-plus"-->
-        <!--                                                               class="scale-150 p-4"/>-->
-        <!--                                        </span>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-        <!--                        &lt;!&ndash;                        <div v-else-if="form.question_type === 'input'">&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                            <InputForm label-name="Answer" input-placeholder="Type answer here"&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                       v-model="form.answer.name[1]"/>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                        <div v-else>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                            <div class="form-control">&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                <label class="label">&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                    <span class="label-text">Answer</span>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                </label>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                <textarea class="textarea textarea-bordered textarea-primary h-24 w-72"&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                                          placeholder="Type Here" v-model="form.answer.name[1]"/>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                            </div>&ndash;&gt;-->
-        <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <template #actions>-->
-        <!--                    <button type="submit" :disabled="form.processing" class="btn btn-primary">-->
-        <!--                        Add into assessment-->
-        <!--                    </button>-->
-        <!--                </template>-->
-        <!--            </Card>-->
     </Layout>
 </template>
 
@@ -262,7 +156,6 @@
 import {Head, Link, router, useForm, usePage} from "@inertiajs/vue3";
 import {onMounted, onUpdated, ref} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";

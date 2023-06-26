@@ -21,7 +21,6 @@ class AssessmentFactory extends Factory
             'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
             'is_publish' => $this->faker->boolean,
             'is_complete' => $this->faker->boolean,
-
         ];
     }
 }
