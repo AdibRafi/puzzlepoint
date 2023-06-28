@@ -359,7 +359,7 @@
                                class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                   <span class="block">
                      <p class="w-full text-lg font-semibold">Even</p>
-                     <p class="w-full">Each Student will present for {{ evenTime }} minutes</p>
+                     <p class="w-full">Each Student will present with even minutes</p>
                   </span>
                             <font-awesome-icon icon="fa-solid fa-equals" size="xl"/>
                         </label>
@@ -372,7 +372,7 @@
                                class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                             <div class="block">
                                 <div class="w-full text-lg font-semibold">Uneven</div>
-                                <div class="w-full">Fill in the specify minutes below</div>
+                                <div class="w-full">Each student will present based on percentage of minutes</div>
                             </div>
                             <font-awesome-icon icon="fa-solid fa-not-equal" size="xl"/>
                         </label>

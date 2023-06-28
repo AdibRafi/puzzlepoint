@@ -176,7 +176,8 @@ class TopicController extends Controller
      */
     public function edit(Topic $topic)
     {
-        return inertia('Topic/Edit', compact('topic'));
+        $option = $topic->option()->first();
+        return inertia('Topic/Edit', compact('topic', 'option'));
     }
 
     /**
@@ -360,5 +361,27 @@ class TopicController extends Controller
 
         return redirect()->route('classroom.show', $classroom)
             ->with('alertMessage', 'Duplicate Topic Successful');
+    }
+
+    public function topicEditValidateStep(Request $request)// steps, data
+    {
+//        dd($request->all());
+
+        $steps = $request->input('steps');
+        if ($steps === 1) {
+            $request->validate([
+                'name' => 'required',
+                'date_time' => 'required|date_format:Y-m-d\TH:i',
+//                after_or_equal:' . date(DATE_ATOM)
+            ], [
+                'name.required' => 'Please fill in the name of the Topic',
+                'date_time.required' => 'Please Specify the date to start the topic',
+//                'date_time.after_or_equal' => 'Invalid Date Format'
+            ]);
+        } elseif ($steps === 2) {
+            $request->validate([
+
+            ]);
+        }
     }
 }
