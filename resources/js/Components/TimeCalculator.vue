@@ -105,7 +105,6 @@ const generateTime = () => {
         outTransition: session.transition,
         outSession: inputData.classDuration,
         outBuffer: inputData.bufferDuration,
-
     });
 }
 

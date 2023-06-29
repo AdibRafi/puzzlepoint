@@ -36,10 +36,10 @@ class TestController extends Controller
 
         if ($topicModuleModal->is_expert_form === 0) {
 
-//            todo: PRIORITY, distribution thing
-
             if ($topicModuleModal->option()->first()->group_distribution === 'random') {
                 $doneShuffleStudent = $studentAttendModal->shuffle();
+            } elseif ($topicModuleModal->option()->first()->group_distribution === 'genderFixed') {
+                $doneShuffleStudent = $studentAttendModal->shuffle()->sortBy('gender');
             } else {
                 $groupUsers = $studentAttendModal->groupBy('gender');
                 $shuffledUsers = $groupUsers->map(function ($group) {

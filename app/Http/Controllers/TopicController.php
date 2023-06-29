@@ -39,6 +39,7 @@ class TopicController extends Controller
                     $query->where('type', '=', 'student');
                 }
             ]);
+
         return inertia('Topic/Create', compact('classroomModal'));
     }
 
@@ -177,7 +178,25 @@ class TopicController extends Controller
     public function edit(Topic $topic)
     {
         $option = $topic->option()->first();
-        return inertia('Topic/Edit', compact('topic', 'option'));
+        $modules = $topic->modules()->get();
+        $classroom = $topic->classroom()->withCount([
+            'users',
+            'users as users_count' => function ($query) {
+                $query->where('type', '=', 'student');
+            }
+        ])->first();
+
+//        $classroomModal = Classroom::find($request->input('classroom_id'))
+//            ->loadCount([
+//                'users',
+//                'users as users_count' => function ($query) {
+//                    $query->where('type', '=', 'student');
+//                }
+//            ]);
+
+
+        return inertia('Topic/Edit',
+            compact('topic', 'option', 'modules', 'classroom'));
     }
 
     /**
@@ -185,7 +204,36 @@ class TopicController extends Controller
      */
     public function update(Request $request, Topic $topic)
     {
-        //
+//        dd($request->input('topic'));
+        $topic->update($request->input('topic'));
+//        $topic->modules()->;
+//        dd($topic->modules()->get());
+        $modulesInput = $request->input('modules');
+        for ($i = 0; $i < count($modulesInput); $i++) {
+            $module = new Module();
+            $module->topic()->associate($topic->id);
+            $module->name = $modulesInput[$i]['name'];
+            $module->learning_objectives = $modulesInput[$i]['learning_objectives'];
+
+            $filePath = 'modules.' . $i . '.file_path';
+            if ($request->hasFile($filePath)) {
+                $file = $request->file($filePath);
+                $file_path = 'modules/' . $file->getClientOriginalName();
+                $file->move('modules', $file->getClientOriginalName());
+
+                $module->file_path = $file_path;
+            }
+            $module->save();
+
+        }
+
+//        $optionInput = $request->input('option')->except(['created_at']);
+//        dd($optionInput);
+
+        $topic->option->update($request->input('option'));
+
+        return redirect()->route('topic.show', $topic)
+            ->with('alertMessage', 'Topic Successfully Updated');
     }
 
     /**
@@ -346,6 +394,14 @@ class TopicController extends Controller
         $assessmentNew->topic()->associate($topicNew);
         $assessmentNew->save();
 
+        $modulesOld = $topicOld->modules()->get();
+
+        foreach ($modulesOld as $value) {
+            $moduleNew = $value->replicate();
+            $moduleNew->topic()->associate($topicNew);
+            $moduleNew->save();
+        }
+
 
         $students = $topicNew->getStudents();
         for ($i = 0; $i < $students->count(); $i++) {
@@ -356,6 +412,7 @@ class TopicController extends Controller
             $attendance->date = $topicNew->date_time;
             $attendance->save();
         }
+
 
         $classroom = $topicOld->classroom()->first();
 
@@ -380,7 +437,25 @@ class TopicController extends Controller
             ]);
         } elseif ($steps === 2) {
             $request->validate([
-
+                'modules.*.name' => 'required'
+            ], [
+                'modules.*.name.required' => 'Please fill in the name of the modules'
+            ]);
+        } elseif ($steps === 3) {
+            $request->validate([
+                'group_distribution' => 'required',
+                'time_method' => 'required',
+            ], [
+                'group_distribution.required' => "Please choose the group method",
+                'time_method.required' => 'Please choose the time method',
+            ]);
+        } elseif ($steps === 4) {
+            $request->validate([
+                'max_session' => 'required',
+                'max_buffer' => 'required'
+            ], [
+                'max_session.required' => 'Please specify the overall time session',
+                'max_buffer.required' => 'Please specify the buffer time',
             ]);
         }
     }

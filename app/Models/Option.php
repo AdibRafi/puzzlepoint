@@ -11,7 +11,8 @@ class Option extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_distribution', 'time_method', 'tm1', 'tm2', 'tm3', 'tm4', 'tm5', 'tm6'];
+//    protected $fillable = ['group_distribution', 'time_method', 'tm1', 'tm2', 'tm3', 'tm4', 'tm5', 'tm6'];
+    protected $guarded = [];
 
     public function topic(): BelongsTo
     {

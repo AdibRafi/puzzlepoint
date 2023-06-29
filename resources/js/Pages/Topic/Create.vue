@@ -338,8 +338,21 @@
                         <label for="genderFixed"
                                class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                             <div class="block">
-                                <div class="w-full text-lg font-semibold">Gender</div>
+                                <div class="w-full text-lg font-semibold">Fixed Gender</div>
                                 <div class="w-full">Group formation based on gender</div>
+                            </div>
+                            <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
+                        </label>
+                    </li>
+                    <li>
+                        <input type="radio" id="genderMixed" name="groupOption" value="genderMixed"
+                               v-model="option.groupMethod"
+                               class="hidden peer">
+                        <label for="genderMixed"
+                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">Mixed Gender</div>
+                                <div class="w-full">Mixed Gender Group Formation</div>
                             </div>
                             <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
                         </label>
@@ -510,11 +523,11 @@
                 <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                     <div class="stat w-full border-2">
                         <div class="stat-title">Total Time</div>
-                        <div class="stat-value">{{form.topic.max_session}} Minutes</div>
+                        <div class="stat-value">{{ form.topic.max_session }} Minutes</div>
                     </div>
                     <div class="stat w-full border-2">
                         <div class="stat-title">Buffer Time</div>
-                        <div class="stat-value">{{form.topic.max_buffer}} Minutes</div>
+                        <div class="stat-value">{{ form.topic.max_buffer }} Minutes</div>
                     </div>
                     <div class="stat w-full border-2">
                         <div class="stat-title">Expert Session</div>
@@ -575,8 +588,9 @@ import TimeCalculator from "@/Components/TimeCalculator.vue";
 
 const formStep = ref(1);
 const evenTime = ref(0);
-const wizardStatus = usePage().props.auth.user.wizard_status
 
+const displayTime = ref(null);
+const wizardStatus = usePage().props.auth.user.wizard_status
 
 const props = defineProps({
     classroomModal: Object,
@@ -613,14 +627,13 @@ const option = reactive({
     tm: tm
 })
 
+
 const form = useForm({
     classroom_id: props.classroomModal.id,
     topic: topic,
     modules: modules,
     option: option,
 })
-
-
 const dummyData = {
     'name': 'Mathematics',
     'no_of_modules': 4,
@@ -633,8 +646,8 @@ if (!usePage().props.auth.user.is_wizard_complete) {
     form.topic.no_of_modules = dummyData.no_of_modules;
     form.topic.max_time_expert = dummyData.max_expert_time;
     form.topic.max_time_jigsaw = dummyData.max_jigsaw_time;
-}
 
+}
 const formatDate = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -644,8 +657,8 @@ const formatDate = (date) => {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     const strTime = hours + ':' + minutes + ' ' + ampm;
     return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
-}
 
+}
 const getTime = (value) => {
     console.log(value)
     form.topic.max_session = value.outSession;
@@ -656,9 +669,8 @@ const getTime = (value) => {
     for (let i = 0; i < 6; i++) {
         tm[i] = value.outStudentPresent;
     }
-}
 
-const displayTime = ref(null);
+}
 
 const unevenTimeFunction = () => {
     tm[1] = 0

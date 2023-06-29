@@ -29,8 +29,15 @@
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
-                                <span class="label-text">Gender</span>
-                                <input type="radio" name="radio-10" value="gender" class="radio"
+                                <span class="label-text">Gender Fixed</span>
+                                <input type="radio" name="radio-10" value="genderFixed" class="radio"
+                                       v-model="groupType"/>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">Gender Mixed</span>
+                                <input type="radio" name="radio-10" value="genderMixed" class="radio"
                                        v-model="groupType"/>
                             </label>
                         </div>
