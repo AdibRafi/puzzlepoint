@@ -113,6 +113,8 @@
             <div v-else-if="formStep === 4">
                 <TimeCalculator :number-of-modules="form.topic.no_of_modules"
                                 :number-of-students="props.classroom.users_count"
+                                :modules-data="form.modules"
+                                :time-method="form.option.time_method"
                                 @out-data="getTime"/>
             </div>
             <div v-else-if="formStep === 5">
@@ -135,11 +137,17 @@
                     <Stat title="Buffer time" :value="form.topic.max_buffer + ' Minutes'"/>
                     <Stat title="Expert Session" :value="form.topic.max_time_expert + ' Minutes'"/>
                     <Stat title="Jigsaw Session" :value="form.topic.max_time_jigsaw + ' Minutes'"/>
-                    <Stat title="Time for Student Present" :value="form.option.tm1 + ' Minutes'"/>
                     <Stat title="Transition Time" :value="form.topic.transition_time + ' Minutes'"/>
+                </GridLayout>
+                <div class="divider">Student Present in Jigsaw Session</div>
+                <GridLayout>
+                    <div v-for="(moduleData,index) in form.modules" :key="moduleData">
+                        <Stat :title="moduleData.name" :value="form.option.tm[index] + ' Minutes'"/>
+                    </div>
                 </GridLayout>
             </div>
             <div class="divider"/>
+
             <div v-if="errors"
                  class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div v-for="error in errors"
@@ -157,8 +165,9 @@
             </button>
             <button v-else type="submit" @click.prevent="submitTopic"
                     class="btn btn-primary float-right mx-2">Update Topic
-
             </button>
+            <!--            <p>{{form.option}}</p>-->
+<!--            <p></p>-->
         </TitleCard>
     </Layout>
 </template>
@@ -181,19 +190,17 @@ const props = defineProps({
     errors: Object,
 })
 
+const tm = ref()
+
 const topic = reactive(props.topic);
-const option = reactive(props.option)
+const option = reactive({
+    group_distribution: props.option.group_distribution,
+    time_method: props.option.time_method,
+    tm: tm
+})
 const modules = reactive(props.modules)
 const modulesNew = reactive([]);
 
-const tm = reactive({
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0
-})
 
 const displayTime = ref(null);
 const formatDate = (date) => {
@@ -254,9 +261,7 @@ const getTime = (value) => {
     form.topic.max_time_expert = value.outExpert;
     form.topic.max_time_jigsaw = value.outJigsaw;
     form.topic.transition_time = value.outTransition;
-    for (let i = 0; i < 6; i++) {
-        tm[i] = value.outStudentPresent;
-    }
+    tm.value = value.outStudentPresent;
 }
 
 const nextStep = () => {
@@ -309,12 +314,12 @@ const nextStep = () => {
             onSuccess: () => {
                 formStep.value++;
                 displayTime.value = formatDate(new Date(form.topic.date_time))
-                form.option.tm1 = tm[0]
-                form.option.tm2 = tm[1]
-                form.option.tm3 = tm[2]
-                form.option.tm4 = tm[3]
-                form.option.tm5 = tm[4]
-                form.option.tm6 = tm[5]
+                // form.option.tm1 = tm[0]
+                // form.option.tm2 = tm[1]
+                // form.option.tm3 = tm[2]
+                // form.option.tm4 = tm[3]
+                // form.option.tm5 = tm[4]
+                // form.option.tm6 = tm[5]
             }
         })
     }

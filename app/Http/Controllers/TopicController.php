@@ -48,6 +48,7 @@ class TopicController extends Controller
      */
     public function store(Request $request) //topicData, classroomData
     {
+//        dd($request->all());
         $topicInput = $request->input('topic');
         $modulesInput = $request->input('modules');
         $optionInput = $request->input('option');
@@ -101,15 +102,15 @@ class TopicController extends Controller
             $module->save();
         }
 
-        $groupDistribution = $optionInput['groupMethod'];
-        $timeMethod = $optionInput['timeMethod'];
+        $groupDistribution = $optionInput['group_distribution'];
+        $timeMethod = $optionInput['time_method'];
 
         $option = new Option();
         $option->topic()->associate($topic->id);
         $option->group_distribution = $groupDistribution;
         $option->time_method = $timeMethod;
-        for ($j = 1; $j < $topic->no_of_modules + 1; $j++) {
-            $option->setAttribute('tm' . $j, $optionInput['tm'][$j]);
+        for ($j = 0; $j < count($optionInput['tm']); $j++) {
+            $option->setAttribute(('tm' . ($j + 1)), $optionInput['tm'][$j]);
         }
         $option->save();
         $topic->update([
@@ -204,10 +205,12 @@ class TopicController extends Controller
      */
     public function update(Request $request, Topic $topic)
     {
+//        dd($request->all());
 //        dd($request->input('topic'));
         $topic->update($request->input('topic'));
 //        $topic->modules()->;
 //        dd($topic->modules()->get());
+        $topic->modules()->delete();
         $modulesInput = $request->input('modules');
         for ($i = 0; $i < count($modulesInput); $i++) {
             $module = new Module();
@@ -230,7 +233,17 @@ class TopicController extends Controller
 //        $optionInput = $request->input('option')->except(['created_at']);
 //        dd($optionInput);
 
-        $topic->option->update($request->input('option'));
+        $topic->option()->delete();
+        $optionInput = $request->input('option');
+
+        $option = new Option();
+        $option->topic()->associate($topic->id);
+        $option->group_distribution = $optionInput['group_distribution'];
+        $option->time_method = $optionInput['time_method'];
+        for ($j = 0; $j < count($optionInput['tm']); $j++) {
+            $option->setAttribute(('tm' . ($j + 1)), $optionInput['tm'][$j]);
+        }
+        $option->save();
 
         return redirect()->route('topic.show', $topic)
             ->with('alertMessage', 'Topic Successfully Updated');

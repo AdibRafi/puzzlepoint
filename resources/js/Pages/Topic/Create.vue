@@ -321,7 +321,9 @@
                 </div>
                 <div v-else-if="formStep === 4">
                     <TimeCalculator :number-of-modules="form.topic.no_of_modules"
-                                    :number-of-students="props.classroom.users_count"
+                                    :number-of-students="props.classroomModal.users_count"
+                                    :time-method="form.option.time_method"
+                                    :modules-data="form.modules"
                                     @out-data="getTime"/>
                 </div>
                 <div v-else-if="formStep === 5">
@@ -347,6 +349,12 @@
                         <Stat title="Time for Student Present" :value="form.option.tm1 + ' Minutes'"/>
                         <Stat title="Transition Time" :value="form.topic.transition_time + ' Minutes'"/>
                     </GridLayout>
+                    <div class="divider">Student Present in Jigsaw Session</div>
+                    <GridLayout>
+                        <div v-for="(moduleData,index) in form.modules" :key="moduleData">
+                            <Stat :title="moduleData.name" :value="form.option.tm[index] + ' Minutes'"/>
+                        </div>
+                    </GridLayout>
                 </div>
                 <div class="divider"/>
                 <GridLayout>
@@ -360,6 +368,9 @@
                 <button @click.prevent="window.history.back()" class="btn btn-accent mx-2">Cancel</button>
                 <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
                         class="btn btn-primary float-right mx-2">Proceed
+                </button>
+                <button v-else type="submit" @click.prevent="submitTopic"
+                        class="btn btn-primary float-right mx-2">Add Topic
                 </button>
             </TitleCard>
         </div>
@@ -766,18 +777,11 @@ const topic = reactive({
 
 const modulesNew = reactive([])
 
-const tm = reactive({
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0
-})
+const tm = ref();
 
 const option = reactive({
-    groupMethod: 'random',
-    timeMethod: 'even',
+    group_distribution: 'random',
+    time_method: 'even',
     tm: tm
 })
 
@@ -820,9 +824,9 @@ const getTime = (value) => {
     form.topic.max_time_expert = value.outExpert;
     form.topic.max_time_jigsaw = value.outJigsaw;
     form.topic.transition_time = value.outTransition;
-    for (let i = 0; i < 6; i++) {
-        tm[i] = value.outStudentPresent;
-    }
+    tm.value = value.outStudentPresent;
+    // for (let i = 0; i < 6; i++) {
+    // }
 }
 
 const unevenTimeFunction = () => {
@@ -842,7 +846,7 @@ const evenTimeFunction = () => {
     tm[5] = evenTime.value
     tm[6] = evenTime.value
 }
-const submit = () => {
+const submitTopic = () => {
     router.post(route('topic.store'), form)
 }
 
