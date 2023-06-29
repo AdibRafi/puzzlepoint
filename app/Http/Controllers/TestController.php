@@ -24,8 +24,9 @@ class TestController extends Controller
     {
 //        $data = auth()->user()->attendances()->get();
         $data = auth()->user();
+        $moduleData = Topic::find(1)->modules()->get();
 
-        return inertia('Test', compact('data'));
+        return inertia('Test', compact('data', 'moduleData'));
     }
 
     public function store(Request $request)

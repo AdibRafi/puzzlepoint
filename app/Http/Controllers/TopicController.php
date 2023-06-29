@@ -420,9 +420,10 @@ class TopicController extends Controller
             ->with('alertMessage', 'Duplicate Topic Successful');
     }
 
-    public function topicEditValidateStep(Request $request)// steps, data
+    public function topicValidateStep(Request $request)// steps, data
     {
 //        dd($request->all());
+
 
         $steps = $request->input('steps');
         if ($steps === 1) {
@@ -436,6 +437,7 @@ class TopicController extends Controller
 //                'date_time.after_or_equal' => 'Invalid Date Format'
             ]);
         } elseif ($steps === 2) {
+            //todo: doesn't return error
             $request->validate([
                 'modules.*.name' => 'required'
             ], [

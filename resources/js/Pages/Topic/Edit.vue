@@ -15,7 +15,7 @@
                         </label>
                         <select class="select select-bordered"
                                 v-model="form.topic.no_of_modules">
-                            <option :value="null" disabled selected>Pick Number</option>
+                            <option :value="null" disabled selected>Pick Number of Modules</option>
                             <option :value="2">2 Modules</option>
                             <option :value="3">3 Modules</option>
                             <option :value="4">4 Modules</option>
@@ -264,7 +264,7 @@ const nextStep = () => {
         const date = new Date(form.topic.date_time);
         const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
         form.topic.date_time = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);
-        router.post(route('topic.edit.validate.step'), {
+        router.post(route('topic.validate.step'), {
             steps: 1,
             name: form.topic.name,
             date_time: form.topic.date_time,
@@ -284,13 +284,13 @@ const nextStep = () => {
         })
     } else if (formStep.value === 2) {
         form.modules = modulesNew
-        router.post(route('topic.edit.validate.step'), {
+        router.post(route('topic.validate.step'), {
             steps: 2,
             modules: form.modules,
         })
         formStep.value++
     } else if (formStep.value === 3) {
-        router.post(route('topic.edit.validate.step'), {
+        router.post(route('topic.validate.step'), {
             steps: 3,
             group_distribution: form.option.group_distribution,
             time_method: form.option.time_method,
@@ -301,7 +301,7 @@ const nextStep = () => {
             }
         });
     } else if (formStep.value === 4) {
-        router.post(route('topic.edit.validate.step'), {
+        router.post(route('topic.validate.step'), {
             steps: 4,
             max_session: form.topic.max_session,
             max_buffer: form.topic.max_buffer,

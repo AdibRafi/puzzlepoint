@@ -5,7 +5,10 @@
 
         <TitleCard>
             <TimeCalculator number-of-modules="4"
-                            number-of-students="40"/>
+                            number-of-students="40"
+                            time-method="even"
+                            :modules-data="props.moduleData"
+                            @out-data="getTime"/>
         </TitleCard>
 
         <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">
@@ -77,12 +80,6 @@ import {useStore} from 'vuex'
 import InputText from "@/Components/InputText.vue";
 import TimeCalculator from "@/Components/TimeCalculator.vue";
 
-const t = () => {
-    console.log('tah')
-}
-
-console.log(usePage().props.auth.classroom)
-
 const messages = reactive([])
 const inputMessage = ref(null);
 const addMessage = () => {
@@ -90,6 +87,10 @@ const addMessage = () => {
         name: 'adib',
         messageInput: inputMessage.value
     })
+}
+
+const getTime = (value) => {
+    console.log(value.outStudentPresent)
 }
 
 const tmDummy = {
@@ -101,6 +102,8 @@ const tmDummy = {
 
 const props = defineProps({
     data: Object,
+    moduleData: Object,
+
 })
 
 const form = useForm({

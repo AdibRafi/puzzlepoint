@@ -1,6 +1,5 @@
 <template>
-    <!--todo: do for uneven time in student present-->
-    <div class="border-2 p-4">
+    <div class="border-2 p-4 overflow-hidden">
         <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
             <InputText label-title="How long is your class? (in minutes)"
                        input-type="number"
@@ -29,36 +28,53 @@
                 <div class="stat-desc">Duration for the jigsaw session</div>
             </div>
             <div class="stat w-full border-2">
-                <div class="stat-title">Student present in Jigsaw Session</div>
-                <div class="stat-value">{{ session.studentPresent }} Minutes</div>
-                <div class="stat-desc">Since there are {{ numberOfModules }} modules, <br/> it will divided with jigsaw
-                    session time
-                </div>
-            </div>
-            <div class="stat w-full border-2">
                 <div class="stat-title">Transition Time</div>
                 <div class="stat-value">{{ session.transition }} Minutes</div>
                 <div class="stat-desc">Duration before expert and jigsaw session</div>
             </div>
-            <div/>
-            <button @click.prevent="generateTime"
-                    class="btn btn-primary float-right ">Generate Time
-            </button>
         </div>
+        <div class="divider">Duration for Student to Present in Jigsaw Session</div>
+        <div v-if="timeMethod==='even'">
+            <div class="stat w-full border-2">
+                <div class="stat-title">Duration</div>
+                <div class="stat-value">{{ session.studentPresent[0] }} Minutes</div>
+                <div class="stat-desc">Each student will equally present with a given time</div>
+            </div>
+        </div>
+        <div v-else-if="timeMethod==='uneven'">
+            <GridLayout>
+                <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
+                    <Stat :title="moduleData.name">
+                        <div class="stat-value">{{ session.studentPresent[index] }} Minutes</div>
+                        <select class="select select-bordered mt-2"
+                                v-model="unevenTime[index]">
+                            <option :value="null" disabled selected>Pick One</option>
+                            <option :value="1">Short</option>
+                            <option :value="2">Medium</option>
+                            <option :value="3">Long</option>
+                        </select>
+                    </Stat>
+                </div>
+            </GridLayout>
+        </div>
+        <div class="divider"/>
+        <button @click.prevent="generateTime"
+                class="btn btn-primary float-right">Generate Time
+        </button>
     </div>
 </template>
 
 <script setup>
 import InputText from "@/Components/InputText.vue";
 import {reactive, ref} from "vue";
+import GridLayout from "@/Components/GridLayout.vue";
+import Stat from "@/Components/Stat.vue";
 
 const props = defineProps({
     numberOfModules: Number,
     numberOfStudents: Number,
-    // outExpert: Number,
-    // outJigsaw: Number,
-    // outStudentPresent: Number,
-    // outTransition: Number,
+    timeMethod: String,
+    modulesData: Object,
 })
 
 const inputData = reactive({
@@ -69,15 +85,23 @@ const inputData = reactive({
 const session = reactive({
     expert: null,
     jigsaw: null,
-    studentPresent: null,
+    studentPresent: [],
     transition: null,
 })
 
 const displayWholeSession = ref();
 const displayBufferSession = ref(0);
 
+const unevenTime = ref([]);
+const displayUnevenTime = ref([]);
+
 const emit = defineEmits(['outData']);
+
 const generateTime = () => {
+    if (props.timeMethod === 'uneven' &&
+        unevenTime.value.length !== props.modulesData.length) {
+        return null;
+    }
     if (props.numberOfStudents < 30) {
         session.transition = 2;
     } else if (props.numberOfStudents < 50) {
@@ -92,11 +116,26 @@ const generateTime = () => {
     displayWholeSession.value = inputData.classDuration;
     displayWholeSession.value -= (session.transition * 2);
 
+    session.studentPresent = [];
 
     let availableTime = Math.round((displayWholeSession.value - inputData.bufferDuration) / 3);
     session.expert = availableTime;
     session.jigsaw = availableTime * 2;
-    session.studentPresent = Math.round((availableTime * 2) / props.numberOfModules);
+
+    if (props.timeMethod === 'uneven') {
+        const sum = unevenTime.value.reduce((a, b) => a + b, 0)
+        const singleDuration = Math.round(session.jigsaw / sum)
+        // const singleDuration = session.jigsaw / sum
+        // displayUnevenTime.value = [];
+        for (let i = 0; i < props.modulesData.length; i++) {
+            session.studentPresent.push(singleDuration * unevenTime.value[i]);
+            // displayUnevenTime.value.push(singleDuration * unevenTime.value[i]);
+        }
+    } else {
+        for (let i = 0; i < props.modulesData.length; i++) {
+            session.studentPresent.push(Math.round((availableTime * 2) / props.numberOfModules));
+        }
+    }
 
     emit('outData', {
         outExpert: session.expert,

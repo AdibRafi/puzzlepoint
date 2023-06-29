@@ -2,7 +2,7 @@
    <div class="drawer-side">
       <label for="left-sidebar-drawer"
              class="drawer-overlay"/>
-      <ul class="menu pt-16 lg:pt-2 w-64 h-full bg-base-100 text-base-content">
+      <ul class="menu pt-16 lg:pt-2 w-72 h-full bg-base-100 text-base-content">
          <li class="mb-2 font-semibold text-xl">
             <Link :href="route('classroom.index')">
                <img class="mask mask-squircle w-10" src="/PuzzlePointLogo.png" alt="Logo"/>
