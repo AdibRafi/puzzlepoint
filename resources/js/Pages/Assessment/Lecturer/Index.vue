@@ -13,7 +13,7 @@
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
                 </Stat>
-                <Stat v-if="!props.assessmentModal.is_publish"
+                <Stat v-if="!props.assessmentModal.is_ready_publish"
                       title="Publish" desc="Click button to Publish">
                     <div @click.prevent="sendPublish"
                          :class="'stat-figure btn btn-circle ' +
@@ -28,7 +28,7 @@
                                v-model="form.endPublishTime"
                                input-name="date"/>
                 </Stat>
-                <Stat v-else-if="props.assessmentModal.is_publish"
+                <Stat v-else-if="props.assessmentModal.is_ready_publish"
                       title="End Assessment Session" :value="props.assessmentModal.time + ' Minutes'"
                       desc="Click Button to End">
                     <div @click.prevent="toEndAssessment"
@@ -130,10 +130,15 @@ const formatDate = (date) => {
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
     const strTime = hours + ':' + minutes + ' ' + ampm;
-    return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "  " + strTime;
 }
 
-const dateTime = formatDate(new Date(props.assessmentModal.publish_end))
+let dateTime;
+if (props.assessmentModal.publish_end !== null) {
+    dateTime = formatDate(new Date(props.assessmentModal.publish_end));
+} else {
+    dateTime = 'Not Publish'
+}
 
 const toCreateQuestion = () => {
     router.get(route('question.create'), {

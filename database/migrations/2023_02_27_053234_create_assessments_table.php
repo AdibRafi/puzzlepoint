@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
             $table->integer('time')->nullable();
+            $table->boolean('is_ready_publish');
             $table->boolean('is_publish');
             $table->boolean('is_complete');
             $table->dateTime('publish_start')->nullable();

@@ -215,7 +215,7 @@ class AssessmentController extends Controller
 
 
         $assessmentModal->update([
-            'is_publish' => 1,
+            'is_ready_publish' => 1,
             'time' => $request->input('time'),
             'publish_end' => $endPublishDate,
         ]);

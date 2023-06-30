@@ -399,6 +399,10 @@ class SessionController extends Controller
             'is_complete' => 1,
         ]);
 
+        $topicModal->assessment()->update([
+            'is_publish' => 1,
+        ]);
+
         if (Auth::user()->wizard_status === 'onStartSession') {
             Auth::user()->update([
                 'wizard_status' => 'onPublishAssessment'
