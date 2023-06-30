@@ -1,10 +1,10 @@
 <template>
     <Head title="Jigsaw"/>
     <SessionLayout page-title="Jigsaw Session">
-        <Card title="DEVELOPER">
-            <button class="btn btn-primary" @click="buttonTest">Reload</button>
-            <p>{{ minuteCounter }}</p>
-        </Card>
+<!--        <Card title="DEVELOPER">-->
+<!--            <button class="btn btn-primary" @click="buttonTest">Reload</button>-->
+<!--            <p>{{ minuteCounter }}</p>-->
+<!--        </Card>-->
         <div v-if="wizardStatus === 'onStartSession'"
              class="alert alert-info shadow-lg">
             <div>
@@ -58,6 +58,9 @@
                         class="btn btn-primary">End Session
                 </button>
             </div>
+            <button class="btn btn-primary float-right mx-4"
+                    @click="endModule">End Module
+            </button>
         </TitleCard>
         <div v-if="wizardStatus === 'onStartSession'"
              class="alert alert-info shadow-lg mt-4">
@@ -136,6 +139,7 @@ console.log(props.tm)
 
 const addOneMinute = () => {
     minuteCounter.value++;
+    moduleMinuteCounter.value++;
 }
 // const postTime = () => {
 //     router.post(route('update.time', {
@@ -156,6 +160,15 @@ const endSession = () => {
     router.get(route('lecturer.session.end'), {
         topic_id: props.topicModuleModal.id
     })
+}
+
+const endModule = () => {
+    minuteCounter.value -= moduleMinuteCounter.value;
+    secondCounter.value = 0;
+
+    props.tm.shift();
+    moduleMinuteCounter.value = props.tm[0];
+    moduleNum.value++;
 }
 
 window.Echo.channel('student-attendance-channel')

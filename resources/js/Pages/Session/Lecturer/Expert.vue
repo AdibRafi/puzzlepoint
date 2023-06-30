@@ -1,10 +1,10 @@
 <template>
     <Head title="Expert"/>
     <SessionLayout page-title="Expert Session">
-        <Card title="DEVELOPER">
-            <button class="btn btn-primary" @click="buttonTest">Reload</button>
-            <p>{{ minuteCounter }}</p>
-        </Card>
+        <!--        <Card title="DEVELOPER">-->
+        <!--            <button class="btn btn-primary" @click="buttonTest">Reload</button>-->
+        <!--            <p>{{ minuteCounter }}</p>-->
+        <!--        </Card>-->
         <div v-if="wizardStatus === 'onStartSession'"
              class="alert alert-info shadow-lg">
             <div>
@@ -20,7 +20,7 @@
             <TimerDisplayStatic :minute-counter="minuteCounter" :second-counter="secondCounter"
                                 :transition-minute-counter="transitionMinuteCounter"
                                 :transition-second-counter="transitionSecondCounter"
-            session-type="Expert Time"/>
+                                session-type="Expert Time"/>
             <div class="grid mt-2 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6">
                 <div v-for="groupData in props.expertGroupUserModal">
                     <CardTable :title="groupData.name"

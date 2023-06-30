@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow bg-base-100 w-full border-2 border-secondary">
+    <div class="stats shadow bg-base-100 w-full border-2 border-secondary">
         <div class="stat">
             <div class="stat-figure text-secondary">
                 <font-awesome-icon icon="fa-solid fa-hourglass-half" size="xl"
@@ -30,6 +30,8 @@
 <script setup>
 import Card from "@/Components/Card.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import GridLayout from "@/Components/GridLayout.vue";
+
 defineProps({
     minuteCounter: Number,
     secondCounter: Number,
