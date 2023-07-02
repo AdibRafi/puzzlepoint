@@ -32,7 +32,7 @@
                 </div>
                 <div class="stats shadow bg-base-100">
                     <div class="stat">
-                        <div class="stat-figure text-primary">
+                        <div class="stat-figure text-secondary">
                             <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
                         </div>
                         <div class="stat-title">Total Students</div>
@@ -93,11 +93,13 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Module</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="userData in groupData.users" :key="userData">
                                     <td>{{ userData.name }}</td>
+                                    <td>{{ userData.pivot.module_name }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -117,7 +119,7 @@
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div class="stats shadow bg-base-100 border-2">
                     <div class="stat">
-                        <div class="stat-figure text-primary">
+                        <div class="stat-figure text-secondary">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
                         <div class="stat-title">Total Question</div>
@@ -196,24 +198,6 @@
                 </div>
             </div>
         </TitleCard>
-        <!--        <Card :title="props.topic.name">-->
-        <!--            <p>Number of Modules = {{ props.topic.no_of_modules }}</p>-->
-        <!--        </Card>-->
-        <!--        <div class="divider">Expert Group</div>-->
-        <!--        <Card v-for="groupData in props.expertGroupModal" :key="groupData"-->
-        <!--              :title="groupData.name">-->
-        <!--            <p class="text-xl">{{ groupData.module.name }}</p>-->
-        <!--            <p v-for="userData in groupData.users" :key="userData">-->
-        <!--                {{ userData.name }}-->
-        <!--            </p>-->
-        <!--        </Card>-->
-        <!--        <div class="divider">Jigsaw Group</div>-->
-        <!--        <Card v-for="groupData in props.jigsawGroupModal" :key="groupData"-->
-        <!--              :title="groupData.name">-->
-        <!--            <p v-for="userData in groupData.users" :key="userData">-->
-        <!--                {{ userData.name }}-->
-        <!--            </p>-->
-        <!--        </Card>-->
     </Layout>
 </template>
 
@@ -261,7 +245,7 @@ for (let i = 0; i < props.studentAssessmentModal.length; i++) {
     } else {
         studentsNotCompleteAssessment.push({
             name: props.studentAssessmentModal[i].name,
-            mark: 'Not Complete',
+            mark: 'NotComplete',
         });
     }
 }

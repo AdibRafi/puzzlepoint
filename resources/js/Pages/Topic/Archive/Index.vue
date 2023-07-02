@@ -1,9 +1,6 @@
 <template>
     <Head title="Archive"/>
     <Layout>
-        <Card title="DEVELOPER">
-            <p>{{ topicModal }}</p>
-        </Card>
         <TitleCard :title="props.classroomModal.name">
             <div v-if="wizardStatus === 'onShowArchive'"
                  class="alert alert-info shadow-lg mb-4">

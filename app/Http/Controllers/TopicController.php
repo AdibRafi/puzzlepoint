@@ -81,6 +81,7 @@ class TopicController extends Controller
 
         $assessment = new Assessment();
         $assessment->is_publish = 0;
+        $assessment->is_ready_publish = 0;
         $assessment->topic()->associate($topic->id);
         $assessment->is_complete = 0;
         $assessment->save();
@@ -304,8 +305,15 @@ class TopicController extends Controller
 
         $jigsawGroupModal = $topic->groups()
             ->where('type', '=', 'jigsaw')
-            ->with('users')
+            ->with('users', function ($q) {
+                $q->withPivot('module_id')
+                    ->withPivot('module_name');
+            })
             ->get();
+//        $jigsawGroupModal = $topic->groups()
+//            ->where('type', '=', 'jigsaw')
+//            ->with('users')
+//            ->get();
 
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();

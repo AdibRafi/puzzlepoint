@@ -72,7 +72,7 @@ class QuestionController extends Controller
 
         if (Auth::user()->wizard_status === 'onCreateAssessment'){
             Auth::user()->update([
-                'wizard_status' => 'onStartSession'
+                'wizard_status' => 'onPublishAssessment'
             ]);
         }
         return redirect()->route('question.create', compact('assessment_id'))

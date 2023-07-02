@@ -51,7 +51,7 @@
             </div>
             <div class="divider"/>
             <div :class="'float-right ' + (wizardStatus === 'onStartSession' ?
-             'tooltip tooltip-open tooltip-info tooltip-left':'')"
+             'tooltip tooltip-open tooltip-info tooltip-bottom':'')"
                  :data-tip="(wizardStatus=== 'onStartSession' ?
                  'Click here to continue':'')">
                 <button @click.prevent="endSession"
@@ -72,6 +72,7 @@
             </div>
         </div>
         <TitleCard title="Student List">
+            <h2 class="card-title">Total Students: {{props.studentAbsentModal.length + props.studentAttendModal.length}}</h2>
             <div class="overflow-x-auto">
                 <table class="table w-full">
                     <thead>

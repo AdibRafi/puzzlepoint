@@ -9,7 +9,8 @@
                 <Stat title="Total Question" :value="props.questionAnswerModal.length"
                       desc="Click Button to Add Question">
                     <div @click.prevent="toCreateQuestion"
-                         class="stat-figure btn btn-circle btn-primary">
+                         :class="'stat-figure btn btn-circle ' +
+                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
                 </Stat>
@@ -21,7 +22,7 @@
                         <font-awesome-icon icon="fa-solid fa-upload" size="xl"/>
                     </div>
                     <InputText input-type="number"
-                               label-title="How Many Minutes?"
+                               label-title="Duration of Assessment"
                                v-model="form.time"/>
                     <InputText label-title="Date to End Assessment"
                                input-type="datetime-local"
@@ -49,7 +50,8 @@
                             <p>{{ answerData.name }}</p>
                         </div>
                         <div @click.prevent="editQuestion(questionData.id)"
-                             class="stat-figure btn btn-circle btn-primary">
+                             :class="'stat-figure btn btn-circle ' +
+                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
                     </Stat>
@@ -66,7 +68,7 @@
                  class="alert alert-info shadow-lg my-4">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span>Since you already create a question, You can publish it.<br/> Specify the minutes that you would like students to answer the assessment. <br/> After that, click the publish button to continue</span>
+                    <span class="ml-2">After you satisfied with the question, You can publish it.<br/> Specify the minutes and end date that you would like <br/> After that, click the publish button to continue</span>
                 </div>
             </div>
             <div v-else-if="wizardStatus === 'onStartSession'"
@@ -80,10 +82,7 @@
                  class="alert alert-info shadow-lg mt-10">
                 <div>
                     <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span>
-                    Since the Assessment is not time specified event. <br/>
-                        You can end it by clicking the end button.
-               </span>
+                    To end early, click the end assessment session button. Click to Continue
                 </div>
             </div>
             <button @click.prevent="router.get(route('topic.show',props.topicModal))"
@@ -118,6 +117,7 @@ const form = useForm({
     endPublishTime: '',
 })
 
+const isWizardComplete = usePage().props.auth.user.is_wizard_complete;
 const wizardStatus = usePage().props.auth.user.wizard_status;
 
 const today = new Date().toISOString().slice(0, 16);

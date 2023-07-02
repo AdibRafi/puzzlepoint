@@ -191,11 +191,20 @@ class ClassroomController extends Controller
 //        dd($request->all());
         $classroomModal = Classroom::find($request->input('classroom_id'));
         $classroom_id = $request->input('classroom_id');
+
+        if (Auth::user()->is_wizard_complete === 0 &&
+            $classroomModal->users()->where('type', '=', 'student')->count() >= 20) {
+            Auth::user()->update([
+                'wizard_status' => 'onCreateTopic',
+            ]);
+        }
+
         if ($request->hasFile('file_path')) {
             $file = $request->file('file_path');
-            $file->move('DummyStudent', $file->getClientOriginalName());
+            $file->move('Student', $file->getClientOriginalName());
+            Excel::import(new UserImport(), 'Student/' . $file->getClientOriginalName());
             $userArr = Excel::toArray(new UserImport(),
-                'DummyStudent/' . $file->getClientOriginalName());
+                'Student/' . $file->getClientOriginalName());
 
             for ($i = 0; $i < count($userArr[0]); $i++) {
                 if (!$classroomModal->users()

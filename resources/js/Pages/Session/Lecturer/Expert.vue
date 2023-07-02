@@ -63,6 +63,7 @@
             </div>
         </div>
         <TitleCard title="Student List">
+            <h2 class="card-title">Total Students: {{props.studentAbsentModal.length + props.studentAttendModal.length}}</h2>
             <div class="overflow-x-auto">
                 <table class="table w-full">
                     <thead>

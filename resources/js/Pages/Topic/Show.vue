@@ -113,9 +113,10 @@
             <div>
                 <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
                 <span>
-                    You have publish the Assessment! <br/>
-                    Now you just have to wait your student to finish the assessment. <br/>
-                    To end the assessment time period, go to assessment page.
+                    You finished the session! <br/>
+                    When you finish your session, the assessment will automatically publish to students. <br/>
+                    The assessment will automatically end it with the given end date of the assessment. <br/> <br/>
+                    Or you can end it early by go to assessment page.
                </span>
             </div>
         </div>

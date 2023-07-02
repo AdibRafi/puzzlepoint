@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Classroom;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class UserImport implements ToModel
@@ -11,10 +12,11 @@ class UserImport implements ToModel
     /**
      * @param array $row
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
-    public function model(array $row)
+    public function model(array $row): Model|User|null
     {
+//        dd($row);
         if (User::where('email', '=', $row[1])->exists()) {
             return null;
         } else {

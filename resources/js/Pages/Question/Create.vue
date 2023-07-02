@@ -111,29 +111,15 @@
                     </span>
                     </div>
                 </div>
-                <!--                        <div v-else-if="form.question_type === 'input'">-->
-                <!--                            <InputForm label-name="Answer" input-placeholder="Type answer here"-->
-                <!--                                       v-model="form.answer.name[1]"/>-->
-                <!--                        </div>-->
-                <!--                        <div v-else>-->
-                <!--                            <div class="form-control">-->
-                <!--                                <label class="label">-->
-                <!--                                    <span class="label-text">Answer</span>-->
-                <!--                                </label>-->
-                <!--                                <textarea class="textarea textarea-bordered textarea-primary h-24 w-72"-->
-                <!--                                          placeholder="Type Here" v-model="form.answer.name[1]"/>-->
-                <!--                            </div>-->
-                <!--                        </div>-->
-                <!--            </div>-->
                 <button class="btn btn-primary float-right"
                         :disabled="form.processing"
                         type="submit">
                     Add into Assessment
                 </button>
                 <div :class="'float-right mx-2 ' +
-                (wizardStatus === 'onStartSession' ? 'tooltip tooltip-info tooltip-open tooltip-bottom lg:tooltip-left':'')"
+                (wizardStatus === 'onPublishAssessment' ? 'tooltip tooltip-info tooltip-open tooltip-bottom lg:tooltip-left':'')"
                      data-tip="If you're done, Click here to return to assessment page">
-                    <Link v-if="wizardStatus === 'onStartSession' || $page.props.auth.user.is_wizard_complete" :href="route('assessment.index',{
+                    <Link v-if="wizardStatus === 'onPublishAssessment' || $page.props.auth.user.is_wizard_complete" :href="route('assessment.index',{
                         assessment_id:props.assessment_id
                     })"
                           class="btn btn-secondary">

@@ -49,7 +49,7 @@
                                class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                   <span class="block">
                      <p class="w-full text-lg font-semibold">Random</p>
-                     <p class="w-full">Just a normal randomise group formation</p>
+                     <p class="w-full">Normal Randomise Students into Groups</p>
                   </span>
                             <font-awesome-icon icon="fa-solid fa-shuffle" size="xl"/>
                         </label>

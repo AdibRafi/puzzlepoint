@@ -405,12 +405,12 @@ class SessionController extends Controller
 
         if (Auth::user()->wizard_status === 'onStartSession') {
             Auth::user()->update([
-                'wizard_status' => 'onPublishAssessment'
+                'wizard_status' => 'onEndAssessment'
             ]);
         }
 
-        $classroom = $topicModal->classroom()->first();
-        return redirect()->route('classroom.show', $classroom)
+//        $classroom = $topicModal->classroom()->first();
+        return redirect()->route('topic.show', $topicModal)
             ->with('alertMessage', 'Session Successfully Ended');
     }
 

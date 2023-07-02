@@ -222,7 +222,7 @@ class AssessmentController extends Controller
 
         if (Auth::user()->wizard_status === 'onPublishAssessment') {
             Auth::user()->update([
-                'wizard_status' => 'onEndAssessment'
+                'wizard_status' => 'onStartSession'
             ]);
         }
 
