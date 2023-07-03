@@ -4,19 +4,20 @@
         <Card title="DEVELOPER"/>
 
         <!--        <TitleCard>-->
-        <!--            <TimeCalculator number-of-modules="4"-->
-        <!--                            number-of-students="40"-->
-        <!--                            time-method="even"-->
-        <!--                            :modules-data="props.moduleData"-->
-        <!--                            @out-data="getTime"/>-->
         <!--        </TitleCard>-->
 
         <!--        <Card v-for="classroomData in usePage().props.auth.classrooms" :key="classroomData">-->
         <!--            <p>{{ classroomData.name }}</p>-->
         <!--        </Card>-->
         <TitleCard>
-            <iframe src="modules/M1.pdf" type="application/pdf"
-                    width="100%" height="800"/>
+            <TimeCalculator number-of-modules="4"
+                            number-of-students="40"
+                            time-method="even"
+                            :modules-data="props.moduleData"
+                            @out-data="getTime"/>
+            <!--            <iframe src="modules/M1.pdf" type="application/pdf"-->
+<!--                    width="100%" height="800"/>-->
+
         </TitleCard>
         <!--        <div class="h-full carousel carousel-vertical rounded-box">-->
 <!--            <div v-for="data in 4" class="carousel-item h-full">-->
@@ -100,6 +101,7 @@ const addMessage = () => {
 
 const getTime = (value) => {
     console.log(value.outStudentPresent)
+    console.log(value.outTimeMethod)
 }
 
 const tmDummy = {

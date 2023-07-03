@@ -1,51 +1,90 @@
 <template>
     <div class="border-2 p-4 overflow-hidden">
-        <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+        <GridLayout v-if="!isManual">
             <InputText label-title="How long is your class? (in minutes)"
                        input-type="number"
                        v-model="inputData.classDuration"/>
             <InputText label-title="How long is the buffer time? (in minutes)"
                        input-type="number"
                        v-model="inputData.bufferDuration"/>
-            <div class="stat w-full border-2">
-                <div class="stat-title">Jigsaw Learning Session</div>
-                <div class="stat-value">{{ inputData.classDuration }} Minutes</div>
-                <div class="stat-desc">Duration for the whole session</div>
-            </div>
-            <div class="stat w-full border-2">
-                <div class="stat-title">Buffer Time</div>
-                <div class="stat-value">{{ displayBufferSession }} Minutes</div>
-                <div class="stat-desc">Duration available before starting the session</div>
-            </div>
-            <div class="stat w-full border-2">
-                <div class="stat-title">Expert Session</div>
-                <div class="stat-value">{{ session.expert }} Minutes</div>
-                <div class="stat-desc">Duration for the expert session</div>
-            </div>
-            <div class="stat w-full border-2">
-                <div class="stat-title">Jigsaw Session</div>
-                <div class="stat-value">{{ session.jigsaw }} Minutes</div>
-                <div class="stat-desc">Duration for the jigsaw session</div>
-            </div>
-            <div class="stat w-full border-2">
-                <div class="stat-title">Transition Time</div>
-                <div class="stat-value">{{ session.transition }} Minutes</div>
-                <div class="stat-desc">Duration before expert and jigsaw session</div>
-            </div>
-        </div>
-        <div class="divider">Duration for Student to Present in Jigsaw Session</div>
-        <div v-if="timeMethod==='even'">
-            <div class="stat w-full border-2">
-                <div class="stat-title">Duration</div>
-                <div class="stat-value">{{ session.studentPresent[0] }} Minutes</div>
-                <div class="stat-desc">Each student will equally present with a given time</div>
-            </div>
-        </div>
-        <div v-else-if="timeMethod==='uneven'">
+        </GridLayout>
+        <div v-else-if="isManual">
+            <GridLayout>
+                <InputText label-title="How long is your class? (in minutes)"
+                           input-type="number"
+                           v-model="inputData.classDuration"/>
+                <InputText label-title="How long is the buffer time? (in minutes)"
+                           input-type="number"
+                           v-model="inputData.bufferDuration"/>
+                <InputText label-title="How long is the Expert Session? (in minutes)"
+                           input-type="number"
+                           v-model="session.expert"/>
+                <InputText label-title="How long is the Jigsaw Session? (in minutes)"
+                           input-type="number"
+                           v-model="session.jigsaw"/>
+                <div class="form-control w-full max-w-xs">
+                    <label class="label">
+                        <span class="label-text">Transition Time</span>
+                    </label>
+                    <select class="select select-bordered"
+                            v-model="session.transition">
+                        <option :value="null" disabled selected>Pick Transition Time</option>
+                        <option :value="2">2 Minutes</option>
+                        <option :value="3">3 Minutes</option>
+                        <option :value="4">4 Minutes</option>
+                        <option :value="5">5 Minutes</option>
+                    </select>
+                </div>
+            </GridLayout>
+            <div class="divider"/>
             <GridLayout>
                 <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
                     <Stat :title="moduleData.name">
-                        <div class="stat-value">{{ session.studentPresent[index] }} Minutes</div>
+                        <InputText label-title="How long? (in minutes)"
+                        input-type="number" v-model="session.studentPresent[index]"/>
+                    </Stat>
+                </div>
+            </GridLayout>
+        </div>
+        <div class="divider"/>
+        <GridLayout>
+            <Stat title="Jigsaw Learning Session" desc="Duration for the whole session">
+                <div class="stat-value">{{ inputData.classDuration }} Minutes</div>
+            </Stat>
+            <Stat title="Buffer Time" desc="Duration available before starting the session">
+                <div class="stat-value">{{ displayBufferSession }} Minutes</div>
+            </Stat>
+            <Stat title="Expert Session" desc="Duration for the Expert Session">
+                <div class="stat-value">{{ displayExpertSession }} Minutes</div>
+            </Stat>
+            <Stat title="Jigsaw Session" desc="Duration for the Jigsaw Session">
+                <div class="stat-value">{{ displayJigsawSession }} Minutes</div>
+            </Stat>
+            <Stat title="Transition Time" desc="Duration before expert and jigsaw session">
+                <div class="stat-value">{{ displayTransitionTime }} Minutes</div>
+            </Stat>
+        </GridLayout>
+        <div class="divider">Duration for Student to Present in Jigsaw Session</div>
+        <div v-if="isManual">
+            <GridLayout>
+                <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
+                    <Stat :title="moduleData.name">
+                        <div class="stat-value">{{displayStudentPresent[index]}} Minutes</div>
+                    </Stat>
+                </div>
+            </GridLayout>
+        </div>
+        <div v-if="timeMethod==='even'">
+            <Stat v-if="!isManual"
+                  title="Duration" desc="Each Student will Equally Present with a Given Time">
+                <div class="stat-value">{{ displayStudentPresent[0] }} Minutes</div>
+            </Stat>
+        </div>
+        <div v-else-if="timeMethod==='uneven'">
+            <GridLayout v-if="!isManual">
+                <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
+                    <Stat :title="moduleData.name">
+                        <div class="stat-value">{{ displayStudentPresent[index] }} Minutes</div>
                         <select class="select select-bordered mt-2"
                                 v-model="unevenTime[index]">
                             <option :value="null" disabled selected>Pick One</option>
@@ -58,9 +97,26 @@
             </GridLayout>
         </div>
         <div class="divider"/>
-        <button @click.prevent="generateTime"
-                class="btn btn-primary float-right">Generate Time
-        </button>
+        <div v-if="!isManual">
+            <button @click.prevent="changeInput"
+                    class="btn btn-primary">
+                Change to Manual Input
+            </button>
+            <button @click.prevent="generateTime"
+                    class="btn btn-primary float-right">Generate Time
+            </button>
+
+        </div>
+        <div v-else-if="isManual">
+            <button @click.prevent="changeInput"
+                    class="btn btn-primary">
+                Change to System Time Calculator
+            </button>
+            <button @click.prevent="saveTime"
+                    class="btn btn-primary float-right">
+                Save Time
+            </button>
+        </div>
     </div>
 </template>
 
@@ -89,11 +145,15 @@ const session = reactive({
     transition: null,
 })
 
-const displayWholeSession = ref();
+const displayWholeSession = ref(0);
 const displayBufferSession = ref(0);
+const displayExpertSession = ref(0);
+const displayJigsawSession = ref(0);
+const displayTransitionTime = ref(0);
+const displayStudentPresent = ref([]);
 
 const unevenTime = ref([]);
-const displayUnevenTime = ref([]);
+const isManual = ref(false);
 
 const emit = defineEmits(['outData']);
 
@@ -137,15 +197,61 @@ const generateTime = () => {
         }
     }
 
+    displayExpertSession.value = session.expert;
+    displayJigsawSession.value = session.jigsaw;
+    displayTransitionTime.value = session.transition;
+    displayStudentPresent.value = session.studentPresent;
+
     emit('outData', {
-        outExpert: session.expert,
-        outJigsaw: session.jigsaw,
-        outStudentPresent: session.studentPresent,
-        outTransition: session.transition,
+        outExpert: displayExpertSession.value,
+        outJigsaw: displayJigsawSession.value,
+        outStudentPresent: displayStudentPresent.value,
+        outTransition: displayTransitionTime,
         outSession: inputData.classDuration,
-        outBuffer: inputData.bufferDuration,
+        outBuffer: displayBufferSession,
+        outTimeMethod: props.timeMethod
     });
 }
 
+const changeInput = () => {
+    isManual.value = !isManual.value;
+
+    inputData.classDuration = 120;
+    inputData.bufferDuration = 0;
+
+    session.expert = null;
+    session.jigsaw = null;
+    session.studentPresent = [];
+    session.transition = null;
+
+    if (isManual) {
+        session.studentPresent.push(ref(Number))
+    }
+
+    displayWholeSession.value = ref();
+    displayBufferSession.value = 0;
+    displayExpertSession.value = 0;
+    displayJigsawSession.value = 0;
+    displayTransitionTime.value = 0;
+    displayStudentPresent.value = [];
+}
+
+const saveTime = () => {
+    displayBufferSession.value = inputData.bufferDuration;
+    displayExpertSession.value = session.expert;
+    displayJigsawSession.value = session.jigsaw;
+    displayTransitionTime.value = session.transition;
+    displayStudentPresent.value = session.studentPresent;
+
+    emit('outData', {
+        outExpert: displayExpertSession.value,
+        outJigsaw: displayJigsawSession.value,
+        outStudentPresent: displayStudentPresent.value,
+        outTransition: displayTransitionTime,
+        outSession: inputData.classDuration,
+        outBuffer: displayBufferSession,
+        outTimeMethod: 'manual'
+    });
+}
 
 </script>

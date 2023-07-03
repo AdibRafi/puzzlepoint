@@ -411,6 +411,7 @@ const getTime = (value) => {
     form.topic.max_time_jigsaw = value.outJigsaw;
     form.topic.transition_time = value.outTransition;
     tm.value = value.outStudentPresent;
+    form.option.time_method = value.outTimeMethod;
     // for (let i = 0; i < 6; i++) {
     // }
 }
