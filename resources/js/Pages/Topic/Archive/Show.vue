@@ -1,10 +1,9 @@
 <template>
     <Head title="Archive"/>
     <Layout page-title="Archive">
-        <Card title="DEVELOPER">
-
-        </Card>
-        <TitleCard :title="props.topic.name">
+        <TitleCard :title="props.topic.name"
+                   :top-right-button-label="$page.props.auth.user.type === 'lecturer' ? 'Duplicate Topic' : ''"
+                   @button-function="duplicateTopic">
             <div v-if="wizardStatus === 'onShowArchive'"
                  class="alert alert-info shadow-lg mb-4">
                 <div>
@@ -116,58 +115,66 @@
                     Click the user button to see in detail</span>
                 </div>
             </div>
-            <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
-                <div class="stats shadow bg-base-100 border-2">
-                    <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
-                        </div>
-                        <div class="stat-title">Total Question</div>
-                        <div class="stat-value">{{ questionAnswerModal.length }}</div>
-                    </div>
-                </div>
-                <div class="stats shadow bg-base-100 border-2">
-                    <div class="stat">
-                        <label for="modal" class="stat-figure btn btn-circle btn-primary">
-                            <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
-                        </label>
-                        <div class="stat-title">Total Student Complete</div>
-                        <div class="stat-value">{{ numCompleteAssessmentStudent }}</div>
-                    </div>
-                    <input type="checkbox" id="modal" class="modal-toggle"/>
-                    <label for="modal" class="modal cursor-pointer">
-                        <label class="modal-box relative" for="">
-                            <div class="overflow-x-auto">
-                                <table class="table w-full">
-                                    <thead>
-                                    <tr>
-                                        <th class="w-3/4">Name</th>
-                                        <th>Marks</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="studentData in studentsCompleteAssessment" :key="studentData">
-                                        <td>{{ studentData.name }}</td>
-                                        <td>
-                                            <div class="badge badge-success">
-                                                {{ studentData.mark }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr v-for="studentData in studentsNotCompleteAssessment" :key="studentData">
-                                        <td>{{ studentData.name }}</td>
-                                        <td>
-                                            <div class="badge badge-error">
-                                                {{ studentData.mark }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+            <div v-if="$page.props.auth.user.type === 'lecturer'">
+                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="stats shadow bg-base-100 border-2">
+                        <div class="stat">
+                            <div class="stat-figure text-secondary">
+                                <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                             </div>
+                            <div class="stat-title">Total Question</div>
+                            <div class="stat-value">{{ questionAnswerModal.length }}</div>
+                        </div>
+                    </div>
+                    <div class="stats shadow bg-base-100 border-2">
+                        <div class="stat">
+                            <label for="modal" class="stat-figure btn btn-circle btn-primary">
+                                <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
+                            </label>
+                            <div class="stat-title">Total Student Complete</div>
+                            <div class="stat-value">{{ numCompleteAssessmentStudent }}</div>
+                        </div>
+                        <input type="checkbox" id="modal" class="modal-toggle"/>
+                        <label for="modal" class="modal cursor-pointer">
+                            <label class="modal-box relative" for="">
+                                <div class="overflow-x-auto">
+                                    <table class="table w-full">
+                                        <thead>
+                                        <tr>
+                                            <th class="w-3/4">Name</th>
+                                            <th>Marks</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="studentData in studentsCompleteAssessment" :key="studentData">
+                                            <td>{{ studentData.name }}</td>
+                                            <td>
+                                                <div class="badge badge-success">
+                                                    {{ studentData.mark }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr v-for="studentData in studentsNotCompleteAssessment" :key="studentData">
+                                            <td>{{ studentData.name }}</td>
+                                            <td>
+                                                <div class="badge badge-error">
+                                                    {{ studentData.mark }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </label>
                         </label>
-                    </label>
+                    </div>
                 </div>
+            </div>
+            <div v-else-if="$page.props.auth.user.type === 'student'">
+                <GridLayout>
+                    <Stat title="Assessment" :value="props.studentAssessmentModal.pivot.is_finish
+                    ? (props.studentAssessmentModal.pivot.marks + ' Marks') : 'Not Complete'"/>
+                </GridLayout>
             </div>
             <div class="divider my-10">Question</div>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
@@ -185,6 +192,17 @@
                     </div>
                 </div>
             </div>
+            <div class="divider">Module Preview</div>
+            <div v-for="moduleData in props.moduleModal" :key="moduleData">
+                <Stat :title="moduleData.name" class="my-2">
+                    <iframe v-if="moduleData.file_path"
+                            class="mt-2"
+                            :src="'../../../../../' + moduleData.file_path"
+                            type="application/pdf"
+                            width="100%" height="800"/>
+                </Stat>
+
+            </div>
             <div v-if="wizardStatus === 'onShowArchive'"
                  class="alert alert-info shadow-lg mt-4">
                 <div>
@@ -194,9 +212,13 @@
                 </div>
                 <div class="flex-none">
                     <button @click.prevent="router.get(route('end.wizard'))"
-                        class="btn btn-ghost">Finish Tutorial</button>
+                            class="btn btn-ghost">Finish Tutorial
+                    </button>
                 </div>
             </div>
+            <button @click="back"
+                    class="btn btn-accent">Back
+            </button>
         </TitleCard>
     </Layout>
 </template>
@@ -210,6 +232,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {reactive, ref} from "vue";
 import CardTable from "@/Components/CardTable.vue";
 import {Head, router, usePage} from "@inertiajs/vue3";
+import Stat from "@/Components/Stat.vue";
+import GridLayout from "@/Components/GridLayout.vue";
 
 const props = defineProps({
     topic: Object,
@@ -230,10 +254,8 @@ const isModuleExpand = ref(false);
 const wizardStatus = usePage().props.auth.user.wizard_status;
 const setModuleExpand = () => {
     isModuleExpand.value = !isModuleExpand.value
-    console.log(isModuleExpand.value)
 }
 
-console.log(props.studentAssessmentModal[0].pivot.marks)
 
 for (let i = 0; i < props.studentAssessmentModal.length; i++) {
     if (props.studentAssessmentModal[i].pivot.marks !== null) {
@@ -247,6 +269,22 @@ for (let i = 0; i < props.studentAssessmentModal.length; i++) {
             name: props.studentAssessmentModal[i].name,
             mark: 'NotComplete',
         });
+    }
+}
+
+const back = () => {
+    router.get(route('topic.archive.index', props.classroomModal.id))
+}
+
+const duplicateTopic = () => {
+    if (confirm('Are you sure to Duplicate Topic?')) {
+        router.post(route('topic.duplicate',
+            {
+                topic_id: props.topic.id
+            }
+        ))
+    } else {
+        router.reload();
     }
 }
 </script>

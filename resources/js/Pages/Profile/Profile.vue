@@ -18,31 +18,31 @@
                            class="input input-bordered w-full">
                 </div>
             </div>
-            <div class="divider"/>
-            <div v-if="user.phone_number === null">
+<!--            <div class="divider"/>-->
+<!--            <div v-if="user.phone_number === null">-->
 
-                <div class="alert inline-block">
-                    <font-awesome-icon icon="fa-solid fa-user-secret" size="xl"
-                                       class="inline-block"/>
-                    <span
-                        class="inline-block ml-4">If you want Two Factor Authorization, Fill in the phone number first.</span>
-                </div>
-            </div>
-            <div v-else>
-                <Card>
-                    <InputText label-title="Verify Code" v-model="verifyCodeInput"/>
-                    <template #actions>
-                        <button @click.prevent="verifyCode"
-                                class="btn btn-primary float-right">
-                            Verify
-                        </button>
-                        <button class="btn btn-primary"
-                                @click.prevent="router.get(route('sms.test'))">
-                            Send Code
-                        </button>
-                    </template>
-                </Card>
-            </div>
+<!--                <div class="alert inline-block">-->
+<!--                    <font-awesome-icon icon="fa-solid fa-user-secret" size="xl"-->
+<!--                                       class="inline-block"/>-->
+<!--                    <span-->
+<!--                        class="inline-block ml-4">If you want Two Factor Authorization, Fill in the phone number first.</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div v-else>-->
+<!--                <Card>-->
+<!--                    <InputText label-title="Verify Code" v-model="verifyCodeInput"/>-->
+<!--                    <template #actions>-->
+<!--                        <button @click.prevent="verifyCode"-->
+<!--                                class="btn btn-primary float-right">-->
+<!--                            Verify-->
+<!--                        </button>-->
+<!--                        <button class="btn btn-primary"-->
+<!--                                @click.prevent="router.get(route('sms.test'))">-->
+<!--                            Send Code-->
+<!--                        </button>-->
+<!--                    </template>-->
+<!--                </Card>-->
+<!--            </div>-->
             <div class="divider"/>
             <select class="select select-bordered mr-4" data-choose-theme>
                 <option disabled selected>Theme</option>

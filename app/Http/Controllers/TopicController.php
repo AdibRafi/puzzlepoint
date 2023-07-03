@@ -310,10 +310,6 @@ class TopicController extends Controller
                     ->withPivot('module_name');
             })
             ->get();
-//        $jigsawGroupModal = $topic->groups()
-//            ->where('type', '=', 'jigsaw')
-//            ->with('users')
-//            ->get();
 
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
@@ -321,14 +317,24 @@ class TopicController extends Controller
         $assessmentModal = $topic->assessment()->first();
         $questionAnswerModal = $assessmentModal->questions()->with('answers')->get();
 
-        $studentAssessmentModal = Assessment::find($assessmentModal->id)->users()
-            ->withPivot('marks')
-            ->get();
+        if (Auth::user()->type === 'lecturer') {
+            $studentAssessmentModal = Assessment::find($assessmentModal->id)->users()
+                ->withPivot('marks')
+                ->get();
+        } else
+            $studentAssessmentModal = Assessment::find($assessmentModal->id)->users()
+                ->where('id', '=', Auth::id())
+                ->withPivot('marks')
+                ->withPivot('is_finish')
+                ->first();
+
+        $classroomModal = $topic->classroom()->first();
 
         return inertia('Topic/Archive/Show',
             compact('topic', 'expertGroupModal',
                 'jigsawGroupModal', 'moduleModal', 'studentModal'
-                , 'assessmentModal', 'questionAnswerModal', 'studentAssessmentModal'));
+                , 'assessmentModal', 'questionAnswerModal', 'studentAssessmentModal'
+                , 'classroomModal'));
     }
 
     public function topicFirstStep(StoreTopicRequest $request)
@@ -408,6 +414,7 @@ class TopicController extends Controller
 
         $assessmentNew = $topicOld->assessment()->first()->replicate()->fill([
             'time' => null,
+            'is_ready_publish' => 0,
             'is_publish' => 0,
             'is_complete' => 0,
             'publish_end' => null,

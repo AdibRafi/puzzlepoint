@@ -45,18 +45,6 @@
                     <span class="ml-4">Now Click the + Button to add Topic</span>
                 </div>
             </div>
-            <div class="state shadow bg-base-100">
-                <div class="stat">
-                    <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
-                          :class="'stat-figure btn btn-circle ' +
-                          (wizardStatus === 'onShowArchive' || isWizardComplete ? 'btn-primary':'btn-disabled')">
-                        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
-                    </Link>
-                    <div class="stat-title">Total Archive</div>
-                    <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
-                    <div class="stat-desc">Click the button to see Archive</div>
-                </div>
-            </div>
         </div>
         <div v-if="wizardStatus === 'onShowArchive'"
              class="alert alert-info shadow-lg my-4">
@@ -77,13 +65,26 @@
                 </span>
             </div>
         </div>
+        <GridLayout>
+            <div class="state shadow bg-base-100 mt-2">
+                <div class="stat">
+                    <Link :href="route('topic.archive.index',{classroom_id: props.classroom.id})"
+                          :class="'stat-figure btn btn-circle ' +
+                          (wizardStatus === 'onShowArchive' || isWizardComplete ? 'btn-primary':'btn-disabled')">
+                        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
+                    </Link>
+                    <div class="stat-title">Total Archive</div>
+                    <div class="stat-value">{{ props.topicArchiveModal.length }}</div>
+                    <div class="stat-desc">Click the button to see Archive</div>
+                </div>
+            </div>
+        </GridLayout>
         <TitleCard :title="props.classroom.name"
                    :desc-title="$page.props.auth.user.type === 'lecturer' ? props.classroom.join_code : ''"
                    :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''"
                    :top-right-button-label="(isWizardComplete === 1 && $page.props.auth.user.type === 'lecturer') ? 'Edit Classroom' : ''"
                    @button-function="editClassroom">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->
-
             <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
                  class="alert alert-info shadow-lg mb-4">
                 <div>
@@ -91,6 +92,7 @@
                     <span>Great! Now you can click the created topic</span>
                 </div>
             </div>
+
             <h2 class="card-title">List of Created Topics</h2>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div v-for="data in topicModal" :key="data">
@@ -112,6 +114,8 @@ import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import CardClick from "@/Components/CardClick.vue";
+import GridLayout from "@/Components/GridLayout.vue";
+import Stat from "@/Components/Stat.vue";
 
 const props = defineProps({
     classroom: Object,

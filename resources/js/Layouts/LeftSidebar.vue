@@ -29,27 +29,11 @@
                      aria-hidden="true"/>
             </Link>
          </li>
-<!--         <div class="divider"/>-->
-<!--         <li v-if="route().current('classroom.*') || route().current('topic.*') || route().current('module.*') || route().current('option.*') ||-->
-<!--         route().current('assessment.*')">-->
-<!--            <Link :href="route('topic.create',-->
-<!--               {classroom_id:route().params.classroom})"-->
-<!--                  :class="route().current('topic.create') ? activeRoute : inactiveRoute">-->
-<!--               Add Topic-->
-<!--               <span v-if="route().current('topic.create')"-->
-<!--                     :class="activeRouteSpan"-->
-<!--                     aria-hidden="true"/>-->
-<!--            </Link>-->
-<!--         </li>-->
-<!--         <li v-else>-->
-<!--            <p>Please choose a classroom</p>-->
-<!--         </li>-->
          <div class="divider"/>
          <li>
             <div class="flex-col">
                 <div class="w-full" @click="setIsExpanded">
                     DEVELOPER
-
                </div>
                <div :class="'w-full ' + (isExpanded ? '' : 'hidden')">
                   <ul class="menu menu-compact">

@@ -23,6 +23,9 @@ class TestController extends Controller
     public function index()
     {
 //        $data = auth()->user()->attendances()->get();
+        $user = User::where('email', '=', 'test@gmail.com')->exists();
+
+        dd($user);
         $data = auth()->user();
         $moduleData = Topic::find(1)->modules()->get();
 

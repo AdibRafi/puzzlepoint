@@ -172,18 +172,18 @@ class ClassroomController extends Controller
     public function addStudentCreate(Request $request) //classroom_id
     {
 //        dd($request->all());
-        $classroomModal = Classroom::find($request->input('classroom_id'))
-            ->loadCount(['users' => function ($q) {
-                $q->where('type', '=', 'student');
-            }]);
-        if ((Auth::user()->is_wizard_complete === 0 && Auth::user()->wizard_status === 'onAddStudent') && $classroomModal->users_count >= 20) {
+        $classroomModal = Classroom::find($request->input('classroom_id'))->first();
+        $studentsModal = $classroomModal->users()
+            ->where('type', '=', 'student')
+            ->get();
+        if ((Auth::user()->is_wizard_complete === 0 && Auth::user()->wizard_status === 'onAddStudent') && $studentsModal->count() >= 20) {
             Auth::user()->update([
                 'wizard_status' => 'onCreateTopic',
             ]);
             Auth::user()->fresh();
         }
 
-        return inertia('Classroom/AddStudent', compact('classroomModal'));
+        return inertia('Classroom/AddStudent', compact('classroomModal', 'studentsModal'));
     }
 
     public function addStudentStore(Request $request) //name, email,gender, file_path, classroom_id

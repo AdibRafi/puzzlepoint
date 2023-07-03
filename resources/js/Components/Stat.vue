@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow bg-base-100 border-2">
+    <div class="shadow bg-base-100 border-2 border-base-300">
         <div class="stat">
             <div v-if="figure"
                  class="stat-figure text-secondary">

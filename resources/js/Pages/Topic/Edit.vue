@@ -143,13 +143,13 @@
                     </GridLayout>
                     <div class="divider">Module Time and File Detail</div>
                     <div v-for="(moduleData,index) in form.modules" :key="moduleData">
-                        <p>{{ moduleData }}</p>
                         <Stat :title="moduleData.name"
                               :value="form.option.tm[index] + ' Minutes'"
-                              desc="Duration for student to Present"/>
-                        <iframe v-if="moduleData.file_path !== ''"
-                                :src="'../../../../modules/' + moduleData.file_path.name" type="application/pdf"
-                                width="100%" height="800"/>
+                              class="my-4">
+                            <iframe v-if="moduleData.file_path !== ''"
+                                    :src="'../../../../modules/' + moduleData.file_path.name" type="application/pdf"
+                                    width="100%" height="800"/>
+                        </Stat>
                     </div>
                 </div>
                 <div class="divider"/>
@@ -172,8 +172,6 @@
                 <button v-else type="submit"
                         class="btn btn-primary float-right mx-2">Update Topic
                 </button>
-                <!--            <p>{{form.option}}</p>-->
-                <!--            <p></p>-->
             </form>
         </TitleCard>
     </Layout>
@@ -324,14 +322,4 @@ const nextStep = () => {
         })
     }
 }
-
-const submitTopic = () => {
-    // router.get(route('topic.update', props.topic), {
-    //     topic: form.topic,
-    //     modules: form.modules,
-    //     option: form.option,
-    // })
-    form.post(route('topic.update', props.topic));
-}
-
 </script>

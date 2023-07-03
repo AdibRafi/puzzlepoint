@@ -2,13 +2,6 @@
     <Head title="Add Student"/>
     <Layout>
         <TitleCard title="Add Student">
-            <div class="shadow bg-base-100 border-2 w-1/2 my-2">
-                <div class="stat">
-                    <div class="stat-title">Total Student</div>
-                    <div class="stat-value">{{ props.classroomModal.users_count }}</div>
-                    <div class="stat-desc">In classroom = {{ props.classroomModal.name }}</div>
-                </div>
-            </div>
             <div v-if="wizardStatus === 'onAddStudent'"
                  class="alert alert-info shadow-lg">
                 <div>
@@ -83,6 +76,26 @@
                 </button>
             </div>
         </TitleCard>
+        <TitleCard :title="'Total Student: ' + props.studentsModal.length">
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="studentData in props.studentsModal" :key="studentData">
+                        <td>{{ studentData.name }}</td>
+                        <td>{{ studentData.email }}</td>
+                        <td>{{ studentData.gender }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </TitleCard>
     </Layout>
 </template>
 <script setup>
@@ -99,6 +112,7 @@ let wizardStatus = usePage().props.auth.user.wizard_status;
 
 const props = defineProps({
     classroomModal: Object,
+    studentsModal: Object,
 })
 
 const form = useForm({

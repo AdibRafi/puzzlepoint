@@ -9,6 +9,11 @@
             </label>
             <h1 class="text-2xl font-semibold ml-2">{{ pageTitle }}</h1>
         </div>
+        <div class="order-1">
+            {{$page.props.auth.user.name}}
+            |
+            {{$page.props.auth.user.type}}
+        </div>
         <div class="order-last">
             <select class="select mr-4" data-choose-theme>
                 <option disabled selected>Theme</option>

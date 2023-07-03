@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-base-200 flex items-center">
-        <div class="card mx-auto w-full max-w-5xl  shadow-xl">
+        <div class="card mx-auto w-full max-w-5xl shadow-xl">
             <div class="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
                 <LandingIntro/>
                 <div class="py-24 px-10">
@@ -19,6 +19,30 @@
                             <InputText label-title="Password Confirmation"
                                        container-style="mt-4"
                                        v-model="form.password_confirmation"/>
+                            <ul class="grid w-full gap-6 md:grid-cols-2 mt-4">
+                                <li>
+                                    <input type="radio" id="male" name="gender" value="male"
+                                           class="hidden peer" v-model="form.gender">
+                                    <label for="male"
+                                           class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                  <span class="block">
+                     <p class="w-full text-lg font-semibold">Male</p>
+                  </span>
+                                        <font-awesome-icon icon="fa-solid fa-person" size="xl"/>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="female" name="gender" value="female"
+                                           class="hidden peer" v-model="form.gender">
+                                    <label for="female"
+                                           class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                        <div class="block">
+                                            <div class="w-full text-lg font-semibold">Female</div>
+                                        </div>
+                                        <font-awesome-icon icon="fa-solid fa-person-dress" size="xl"/>
+                                    </label>
+                                </li>
+                            </ul>
                         </div>
                         <ErrorAlert v-if="errors" v-for="error in errors" :key="error"
                                     :error-text="error.valueOf()"/>
@@ -129,6 +153,7 @@ import {Head, Link, useForm} from '@inertiajs/vue3';
 import LandingIntro from "@/Pages/Welcome/LandingIntro.vue";
 import InputText from "@/Components/InputText.vue";
 import ErrorAlert from "@/Components/ErrorAlert.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 defineProps({
     errors: Object
@@ -140,6 +165,8 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    gender: 'male',
+
 });
 
 const submit = () => {

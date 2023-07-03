@@ -10,9 +10,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\Testing\Concerns\Has;
 
 class RegisteredUserController extends Controller
 {
@@ -37,16 +39,24 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'type' => 'student',
-            'gender' => 'male',
-            'wizard_status' => 'onCreateClassroom',
-            'is_wizard_complete' => 0,
+        $user = User::where('email', '=', $request->email);
+        $type = Str::contains($request->email, 'student');
+        if ($user->exists() && !$user->hasVerifiedEmail()) {
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'type' => $type ? 'student' : 'lecturer',
+                'gender' => $request->gender,
+                'wizard_status' => $type ? null : 'onCreateClassroom',
+                'is_wizard_complete' => $type ? 1 : 0,
+            ]);
+        }
 
-        ]);
 
         event(new Registered($user));
 

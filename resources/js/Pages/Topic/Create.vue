@@ -79,8 +79,8 @@
                     <div v-for="(moduleData, Index) in form.modules" class="border-2 p-4">
                         <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
                                    v-model="moduleData.name"/>
-<!--                        <InputText label-title="Learning Objectives (optional)" input-type="text"-->
-<!--                                   v-model="moduleData.learning_objectives"/>-->
+                        <!--                        <InputText label-title="Learning Objectives (optional)" input-type="text"-->
+                        <!--                                   v-model="moduleData.learning_objectives"/>-->
                         <input type="file"
                                class="file-input file-input-bordered
                                       file-input-primary mt-4 w-full"
@@ -290,7 +290,7 @@
                 <div v-for="(moduleData,index) in form.modules" :key="moduleData">
                     <Stat :title="moduleData.name"
                           :value="form.option.tm[index] + ' Minutes'"
-                    desc="Duration for student to Present"/>
+                          desc="Duration for student to Present"/>
                     <iframe v-if="moduleData.file_path !== ''"
                             :src="'../../../../modules/' + moduleData.file_path.name" type="application/pdf"
                             width="100%" height="800"/>
@@ -305,7 +305,7 @@
                     </div>
                 </div>
             </GridLayout>
-            <button @click.prevent="window.history.back()" class="btn btn-accent mx-2">Cancel</button>
+            <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
             <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
                     class="btn btn-primary float-right mx-2">Proceed
             </button>
@@ -392,6 +392,11 @@ if (!usePage().props.auth.user.is_wizard_complete) {
         })
     }
 }
+
+const back = () => {
+    router.get(route('classroom.show',props.classroomModal.id))
+}
+
 const formatDate = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();

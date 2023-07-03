@@ -27,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
         VerifyEmail::toMailUsing(function (object $notification, string $url) {
             return (new MailMessage())
                 ->greeting('Hello!')
-                ->subject('Verify your email address')
-                ->line('so click the button below ok?')
+                ->subject('Thanks For Signing up to PuzzlePoint')
+                ->line('Click the button below to verified')
                 ->action('Verify email address', $url);
         });
     }
