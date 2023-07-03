@@ -1,9 +1,6 @@
 <template>
     <Head title="Index"/>
-    <SessionLayout page-title="Index">
-        <Card title="DEVELOPER">
-            <!--            <p>{{ props.studentAbsentModal }}</p>-->
-        </Card>
+    <SessionLayout page-title="Pre Session">
         <div v-if="$page.props.auth.user.type === 'lecturer'">
             <TitleCard :title="props.topicModuleModal.name">
                 <div v-if="wizardStatus === 'onStartSession'"
@@ -51,7 +48,7 @@
                             <font-awesome-icon icon="fa-solid fa-hourglass" size="xl"/>
                         </div>
                         <div class="stat-title">Time After Buffer</div>
-                        <div class="stat-value">{{props.timeAddBuffer}}</div>
+                        <div class="stat-value">{{ props.timeAddBuffer }}</div>
                         <div class="stat-desc">
                             You can start early if you like
                         </div>
@@ -67,16 +64,21 @@
             </TitleCard>
         </div>
         <div v-if="$page.props.auth.user.type ==='student'">
-            <Card title="You have enter a session">
-                Please wait for your lecturer to start the session
-                <div class="divider">Topic</div>
-                <p>Title: {{ props.topicModuleModal.name }}</p>
-                <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">
-                    {{ moduleData.name }}
-                </p>
-                <p>Expert Time = {{ props.topicModuleModal.max_time_expert }}</p>
-                <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>
-            </Card>
+            <TitleCard title="You have enter a session">
+                <h2 class="card-title">Please Wait for your lecturer to start the session</h2>
+                <div class="divider"/>
+                <GridLayout>
+                    <Stat title="Topic Title" :value="props.topicModuleModal.name"/>
+                    <Stat v-for="(moduleData,index) in props.topicModuleModal.modules" :key="moduleData"
+                          :title="'Module ' + (index + 1)" :value="moduleData.name"/>
+                </GridLayout>
+                <div class="divider"/>
+                <GridLayout>
+                    <Stat title="Expert Session Duration" :value="props.topicModuleModal.max_time_expert + ' Minutes'"/>
+                    <Stat title="Jigsaw Session Duration" :value="props.topicModuleModal.max_time_jigsaw + ' Minutes'"/>
+                </GridLayout>
+            </TitleCard>
+
         </div>
         <!--        <div v-if="$page.props.auth.user.type === 'lecturer'">-->
         <!--            <Card :title="props.topicModuleModal.name">-->
@@ -121,6 +123,8 @@ import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import SessionLayout from "@/Layouts/SessionLayout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import GridLayout from "@/Components/GridLayout.vue";
+import Stat from "@/Components/Stat.vue";
 
 const props = defineProps({
     topicModuleModal: Object,

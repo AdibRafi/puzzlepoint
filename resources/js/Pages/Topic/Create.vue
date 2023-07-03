@@ -79,12 +79,12 @@
                     <div v-for="(moduleData, Index) in form.modules" class="border-2 p-4">
                         <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
                                    v-model="moduleData.name"/>
-                        <InputText label-title="Learning Objectives (optional)" input-type="text"
-                                   v-model="moduleData.learning_objectives"/>
+<!--                        <InputText label-title="Learning Objectives (optional)" input-type="text"-->
+<!--                                   v-model="moduleData.learning_objectives"/>-->
                         <input type="file"
                                class="file-input file-input-bordered
                                       file-input-primary mt-4 w-full"
-                               @input="module.file_path = $event.target.files[0]"/>
+                               @input="moduleData.file_path = $event.target.files[0]"/>
                     </div>
                 </GridLayout>
             </div>
@@ -286,12 +286,15 @@
                     <Stat title="Jigsaw Session" :value="form.topic.max_time_jigsaw + ' Minutes'"/>
                     <Stat title="Transition Time" :value="form.topic.transition_time + ' Minutes'"/>
                 </GridLayout>
-                <div class="divider">Student Present in Jigsaw Session</div>
-                <GridLayout>
-                    <div v-for="(moduleData,index) in form.modules" :key="moduleData">
-                        <Stat :title="moduleData.name" :value="form.option.tm[index] + ' Minutes'"/>
-                    </div>
-                </GridLayout>
+                <div class="divider">Module Time and File Detail</div>
+                <div v-for="(moduleData,index) in form.modules" :key="moduleData">
+                    <Stat :title="moduleData.name"
+                          :value="form.option.tm[index] + ' Minutes'"
+                    desc="Duration for student to Present"/>
+                    <iframe v-if="moduleData.file_path !== ''"
+                            :src="'../../../../modules/' + moduleData.file_path.name" type="application/pdf"
+                            width="100%" height="800"/>
+                </div>
             </div>
             <div class="divider"/>
             <GridLayout>

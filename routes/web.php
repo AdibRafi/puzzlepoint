@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('topic-wizard-step', [TopicController::class, 'topicWizardStep'])->name('topic.wizard.step');
     Route::post('topic-duplicate', [TopicController::class, 'duplicateTopic'])->name('topic.duplicate');
     Route::post('topic-edit-step', [TopicController::class, 'topicValidateStep'])->name('topic.validate.step');
+    Route::post('topic-update', [TopicController::class, 'updateTopic'])->name('topic.update.post');
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');

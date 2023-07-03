@@ -206,13 +206,16 @@ class TopicController extends Controller
      */
     public function update(Request $request, Topic $topic)
     {
-//        dd($request->all());
-//        dd($request->input('topic'));
+//
+    }
+
+    public function updateTopic(Request $request)
+    {
+        $topic = Topic::find($request->input('topic')['id']);
         $topic->update($request->input('topic'));
-//        $topic->modules()->;
-//        dd($topic->modules()->get());
         $topic->modules()->delete();
         $modulesInput = $request->input('modules');
+
         for ($i = 0; $i < count($modulesInput); $i++) {
             $module = new Module();
             $module->topic()->associate($topic->id);
@@ -230,9 +233,6 @@ class TopicController extends Controller
             $module->save();
 
         }
-
-//        $optionInput = $request->input('option')->except(['created_at']);
-//        dd($optionInput);
 
         $topic->option()->delete();
         $optionInput = $request->input('option');
@@ -464,6 +464,14 @@ class TopicController extends Controller
             ], [
                 'modules.*.name.required' => 'Please fill in the name of the modules'
             ]);
+
+            for ($i = 0; $i < count($request->input('modules')); $i++) {
+                $filePath = 'modules.' . $i . '.file_path';
+                if ($request->hasFile($filePath)) {
+                    $file = $request->file($filePath);
+                    $file->move('modules', $file->getClientOriginalName());
+                }
+            }
         } elseif ($steps === 3) {
             $request->validate([
                 'group_distribution' => 'required',

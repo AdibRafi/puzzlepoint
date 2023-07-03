@@ -1,9 +1,9 @@
 <template>
     <Head title="Session"/>
     <MainLayout>
-        <Card title="DEVELOPER">
-            <p></p>
-        </Card>
+        <TitleCard>
+
+        </TitleCard>
         <Card title="You have enter a session" class="my-4">
             Please wait your lecturer to start the topic session
         </Card>
@@ -15,6 +15,7 @@ import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import '../../../bootstrap'
+import TitleCard from "@/Components/TitleCard.vue";
 
 const props = defineProps({
     topicModuleModal: Object,

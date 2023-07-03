@@ -80,7 +80,7 @@
         <TitleCard :title="props.classroom.name"
                    :desc-title="$page.props.auth.user.type === 'lecturer' ? props.classroom.join_code : ''"
                    :tooltip-desc-text="wizardStatus === 'onAddStudent' ? 'Share this code to student to join' : ''"
-                   :top-right-button-label="isWizardComplete === 1 ? 'Edit Classroom' : ''"
+                   :top-right-button-label="(isWizardComplete === 1 && $page.props.auth.user.type === 'lecturer') ? 'Edit Classroom' : ''"
                    @button-function="editClassroom">
             <!--:tooltip-btn-text="wizardStatus === 'onCreateTopic' ? 'This will be proceed to edit classroom' : ''"-->
 

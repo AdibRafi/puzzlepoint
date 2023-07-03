@@ -4,170 +4,177 @@
         <TitleCard :title="props.topic.name"
                    top-right-button-label="Destroy"
                    @button-function="destroy">
-            <div v-if="formStep === 1">
-                <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
-                    <InputText label-title="Topic Name" v-model="form.topic.name"/>
-                    <InputText label-title="Date" input-type="datetime-local"
-                               v-model="form.topic.date_time"/>
-                    <div class="form-control w-full max-w-xs">
-                        <label class="label">
-                            <span class="label-text">Number of Modules</span>
-                        </label>
-                        <select class="select select-bordered"
-                                v-model="form.topic.no_of_modules">
-                            <option :value="null" disabled selected>Pick Number of Modules</option>
-                            <option :value="2">2 Modules</option>
-                            <option :value="3">3 Modules</option>
-                            <option :value="4">4 Modules</option>
-                            <option :value="5">5 Modules</option>
-                            <option :value="6">6 Modules</option>
-                        </select>
+            <form @submit.prevent="form.post(route('topic.update.post'))" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                <div v-if="formStep === 1">
+                    <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+                        <InputText label-title="Topic Name" v-model="form.topic.name"/>
+                        <InputText label-title="Date" input-type="datetime-local"
+                                   v-model="form.topic.date_time"/>
+                        <div class="form-control w-full max-w-xs">
+                            <label class="label">
+                                <span class="label-text">Number of Modules</span>
+                            </label>
+                            <select class="select select-bordered"
+                                    v-model="form.topic.no_of_modules">
+                                <option :value="null" disabled selected>Pick Number of Modules</option>
+                                <option :value="2">2 Modules</option>
+                                <option :value="3">3 Modules</option>
+                                <option :value="4">4 Modules</option>
+                                <option :value="5">5 Modules</option>
+                                <option :value="6">6 Modules</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div v-else-if="formStep === 2">
-                <GridLayout>
-                    <div v-for="(moduleData, Index) in modulesNew" class="border-2 p-4">
-                        <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
-                                   v-model="moduleData.name"/>
-                        <InputText label-title="Learning Objectives (optional)" input-type="text"
-                                   v-model="moduleData.learning_objectives"/>
-                        <input type="file"
-                               class="file-input file-input-bordered
+                <div v-else-if="formStep === 2">
+                    <GridLayout>
+                        <div v-for="(moduleData, Index) in modulesNew" class="border-2 p-4">
+                            <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
+                                       v-model="moduleData.name"/>
+                            <!--                        <InputText label-title="Learning Objectives (optional)" input-type="text"-->
+                            <!--                                   v-model="moduleData.learning_objectives"/>-->
+                            <input type="file"
+                                   class="file-input file-input-bordered
                                       file-input-primary mt-4 w-full"
-                               @input="module.file_path = $event.target.files[0]"/>
-                    </div>
-                </GridLayout>
-            </div>
-            <div v-else-if="formStep === 3">
-                <h2 class="card-title mb-8">Grouping Option</h2>
-                <ul class="grid w-full gap-6 md:grid-cols-2">
-                    <li>
-                        <input type="radio" id="random" name="groupOption" value="random"
-                               v-model="form.option.group_distribution" class="hidden peer" required>
-                        <label for="random"
-                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                   @input="moduleData.file_path = $event.target.files[0]"/>
+                        </div>
+                    </GridLayout>
+                </div>
+                <div v-else-if="formStep === 3">
+                    <h2 class="card-title mb-8">Grouping Option</h2>
+                    <ul class="grid w-full gap-6 md:grid-cols-2">
+                        <li>
+                            <input type="radio" id="random" name="groupOption" value="random"
+                                   v-model="form.option.group_distribution" class="hidden peer" required>
+                            <label for="random"
+                                   class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                   <span class="block">
                      <p class="w-full text-lg font-semibold">Random</p>
                      <p class="w-full">Normal Randomise Students into Groups</p>
                   </span>
-                            <font-awesome-icon icon="fa-solid fa-shuffle" size="xl"/>
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" id="genderFixed" name="groupOption" value="genderFixed"
-                               v-model="form.option.group_distribution"
-                               class="hidden peer">
-                        <label for="genderFixed"
-                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">Fixed Gender</div>
-                                <div class="w-full">Group formation based on gender</div>
-                            </div>
-                            <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" id="genderMixed" name="groupOption" value="genderMixed"
-                               v-model="form.option.group_distribution"
-                               class="hidden peer">
-                        <label for="genderMixed"
-                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">Mixed Gender</div>
-                                <div class="w-full">Mixed Gender Group Formation</div>
-                            </div>
-                            <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
-                        </label>
-                    </li>
-                </ul>
-                <div class="divider"/>
-                <h2 class="card-title mb-8">Time Option for Jigsaw Session</h2>
-                <ul class="grid w-full gap-6 md:grid-cols-2">
-                    <li>
-                        <input type="radio" id="even" name="timeOption" value="even"
-                               v-model="form.option.time_method" class="hidden peer">
-                        <label for="even"
-                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                <font-awesome-icon icon="fa-solid fa-shuffle" size="xl"/>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="genderFixed" name="groupOption" value="genderFixed"
+                                   v-model="form.option.group_distribution"
+                                   class="hidden peer">
+                            <label for="genderFixed"
+                                   class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                <div class="block">
+                                    <div class="w-full text-lg font-semibold">Fixed Gender</div>
+                                    <div class="w-full">Group formation based on gender</div>
+                                </div>
+                                <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="genderMixed" name="groupOption" value="genderMixed"
+                                   v-model="form.option.group_distribution"
+                                   class="hidden peer">
+                            <label for="genderMixed"
+                                   class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                <div class="block">
+                                    <div class="w-full text-lg font-semibold">Mixed Gender</div>
+                                    <div class="w-full">Mixed Gender Group Formation</div>
+                                </div>
+                                <font-awesome-icon icon="fa-solid fa-user" size="xl"/>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="divider"/>
+                    <h2 class="card-title mb-8">Time Option for Jigsaw Session</h2>
+                    <ul class="grid w-full gap-6 md:grid-cols-2">
+                        <li>
+                            <input type="radio" id="even" name="timeOption" value="even"
+                                   v-model="form.option.time_method" class="hidden peer">
+                            <label for="even"
+                                   class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
                   <span class="block">
                      <p class="w-full text-lg font-semibold">Even</p>
                      <p class="w-full">Each Student will present with even minutes</p>
                   </span>
-                            <font-awesome-icon icon="fa-solid fa-equals" size="xl"/>
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" id="uneven" name="timeOption" value="uneven"
-                               v-model="form.option.time_method" class="hidden peer">
-                        <label for="uneven"
-                               class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">Uneven</div>
-                                <div class="w-full">Each student will present based on percentage of minutes</div>
-                            </div>
-                            <font-awesome-icon icon="fa-solid fa-not-equal" size="xl"/>
-                        </label>
-                    </li>
-                </ul>
-            </div>
-            <div v-else-if="formStep === 4">
-                <TimeCalculator :number-of-modules="form.topic.no_of_modules"
-                                :number-of-students="props.classroom.users_count"
-                                :modules-data="form.modules"
-                                :time-method="form.option.time_method"
-                                @out-data="getTime"/>
-            </div>
-            <div v-else-if="formStep === 5">
-                <GridLayout>
-                    <Stat title="Topic Name" :value="form.topic.name"/>
-                    <Stat title="Date and Time" :value="displayTime"/>
-                    <Stat title="Number of Modules" :value="form.topic.no_of_modules"/>
-                    <Stat title="Group Method" :value="form.option.group_distribution"/>
-                    <Stat title="Time Method for Jigsaw Session" :value="form.option.time_method"/>
-                </GridLayout>
-                <div class="divider">Module</div>
-                <GridLayout>
-                    <div v-for="(moduleData,index) in form.modules">
-                        <Stat :title="'Module' + (index+1)" :value="moduleData.name"/>
-                    </div>
-                </GridLayout>
-                <div class="divider">Time Session</div>
-                <GridLayout>
-                    <Stat title="Total Time" :value="form.topic.max_session + ' Minutes'"/>
-                    <Stat title="Buffer time" :value="form.topic.max_buffer + ' Minutes'"/>
-                    <Stat title="Expert Session" :value="form.topic.max_time_expert + ' Minutes'"/>
-                    <Stat title="Jigsaw Session" :value="form.topic.max_time_jigsaw + ' Minutes'"/>
-                    <Stat title="Transition Time" :value="form.topic.transition_time + ' Minutes'"/>
-                </GridLayout>
-                <div class="divider">Student Present in Jigsaw Session</div>
-                <GridLayout>
+                                <font-awesome-icon icon="fa-solid fa-equals" size="xl"/>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="uneven" name="timeOption" value="uneven"
+                                   v-model="form.option.time_method" class="hidden peer">
+                            <label for="uneven"
+                                   class="inline-flex items-center justify-between w-full p-5 rounded-lg bg-base-100 border border-base-300 cursor-pointer peer-checked:bg-base-300">
+                                <div class="block">
+                                    <div class="w-full text-lg font-semibold">Uneven</div>
+                                    <div class="w-full">Each student will present based on percentage of minutes</div>
+                                </div>
+                                <font-awesome-icon icon="fa-solid fa-not-equal" size="xl"/>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else-if="formStep === 4">
+                    <TimeCalculator :number-of-modules="form.topic.no_of_modules"
+                                    :number-of-students="props.classroom.users_count"
+                                    :modules-data="form.modules"
+                                    :time-method="form.option.time_method"
+                                    @out-data="getTime"/>
+                </div>
+                <div v-else-if="formStep === 5">
+                    <GridLayout>
+                        <Stat title="Topic Name" :value="form.topic.name"/>
+                        <Stat title="Date and Time" :value="displayTime"/>
+                        <Stat title="Number of Modules" :value="form.topic.no_of_modules"/>
+                        <Stat title="Group Method" :value="form.option.group_distribution"/>
+                        <Stat title="Time Method for Jigsaw Session" :value="form.option.time_method"/>
+                    </GridLayout>
+                    <div class="divider">Module</div>
+                    <GridLayout>
+                        <div v-for="(moduleData,index) in form.modules">
+                            <Stat :title="'Module' + (index+1)" :value="moduleData.name"/>
+                        </div>
+                    </GridLayout>
+                    <div class="divider">Time Session</div>
+                    <GridLayout>
+                        <Stat title="Total Time" :value="form.topic.max_session + ' Minutes'"/>
+                        <Stat title="Buffer time" :value="form.topic.max_buffer + ' Minutes'"/>
+                        <Stat title="Expert Session" :value="form.topic.max_time_expert + ' Minutes'"/>
+                        <Stat title="Jigsaw Session" :value="form.topic.max_time_jigsaw + ' Minutes'"/>
+                        <Stat title="Transition Time" :value="form.topic.transition_time + ' Minutes'"/>
+                    </GridLayout>
+                    <div class="divider">Module Time and File Detail</div>
                     <div v-for="(moduleData,index) in form.modules" :key="moduleData">
-                        <Stat :title="moduleData.name" :value="form.option.tm[index] + ' Minutes'"/>
-                    </div>
-                </GridLayout>
-            </div>
-            <div class="divider"/>
-
-            <div v-if="errors"
-                 class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div v-for="error in errors"
-                     class="alert alert-error w-full shadow-lg mb-4">
-                    <div>
-                        <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
-                        <p>{{ error.valueOf() }}</p>
+                        <p>{{ moduleData }}</p>
+                        <Stat :title="moduleData.name"
+                              :value="form.option.tm[index] + ' Minutes'"
+                              desc="Duration for student to Present"/>
+                        <iframe v-if="moduleData.file_path !== ''"
+                                :src="'../../../../modules/' + moduleData.file_path.name" type="application/pdf"
+                                width="100%" height="800"/>
                     </div>
                 </div>
-            </div>
-            <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
-            <button @click.prevent="duplicateTopic" class="btn btn-primary">Duplicate Topic</button>
-            <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
-                    class="btn btn-primary float-right mx-2">Proceed
-            </button>
-            <button v-else type="submit" @click.prevent="submitTopic"
-                    class="btn btn-primary float-right mx-2">Update Topic
-            </button>
-            <!--            <p>{{form.option}}</p>-->
-<!--            <p></p>-->
+                <div class="divider"/>
+
+                <div v-if="errors"
+                     class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div v-for="error in errors"
+                         class="alert alert-error w-full shadow-lg mb-4">
+                        <div>
+                            <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                            <p>{{ error.valueOf() }}</p>
+                        </div>
+                    </div>
+                </div>
+                <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
+                <button @click.prevent="duplicateTopic" class="btn btn-primary">Duplicate Topic</button>
+                <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
+                        class="btn btn-primary float-right mx-2">Proceed
+                </button>
+                <button v-else type="submit"
+                        class="btn btn-primary float-right mx-2">Update Topic
+                </button>
+                <!--            <p>{{form.option}}</p>-->
+                <!--            <p></p>-->
+            </form>
         </TitleCard>
     </Layout>
 </template>
@@ -214,21 +221,12 @@ const formatDate = (date) => {
     return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
 
-// const tm = reactive({
-//     1: option.tm1,
-//     2: option.tm2,
-//     3: option.tm3,
-//     4: option.tm4,
-//     5: option.tm5,
-//     6: option.tm6
-// })
 const form = useForm({
     topic: topic,
     option: option,
     modules: modules,
 })
 
-console.log(props.classroom)
 
 const formStep = ref(1);
 
@@ -282,7 +280,7 @@ const nextStep = () => {
                         modulesNew.push({
                             name: form.modules[i].name,
                             learning_objectives: form.modules[i].learning_objectives,
-                            file_path: form.modules[i].file_path,
+                            file_path: '',
                         })
                 }
             }
@@ -326,7 +324,12 @@ const nextStep = () => {
 }
 
 const submitTopic = () => {
-    form.put(route('topic.update', props.topic));
+    // router.get(route('topic.update', props.topic), {
+    //     topic: form.topic,
+    //     modules: form.modules,
+    //     option: form.option,
+    // })
+    form.post(route('topic.update', props.topic));
 }
 
 </script>

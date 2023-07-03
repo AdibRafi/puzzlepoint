@@ -2,7 +2,7 @@
     <Head title="Topic"/>
     <Layout page-title="Topic Menu">
         <TitleCard :title="props.topic.name"
-                   :top-right-button-label="isWizardComplete === 1 ? 'Edit Topic': ''"
+                   :top-right-button-label="(isWizardComplete === 1 && $page.props.auth.user.type === 'lecturer') ? 'Edit Topic': ''"
                    @button-function="editTopic">
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <div class="shadow bg-base-100 border-2">
@@ -55,7 +55,7 @@
                         <div
                             :class="'stat-figure btn btn-circle ' +
                         ((wizardStatus === 'onStartSession' || isAssessmentComplete)
-                         || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot)? 'btn-disabled':'btn-primary')"
+                         || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot) || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot === null)? 'btn-disabled':'btn-primary')"
                             @click.prevent="toAssessment(props.topic.id)">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
@@ -158,6 +158,8 @@ const wizardStatus = usePage().props.auth.user.wizard_status
 const isSessionComplete = props.topic.is_complete;
 const isAssessmentComplete = props.assessmentModal.is_complete;
 const isWizardComplete = usePage().props.auth.user.is_wizard_complete;
+// const isStudentFinishAssessment = (props.assessmentModal.pivot) === null ? false : props.assessmentModal.pivot.is_finish;
+// console.log(isStudentFinishAssessment);
 
 const setModuleExpand = () => {
     isModuleExpand.value = !isModuleExpand.value

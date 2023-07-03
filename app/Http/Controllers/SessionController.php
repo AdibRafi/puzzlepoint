@@ -277,12 +277,17 @@ class SessionController extends Controller
     {
         $topicModal = Topic::find($topic_id);
         $groupUserModal = Group::whereHas('users', function ($query) use ($topicModal) {
-            $query->where('user_id', Auth::id());
-            $query->where('topic_id', '=', $topicModal->id);
-        })->where('type', '=', $groupType)->with('users')->first();
+            $query->where('user_id', Auth::id())
+                ->where('topic_id', '=', $topicModal->id);
+        })->where('type', '=', $groupType)
+            ->with('users', function ($q) {
+                $q->withPivot('module_id')
+                    ->withPivot('module_name');
+            })->first();
 
+        $moduleModal = $topicModal->modules()->get();
 //        $userModal = Group::find($groupModal->id)->users()->get();
-        return [$topicModal, $groupUserModal];
+        return [$topicModal, $groupUserModal, $moduleModal];
     }
 
     private function changeAttendance($topic_id)
@@ -307,7 +312,7 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
-        return inertia('Session/Index', compact('topicModuleModal'));
+        return inertia('Session/Student/Index', compact('topicModuleModal'));
     }
 
     public function studentExpertSession(Request $request) //topic_id
@@ -340,17 +345,17 @@ class SessionController extends Controller
         $topicModal = Topic::find($request->input('topic_id'));
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
-            list($topicModal, $groupUserModal) =
+            list($topicModal, $groupUserModal, $moduleModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
             $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
 
 
         } else {
-            list($topicModal, $groupUserModal) =
+            list($topicModal, $groupUserModal, $moduleModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
         }
         return inertia('Session/Student/Jigsaw',
-            compact('topicModal', 'groupUserModal'));
+            compact('topicModal', 'groupUserModal', 'moduleModal'));
     }
 
     private function modifiedGroup($topic_id, $groupType, $userId)
