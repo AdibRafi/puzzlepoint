@@ -53,9 +53,7 @@
                 <div class="border-2 shadow bg-base-100">
                     <div class="stat">
                         <div
-                            :class="'stat-figure btn btn-circle ' +
-                        ((wizardStatus === 'onStartSession' || isAssessmentComplete)
-                         || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot) || ($page.props.auth.user.type === 'student' && props.assessmentModal.pivot === null)? 'btn-disabled':'btn-primary')"
+                            :class="'stat-figure btn btn-circle '"
                             @click.prevent="toAssessment(props.topic.id)">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>

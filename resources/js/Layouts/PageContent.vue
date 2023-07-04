@@ -16,6 +16,16 @@
                     <span class="mx-2">{{ $page.props.message.warningMessage }}</span>
                 </div>
             </div>
+            <ul v-if="!$page.props.auth.user.is_wizard_complete"
+                class="steps w-full my-2">
+                <li class="step step-primary">Add Classroom</li>
+                <li class="step step-primary">Add Student</li>
+                <li class="step">Add Topic</li>
+                <li class="step">Add Assessment</li>
+                <li class="step">Start Session</li>
+                <li class="step">End Assessment</li>
+                <li class="step">Archive</li>
+            </ul>
             <slot/>
             <div class="mt-16"/>
         </main>
