@@ -11,8 +11,8 @@
         <!--        </Card>-->
         <TitleCard>
             <TimeCalculator number-of-modules="4"
-                            number-of-students="40"
-                            time-method="even"
+                            number-of-students="100"
+                            time-method="uneven"
                             :modules-data="props.moduleData"
                             @out-data="getTime"/>
             <!--            <iframe src="modules/M1.pdf" type="application/pdf"-->
@@ -100,8 +100,7 @@ const addMessage = () => {
 }
 
 const getTime = (value) => {
-    console.log(value.outStudentPresent)
-    console.log(value.outTimeMethod)
+    console.log(value)
 }
 
 const tmDummy = {

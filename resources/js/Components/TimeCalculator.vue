@@ -10,18 +10,18 @@
         </GridLayout>
         <div v-else-if="isManual">
             <GridLayout>
-                <InputText label-title="How long is your class? (in minutes)"
-                           input-type="number"
-                           v-model="inputData.classDuration"/>
+                <!--                <InputText label-title="How long is your class? (in minutes)"-->
+                <!--                           input-type="number"-->
+                <!--                           v-model="inputData.classDuration"/>-->
                 <InputText label-title="How long is the buffer time? (in minutes)"
                            input-type="number"
                            v-model="inputData.bufferDuration"/>
                 <InputText label-title="How long is the Expert Session? (in minutes)"
                            input-type="number"
                            v-model="session.expert"/>
-                <InputText label-title="How long is the Jigsaw Session? (in minutes)"
-                           input-type="number"
-                           v-model="session.jigsaw"/>
+                <!--                <InputText label-title="How long is the Jigsaw Session? (in minutes)"-->
+                <!--                           input-type="number"-->
+                <!--                           v-model="session.jigsaw"/>-->
                 <div class="form-control w-full max-w-xs">
                     <label class="label">
                         <span class="label-text">Transition Time</span>
@@ -36,20 +36,20 @@
                     </select>
                 </div>
             </GridLayout>
-            <div class="divider"/>
+            <div class="divider">Module Time</div>
             <GridLayout>
                 <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
                     <Stat :title="moduleData.name">
                         <InputText label-title="How long? (in minutes)"
-                        input-type="number" v-model="session.studentPresent[index]"/>
+                                   input-type="number" v-model="session.studentPresent[index]"/>
                     </Stat>
                 </div>
             </GridLayout>
         </div>
         <div class="divider"/>
         <GridLayout>
-            <Stat title="Jigsaw Learning Session" desc="Duration for the whole session">
-                <div class="stat-value">{{ inputData.classDuration }} Minutes</div>
+            <Stat title="Jigsaw Learning Session" desc="Actual Duration for the Whole Session without Buffer Time">
+                <div class="stat-value">{{ displayWholeSession }} Minutes</div>
             </Stat>
             <Stat title="Buffer Time" desc="Duration available before starting the session">
                 <div class="stat-value">{{ displayBufferSession }} Minutes</div>
@@ -69,7 +69,7 @@
             <GridLayout>
                 <div v-for="(moduleData,index) in props.modulesData" :key="moduleData">
                     <Stat :title="moduleData.name">
-                        <div class="stat-value">{{displayStudentPresent[index]}} Minutes</div>
+                        <div class="stat-value">{{ displayStudentPresent[index] }} Minutes</div>
                     </Stat>
                 </div>
             </GridLayout>
@@ -116,6 +116,7 @@
                     class="btn btn-primary float-right">
                 Save Time
             </button>
+            <p>{{session.studentPresent}}</p>
         </div>
     </div>
 </template>
@@ -171,7 +172,7 @@ const generateTime = () => {
     } else if (props.numberOfStudents >= 70) {
         session.transition = 5;
     }
-    displayBufferSession.value = inputData.bufferDuration;
+    displayBufferSession.value = parseInt(inputData.bufferDuration);
 
     displayWholeSession.value = inputData.classDuration;
     displayWholeSession.value -= (session.transition * 2);
@@ -184,18 +185,18 @@ const generateTime = () => {
 
     if (props.timeMethod === 'uneven') {
         const sum = unevenTime.value.reduce((a, b) => a + b, 0)
-        const singleDuration = Math.round(session.jigsaw / sum)
-        // const singleDuration = session.jigsaw / sum
-        // displayUnevenTime.value = [];
+        const singleDuration = Math.floor(session.jigsaw / sum)
         for (let i = 0; i < props.modulesData.length; i++) {
             session.studentPresent.push(singleDuration * unevenTime.value[i]);
-            // displayUnevenTime.value.push(singleDuration * unevenTime.value[i]);
         }
     } else {
         for (let i = 0; i < props.modulesData.length; i++) {
-            session.studentPresent.push(Math.round((availableTime * 2) / props.numberOfModules));
+            session.studentPresent.push(Math.floor((availableTime * 2) / props.numberOfModules));
         }
     }
+
+    session.jigsaw = session.studentPresent.reduce((a, b) => a + b, 0);
+    displayWholeSession.value = session.jigsaw + session.expert + (session.transition * 2)
 
     displayExpertSession.value = session.expert;
     displayJigsawSession.value = session.jigsaw;
@@ -206,9 +207,9 @@ const generateTime = () => {
         outExpert: displayExpertSession.value,
         outJigsaw: displayJigsawSession.value,
         outStudentPresent: displayStudentPresent.value,
-        outTransition: displayTransitionTime,
-        outSession: inputData.classDuration,
-        outBuffer: displayBufferSession,
+        outTransition: displayTransitionTime.value,
+        outSession: displayWholeSession.value,
+        outBuffer: displayBufferSession.value,
         outTimeMethod: props.timeMethod
     });
 }
@@ -228,7 +229,7 @@ const changeInput = () => {
         session.studentPresent.push(ref(Number))
     }
 
-    displayWholeSession.value = ref();
+    displayWholeSession.value = 0;
     displayBufferSession.value = 0;
     displayExpertSession.value = 0;
     displayJigsawSession.value = 0;
@@ -237,19 +238,27 @@ const changeInput = () => {
 }
 
 const saveTime = () => {
-    displayBufferSession.value = inputData.bufferDuration;
-    displayExpertSession.value = session.expert;
-    displayJigsawSession.value = session.jigsaw;
-    displayTransitionTime.value = session.transition;
+    session.studentPresent = session.studentPresent.map(function (str) {
+        return parseInt(str);
+    });
+
+    displayBufferSession.value = parseInt(inputData.bufferDuration);
+    displayExpertSession.value = parseInt(session.expert);
+    displayTransitionTime.value = parseInt(session.transition);
+
+    session.jigsaw = session.studentPresent.reduce((a, b) => a + b, 0)
+    displayJigsawSession.value = session.jigsaw
     displayStudentPresent.value = session.studentPresent;
+
+    displayWholeSession.value = parseInt(session.expert) + session.jigsaw + parseInt((session.transition * 2));
 
     emit('outData', {
         outExpert: displayExpertSession.value,
         outJigsaw: displayJigsawSession.value,
         outStudentPresent: displayStudentPresent.value,
-        outTransition: displayTransitionTime,
-        outSession: inputData.classDuration,
-        outBuffer: displayBufferSession,
+        outTransition: displayTransitionTime.value,
+        outSession: displayWholeSession.value,
+        outBuffer: displayBufferSession.value,
         outTimeMethod: 'manual'
     });
 }

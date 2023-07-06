@@ -25,7 +25,6 @@ class TestController extends Controller
 //        $data = auth()->user()->attendances()->get();
         $user = User::where('email', '=', 'test@gmail.com')->exists();
 
-        dd($user);
         $data = auth()->user();
         $moduleData = Topic::find(1)->modules()->get();
 

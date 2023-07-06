@@ -83,6 +83,8 @@
                     </div>
                 </div>
             </div>
+            <button @click.prevent="back"
+                    class="btn btn-accent mt-10">Back to Classroom</button>
         </TitleCard>
         <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
              class="alert alert-info shadow-lg mt-10">
@@ -137,6 +139,8 @@ const props = defineProps({
     moduleModal: Object,
     studentModal: Object,
     assessmentModal: Object,
+    classroomModal: Object,
+    assessmentStatus: Object,
 })
 
 const formatDate = (date) => {
@@ -177,5 +181,9 @@ const toAssessment = (id) => {
 
 const editTopic = () => {
     router.get(route('topic.edit', props.topic));
+}
+
+const back = () => {
+    router.get(route('classroom.show', props.classroomModal));
 }
 </script>

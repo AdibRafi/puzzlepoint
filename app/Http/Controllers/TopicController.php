@@ -155,7 +155,10 @@ class TopicController extends Controller
 
         $moduleModal = $topic->modules()->get();
         $studentModal = $topic->getStudents();
+        $classroomModal = $topic->classroom()->first();
 
+        //todo: make assessment status from backend instead of frontend
+        $assessmentStatus = null;
         if (Auth::user()->type === 'student') {
             $pivot = Assessment::find($topic->assessment()->first()->id)
                 ->users()
@@ -171,7 +174,8 @@ class TopicController extends Controller
 
         return inertia('Topic/Show',
             compact('topic', 'moduleModal',
-                'studentModal', 'assessmentModal'));
+                'studentModal', 'assessmentModal', 'classroomModal',
+                'assessmentStatus'));
     }
 
     /**
