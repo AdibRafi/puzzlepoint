@@ -69,13 +69,13 @@
                 </div>
             </div>
             <div v-else-if="formStep === 2">
+                <div v-if="!isWizardComplete">
+                    <p>Here you may able to put in the detail of the modules</p>
+                    <br/>
+                    <p>You may edit, but we suggest use the example data.</p>
+                    <br/>
+                </div>
                 <GridLayout>
-                    <div v-if="!isWizardComplete">
-                        <p>Here you may able to put in the detail of the modules</p>
-                        <br/>
-                        <p>You may edit, but we suggest use the example data.</p>
-                        <br/>
-                    </div>
                     <div v-for="(moduleData, Index) in form.modules" class="border-2 p-4">
                         <InputText :label-title="'Module ' + (Index+1)+ ' Name'" input-type="text"
                                    v-model="moduleData.name"/>
@@ -306,6 +306,9 @@
                 </div>
             </GridLayout>
             <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
+            <button v-if="formStep >= 2"
+                    @click.prevent="previous" class="btn btn-primary mx-2">Previous
+            </button>
             <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
                     class="btn btn-primary float-right mx-2">Proceed
             </button>
@@ -394,7 +397,7 @@ if (!usePage().props.auth.user.is_wizard_complete) {
 }
 
 const back = () => {
-    router.get(route('classroom.show',props.classroomModal.id))
+    router.get(route('classroom.show', props.classroomModal.id))
 }
 
 const formatDate = (date) => {
@@ -504,106 +507,9 @@ const nextStep = () => {
             }
         })
     }
-    // if (wizardStatus === 'onCreateTopicsss') {
-    //     if (formStep.value === 1) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 1,
-    //             name: form.topic.name,
-    //             date_time: form.topic.date_time
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //             }
-    //         })
-    //     } else if (formStep.value === 2) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 2,
-    //             no_of_modules: form.topic.no_of_modules,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //                 for (let i = 0; i < form.topic.no_of_modules; i++) {
-    //                     modules.push({
-    //                         name: dummyData.modules[i],
-    //                         learning_objectives: '',
-    //                         file_path: '',
-    //                     })
-    //                 }
-    //             }
-    //         })
-    //     } else if (formStep.value === 3) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 3,
-    //             modules: form.modules,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //             }
-    //         })
-    //     } else if (formStep.value === 4) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 4,
-    //             option: form.option,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //             }
-    //         })
-    //     } else if (formStep.value === 5) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 5,
-    //             max_session: form.topic.max_session,
-    //             max_buffer: form.topic.max_buffer,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //                 displayTime.value = formatDate(new Date(form.topic.date_time))
-    //             }
-    //         })
-    //     } else if (formStep.value === 6) {
-    //         router.post(route('topic.wizard.step'), {
-    //             steps: 6,
-    //             date_time: form.topic.date_time,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //             }
-    //         })
-    //     }
-    // }
-    // else {
-    //     if (formStep.value === 1) {
-    //         router.post(route('topic.first.step'), {
-    //             name: form.topic.name,
-    //             date_time: form.topic.date_time,
-    //             no_of_modules: form.topic.no_of_modules,
-    //             max_time_expert: form.topic.max_time_expert,
-    //             max_time_jigsaw: form.topic.max_time_jigsaw,
-    //             transition_time: form.topic.transition_time,
-    //
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++;
-    //                 for (let i = 0; i < form.topic.no_of_modules; i++) {
-    //                     modules.push({
-    //                         name: '',
-    //                         learning_objectives: '',
-    //                         file_path: ''
-    //                     })
-    //                 }
-    //             }
-    //         });
-    //     } else if (formStep.value === 2) {
-    //         router.post(route('topic.second.step'), {
-    //             modules,
-    //         }, {
-    //             onSuccess: () => {
-    //                 formStep.value++
-    //                 evenTime.value = topic.max_time_jigsaw / parseInt(topic.no_of_modules)
-    //                 evenTimeFunction();
-    //             }
-    //         });
-    //     }
-    // }
+}
+
+const previous = () => {
+    formStep.value--;
 }
 </script>

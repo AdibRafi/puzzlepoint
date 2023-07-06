@@ -37,12 +37,12 @@
                         To add more, Click the + Button
                     </div>
                 </div>
-            </div>
-            <div v-if="wizardStatus === 'onCreateTopic'"
-                 class="alert alert-info shadow-lg">
-                <div>
-                    <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                    <span class="ml-4">Now Click the + Button to add Topic</span>
+                <div v-if="wizardStatus === 'onCreateTopic'"
+                     class="alert alert-info shadow-lg">
+                    <div>
+                        <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
+                        <span class="ml-4">Now Click the + Button to add Topic</span>
+                    </div>
                 </div>
             </div>
         </div>

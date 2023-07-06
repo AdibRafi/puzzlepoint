@@ -91,7 +91,9 @@ class GroupSeeder extends Seeder
             );
         });
 
-        User::factory($studentNum)->create();
+        User::factory($studentNum)->create([
+            'password' => bcrypt('test1234')
+        ]);
 
         User::all()->each(function ($user) use ($classrooms) {
             $user->classrooms()->syncWithoutDetaching(

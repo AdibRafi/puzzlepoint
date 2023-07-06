@@ -52,8 +52,9 @@
                 </div>
                 <div class="border-2 shadow bg-base-100">
                     <div class="stat">
+                        <!--todo: PRIORITY: FIND OUT HOW TO DISABLE-->
                         <div
-                            :class="'stat-figure btn btn-circle '"
+                            :class="'stat-figure btn btn-circle btn-primary '"
                             @click.prevent="toAssessment(props.topic.id)">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>

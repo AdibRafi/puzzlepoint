@@ -39,23 +39,18 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::where('email', '=', $request->email);
+
         $type = Str::contains($request->email, 'student');
-        if ($user->exists() && !$user->hasVerifiedEmail()) {
-            $user->update([
-                'password' => Hash::make($request->password)
-            ]);
-        } else {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'type' => $type ? 'student' : 'lecturer',
-                'gender' => $request->gender,
-                'wizard_status' => $type ? null : 'onCreateClassroom',
-                'is_wizard_complete' => $type ? 1 : 0,
-            ]);
-        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => $type ? 'student' : 'lecturer',
+            'gender' => $request->gender,
+            'wizard_status' => $type ? null : 'onCreateClassroom',
+            'is_wizard_complete' => $type ? 1 : 0,
+        ]);
 
 
         event(new Registered($user));

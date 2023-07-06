@@ -192,13 +192,6 @@ class ClassroomController extends Controller
         $classroomModal = Classroom::find($request->input('classroom_id'));
         $classroom_id = $request->input('classroom_id');
 
-        if (Auth::user()->is_wizard_complete === 0 &&
-            $classroomModal->users()->where('type', '=', 'student')->count() >= 20) {
-            Auth::user()->update([
-                'wizard_status' => 'onCreateTopic',
-            ]);
-        }
-
         if ($request->hasFile('file_path')) {
             $file = $request->file('file_path');
             $file->move('Student', $file->getClientOriginalName());
@@ -216,6 +209,12 @@ class ClassroomController extends Controller
                                 ->first()->id
                         );
                 }
+            }
+            if (Auth::user()->is_wizard_complete === 0 &&
+                $classroomModal->users()->where('type', '=', 'student')->count() >= 20) {
+                Auth::user()->update([
+                    'wizard_status' => 'onCreateTopic',
+                ]);
             }
             return redirect()->route('classroom.show', $classroomModal)
                 ->with('alertMessage', 'Students Successfully added');
@@ -247,6 +246,14 @@ class ClassroomController extends Controller
                     ]);
                 }
                 $classroomModal->users()->attach($checkUser);
+
+                if (Auth::user()->is_wizard_complete === 0 &&
+                    $classroomModal->users()->where('type', '=', 'student')->count() >= 20) {
+                    Auth::user()->update([
+                        'wizard_status' => 'onCreateTopic',
+                    ]);
+                }
+
                 return redirect()->route('classroom.add-student.create', compact('classroom_id'))
                     ->with('alertMessage', 'Student ' . $checkUser->name . ' Successfully added');
             }

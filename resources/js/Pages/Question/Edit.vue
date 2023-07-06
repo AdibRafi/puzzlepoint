@@ -88,13 +88,15 @@
                         <!--                    </span>-->
                     </div>
                 </div>
+                <button @click.prevent="back"
+                    class="btn btn-accent">Cancel</button>
                 <button class="btn btn-primary float-right" type="submit">
                     Update Question
                 </button>
             </TitleCard>
-            <p>{{ form }}</p>
-            <p>{{ form.answer[1].right_answer }}</p>
-            <p>{{checkRightAnswer}}</p>
+<!--            <p>{{ form }}</p>-->
+<!--            <p>{{ form.answer[1].right_answer }}</p>-->
+<!--            <p>{{checkRightAnswer}}</p>-->
         </form>
     </Layout>
 </template>
@@ -160,6 +162,11 @@ const destroyQuestion = () => {
         router.delete(route('question.destroy', props.questionAnswerModal))
     }
 }
+
+const back = () =>{
+    window.history.back();
+}
+
 </script>
 
 <style scoped>
