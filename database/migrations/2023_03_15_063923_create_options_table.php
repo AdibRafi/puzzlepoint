@@ -16,12 +16,12 @@ return new class extends Migration {
             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
             $table->string('group_distribution');
             $table->string('time_method');
-            $table->string('tm1')->nullable();
-            $table->string('tm2')->nullable();
-            $table->string('tm3')->nullable();
-            $table->string('tm4')->nullable();
-            $table->string('tm5')->nullable();
-            $table->string('tm6')->nullable();
+            $table->integer('tm1')->nullable();
+            $table->integer('tm2')->nullable();
+            $table->integer('tm3')->nullable();
+            $table->integer('tm4')->nullable();
+            $table->integer('tm5')->nullable();
+            $table->integer('tm6')->nullable();
             $table->timestamps();
         });
     }

@@ -71,6 +71,15 @@ class SessionController extends Controller
                     'max_time_expert' => ($topicModuleModal->max_time_expert + $splitTime),
                     'max_time_jigsaw' => ($topicModuleModal->max_time_jigsaw + $splitTime),
                 ]);
+                $splitTimeTm = floor($remainderTime / $topicModuleModal->no_of_modules);
+                $topicModuleModal->option()->update([
+                    'tm1' => ($topicModuleModal->option()->first()->tm1 + $splitTimeTm),
+                    'tm2' => ($topicModuleModal->option()->first()->tm2 + $splitTimeTm),
+                    'tm3' => ($topicModuleModal->option()->first()->tm3 + $splitTimeTm),
+                    'tm4' => ($topicModuleModal->option()->first()->tm4 + $splitTimeTm),
+                    'tm5' => ($topicModuleModal->option()->first()->tm5 + $splitTimeTm),
+                    'tm6' => ($topicModuleModal->option()->first()->tm6 + $splitTimeTm),
+                ]);
             }
             $topicModuleModal->update([
                 'is_buffer_add' => 1,

@@ -164,14 +164,20 @@
                         </div>
                     </div>
                 </div>
-                <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
-                <button @click.prevent="duplicateTopic" class="btn btn-primary">Duplicate Topic</button>
+                <button @click.prevent="back"
+                        class="btn btn-accent mx-2">Cancel</button>
+                <button v-if="formStep >= 2"
+                        @click.prevent="previousStep"
+                        class="btn btn-primary">Previous
+                </button>
                 <button v-if="formStep !== 5" type="submit" @click.prevent="nextStep"
                         class="btn btn-primary float-right mx-2">Proceed
                 </button>
                 <button v-else type="submit"
                         class="btn btn-primary float-right mx-2">Update Topic
                 </button>
+                <button @click.prevent="duplicateTopic"
+                        class="btn btn-primary float-right ">Duplicate Topic</button>
             </form>
         </TitleCard>
     </Layout>
@@ -261,6 +267,9 @@ const getTime = (value) => {
     form.option.time_method = value.outTimeMethod;
 
 }
+const previousStep = () => {
+    router.get(route('topic.show', props.topic))
+}
 
 const nextStep = () => {
     if (formStep.value === 1) {
@@ -275,13 +284,21 @@ const nextStep = () => {
         }, {
             onSuccess: () => {
                 formStep.value++;
+                console.log(form.topic.no_of_modules)
                 for (let i = 0; i < form.topic.no_of_modules; i++) {
-                    if (form.modules[i] !== undefined)
+                    if (form.modules[i] !== undefined) {
                         modulesNew.push({
                             name: form.modules[i].name,
                             learning_objectives: form.modules[i].learning_objectives,
                             file_path: '',
                         })
+                    } else {
+                        modulesNew.push({
+                            name: '',
+                            learning_objectives: '',
+                            file_path: ''
+                        })
+                    }
                 }
             }
         })

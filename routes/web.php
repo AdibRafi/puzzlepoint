@@ -41,14 +41,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboardA', function () {
-    return Inertia::render('Archives/DashboardA');
-})->middleware(['auth', 'verified'])->name('dashboardA');
+//Route::get('/dashboardA', function () {
+//    return Inertia::render('Archives/DashboardA');
+//})->middleware(['auth', 'verified'])->name('dashboardA');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
-    Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
-    Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
+//    Route::get('/profileA', [ProfileAController::class, 'edit'])->name('profileA.edit');
+//    Route::patch('/profileA', [ProfileAController::class, 'update'])->name('profileA.update');
+//    Route::delete('/profileA', [ProfileAController::class, 'destroy'])->name('profileA.destroy');
 
     Route::get('/test', [TestController::class, 'index'])->name('test.index');
     Route::post('/test', [TestController::class, 'store'])->name('test.store');

@@ -67,9 +67,10 @@ const moduleSecondCounter = ref(0);
 const moduleNum = ref();
 
 
-onMounted(() => {
-    console.log('mounted')
-})
+window.Echo.channel('move-expert-channel')
+    .stopListening('MoveExpertSession');
+window.Echo.channel('move-jigsaw-channel')
+    .stopListening('MoveJigsawSession')
 
 const props = defineProps({
     topicModal: Object,

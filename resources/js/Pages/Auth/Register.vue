@@ -1,4 +1,5 @@
 <template>
+    <Head title="Register" />
     <div class="min-h-screen bg-base-200 flex items-center">
         <div class="card mx-auto w-full max-w-5xl shadow-xl">
             <div class="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
@@ -15,10 +16,12 @@
                                        v-model="form.email"/>
                             <InputText label-title="Password"
                                        container-style="mt-4"
-                                       v-model="form.password"/>
+                                       v-model="form.password"
+                            input-type="password"/>
                             <InputText label-title="Password Confirmation"
                                        container-style="mt-4"
-                                       v-model="form.password_confirmation"/>
+                                       v-model="form.password_confirmation"
+                            input-type="password"/>
                             <ul class="grid w-full gap-6 md:grid-cols-2 mt-4">
                                 <li>
                                     <input type="radio" id="male" name="gender" value="male"
@@ -62,93 +65,9 @@
             </div>
         </div>
     </div>
-    <!--   <GuestLayout>-->
-    <!--      <Head title="Register" />-->
-
-    <!--      <form @submit.prevent="submit">-->
-    <!--         <div>-->
-    <!--            <InputLabel for="name" value="Name" />-->
-
-    <!--            <TextInput-->
-    <!--               id="name"-->
-    <!--               type="text"-->
-    <!--               class="mt-1 block w-full"-->
-    <!--               v-model="form.name"-->
-    <!--               required-->
-    <!--               autofocus-->
-    <!--               autocomplete="name"-->
-    <!--            />-->
-
-    <!--            <InputError class="mt-2" :message="form.errors.name" />-->
-    <!--         </div>-->
-
-    <!--         <div class="mt-4">-->
-    <!--            <InputLabel for="email" value="Email" />-->
-
-    <!--            <TextInput-->
-    <!--               id="email"-->
-    <!--               type="email"-->
-    <!--               class="mt-1 block w-full"-->
-    <!--               v-model="form.email"-->
-    <!--               required-->
-    <!--               autocomplete="username"-->
-    <!--            />-->
-
-    <!--            <InputError class="mt-2" :message="form.errors.email" />-->
-    <!--         </div>-->
-
-    <!--         <div class="mt-4">-->
-    <!--            <InputLabel for="password" value="Password" />-->
-
-    <!--            <TextInput-->
-    <!--               id="password"-->
-    <!--               type="password"-->
-    <!--               class="mt-1 block w-full"-->
-    <!--               v-model="form.password"-->
-    <!--               required-->
-    <!--               autocomplete="new-password"-->
-    <!--            />-->
-
-    <!--            <InputError class="mt-2" :message="form.errors.password" />-->
-    <!--         </div>-->
-
-    <!--         <div class="mt-4">-->
-    <!--            <InputLabel for="password_confirmation" value="Confirm Password" />-->
-
-    <!--            <TextInput-->
-    <!--               id="password_confirmation"-->
-    <!--               type="password"-->
-    <!--               class="mt-1 block w-full"-->
-    <!--               v-model="form.password_confirmation"-->
-    <!--               required-->
-    <!--               autocomplete="new-password"-->
-    <!--            />-->
-
-    <!--            <InputError class="mt-2" :message="form.errors.password_confirmation" />-->
-    <!--         </div>-->
-
-    <!--         <div class="flex items-center justify-end mt-4">-->
-    <!--            <Link-->
-    <!--               :href="route('login')"-->
-    <!--               class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"-->
-    <!--            >-->
-    <!--               Already registered?-->
-    <!--            </Link>-->
-
-    <!--            <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">-->
-    <!--               Register-->
-    <!--            </PrimaryButton>-->
-    <!--         </div>-->
-    <!--      </form>-->
-    <!--   </GuestLayout>-->
 </template>
 
 <script setup>
-import GuestLayout from '@/Layouts/Archives/GuestLayout.vue';
-import InputError from '@/Components/Archives/InputError.vue';
-import InputLabel from '@/Components/Archives/InputLabel.vue';
-import PrimaryButton from '@/Components/Archives/PrimaryButton.vue';
-import TextInput from '@/Components/Archives/TextInput.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
 import LandingIntro from "@/Pages/Welcome/LandingIntro.vue";
 import InputText from "@/Components/InputText.vue";

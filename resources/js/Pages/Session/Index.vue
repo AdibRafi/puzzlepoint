@@ -69,49 +69,17 @@
                 <div class="divider"/>
                 <GridLayout>
                     <Stat title="Topic Title" :value="props.topicModuleModal.name"/>
+                    <Stat title="Expert Session Duration" :value="props.topicModuleModal.max_time_expert + ' Minutes'" figure="fa-solid fa-hourglass"/>
+                    <Stat title="Jigsaw Session Duration" :value="props.topicModuleModal.max_time_jigsaw + ' Minutes'" figure="fa-solid fa-hourglass"/>
+                </GridLayout>
+                <div class="divider">Module</div>
+                <GridLayout>
                     <Stat v-for="(moduleData,index) in props.topicModuleModal.modules" :key="moduleData"
                           :title="'Module ' + (index + 1)" :value="moduleData.name"/>
-                </GridLayout>
-                <div class="divider"/>
-                <GridLayout>
-                    <Stat title="Expert Session Duration" :value="props.topicModuleModal.max_time_expert + ' Minutes'"/>
-                    <Stat title="Jigsaw Session Duration" :value="props.topicModuleModal.max_time_jigsaw + ' Minutes'"/>
                 </GridLayout>
             </TitleCard>
 
         </div>
-        <!--        <div v-if="$page.props.auth.user.type === 'lecturer'">-->
-        <!--            <Card :title="props.topicModuleModal.name">-->
-        <!--                <p>Module: </p>-->
-        <!--                <p v-for="moduleData in props.topicModuleModal.modules" :key="moduleData">-->
-        <!--                    {{ moduleData.name }}-->
-        <!--                </p>-->
-        <!--                <p>Expert Time = {{ props.topicModuleModal.max_time_expert }}</p>-->
-        <!--                <p>Jigsaw Time = {{ props.topicModuleModal.max_time_jigsaw }}</p>-->
-        <!--                <p>Total Student = {{ props.studentAttendModal.length + props.studentAbsentModal.length }}</p>-->
-        <!--            </Card>-->
-        <!--            <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
-        <!--                <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-        <!--                   class="text-red-500">{{ userData.name }}</p>-->
-        <!--            </Card>-->
-        <!--            <Card :title="'Present, '+props.studentAttendModal.length+' students'">-->
-        <!--                <p v-for="userData in props.studentAttendModal" :key="userData">-->
-        <!--                    {{ userData.name }}-->
-        <!--                </p>-->
-        <!--            </Card>-->
-        <!--            <Card>-->
-        <!--                <Link :href="route('lecturer.session.expert',{-->
-        <!--                    topic_id:props.topicModuleModal.id,-->
-        <!--                    minuteCounter: props.topicModuleModal.max_time_expert,-->
-        <!--                    secondCounter: 0,-->
-        <!--                    transitionMinuteCounter: props.topicModuleModal.transition_time,-->
-        <!--                    transitionSecondCounter:0,-->
-        <!--                })"-->
-        <!--                      class="btn btn-primary">Start-->
-        <!--                    Expert Session-->
-        <!--                </Link>-->
-        <!--            </Card>-->
-        <!--        </div>-->
     </SessionLayout>
 </template>
 

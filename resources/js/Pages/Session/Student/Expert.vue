@@ -2,7 +2,7 @@
     <SessionLayout page-title="Expert Session">
         <TitleCard :title="'Expert Session ' + props.topicModal.name">
             <TimerDisplayStatic session-type="Expert Time"
-                :minute-counter="minuteCounter"
+                                :minute-counter="minuteCounter"
                                 :second-counter="secondCounter"
                                 :transition-minute-counter="transitionMinuteCounter"
                                 :transition-second-counter="transitionSecondCounter"/>
@@ -40,7 +40,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import Card from "@/Components/Card.vue";
 import '../../../bootstrap'
 import {router} from "@inertiajs/vue3";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
 import VuePdfEmbed from "vue-pdf-embed";
 import Layout from "@/Layouts/Layout.vue";
@@ -61,21 +61,30 @@ console.log(props.moduleModal.file_path);
 const minuteCounter = ref(0);
 const secondCounter = ref(0);
 const transitionMinuteCounter = ref(0);
-
 const transitionSecondCounter = ref(0);
+
+window.Echo.channel('move-expert-channel')
+    .stopListening('MoveExpertSession');
+window.Echo.channel('move-jigsaw-channel')
+    .stopListening('MoveJigsawSession')
 
 window.Echo.channel('move-jigsaw-channel')
     .listen('MoveJigsawSession', (e) => {
         router.get(route('student.session.jigsaw', {topic_id: props.topicModal.id}))
     });
 
-window.Echo.channel('update-expert-session')
-    .listen('UpdateExpertSession', (e) => {
-        // console.log(e);
-        minuteCounter.value = e.minuteCounter;
-        secondCounter.value = e.secondCounter;
-        transitionMinuteCounter.value = e.transitionMinuteCounter;
-        transitionSecondCounter.value = e.transitionSecondCounter;
-    });
+const listenChannel = () => {
+    window.Echo.channel('update-expert-session')
+        .listen('UpdateExpertSession', (e) => {
+            console.log(e);
+            minuteCounter.value = e.minuteCounter;
+            secondCounter.value = e.secondCounter;
+            transitionMinuteCounter.value = e.transitionMinuteCounter;
+            transitionSecondCounter.value = e.transitionSecondCounter;
+        });
+
+}
+
+listenChannel()
 
 </script>
