@@ -94,40 +94,13 @@
                 </table>
             </div>
         </TitleCard>
-        <!--        <Card title="Expert Session">-->
-        <!--            <p>{{ props.topicModuleModal.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <TimerDisplay :initiate-minute="minuteCounter" :initiate-second="secondCounter"-->
-        <!--                      :initiate-transition-minute="transitionMinuteCounter"-->
-        <!--                      :initiate-transition-second="transitionSecondCounter"/>-->
-        <!--        <Card :title="'Absent, '+props.studentAbsentModal.length+' students'">-->
-        <!--            <p v-for="userData in props.studentAbsentModal" :key="userData"-->
-        <!--               class="text-red-500">{{ userData.name }}</p>-->
-        <!--        </Card>-->
-        <!--        <div v-for="groupData in props.expertGroupUserModal">-->
-        <!--            <Card :title="groupData.name">-->
-        <!--                <div v-for="userData in groupData.users">-->
-        <!--                    <p>{{ userData.name }}</p>-->
-        <!--                </div>-->
-        <!--            </Card>-->
-        <!--        </div>-->
-        <!--        <Card>-->
-        <!--            <Link :href="route('lecturer.session.jigsaw',-->
-        <!--            {topic_id:props.topicModuleModal.id})"-->
-        <!--                  class="btn btn-primary">-->
-        <!--                Next to Jigsaw-->
-        <!--            </Link>-->
-        <!--        </Card>-->
     </SessionLayout>
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
-import Card from "@/Components/Card.vue";
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import {onMounted, onUnmounted, ref} from "vue";
 import '../../../bootstrap'
-import TimerDisplay from "@/Components/TimerDisplay.vue";
 import SessionLayout from "@/Layouts/SessionLayout.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import TitleCard from "@/Components/TitleCard.vue";
@@ -161,16 +134,6 @@ window.Echo.channel('student-attendance-channel')
         // setTimeout(postTime, 5000);
     })
 
-const buttonTest = () => {
-    router.reload({
-        data: {
-            minuteCounter: minuteCounter.value,
-            secondCounter: secondCounter.value,
-            transitionMinuteCounter: transitionMinuteCounter.value,
-            transitionSecondCounter: transitionSecondCounter.value
-        }
-    });
-}
 
 const addOneMinute = () => {
     minuteCounter.value++;

@@ -19,7 +19,8 @@ import {
     faCircleInfo, faPenToSquare,
     faUpload, faPlay,
     faForwardStep, faClipboard,
-    faUserSecret, faPerson, faPersonDress
+    faUserSecret, faPerson, faPersonDress,
+    faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import {faCircleCheck, faAddressCard, faSquare, faClone} from "@fortawesome/free-regular-svg-icons"
 
@@ -28,4 +29,4 @@ library.add(faAnglesLeft, faBars, faArrowRightFromBracket, faUser,
     faCircleExclamation, faXmark, solidFaCircle, faPuzzlePiece,
     faAngleDown, faArrowRightToBracket, faHourglass, faShuffle, faEquals,
     faNotEqual, faAddressCard, faArrowUpRightFromSquare, faHand, faCircleInfo, faPenToSquare
-    , faHourglassStart, faHourglassEnd, faHourglassHalf, faClone, faSquare, faUpload, faPlay, faForwardStep, faClipboard, faUserSecret,faPerson,faPersonDress);
+    , faHourglassStart, faHourglassEnd, faHourglassHalf, faClone, faSquare, faUpload, faPlay, faForwardStep, faClipboard, faUserSecret, faPerson, faPersonDress, faTrash);

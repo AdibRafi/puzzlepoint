@@ -45,8 +45,26 @@ class SessionController extends Controller
             'is_start' => 1,
         ]);
 
+        $numOfModule = $topicModuleModal->no_of_modules;
+        $minStudent = null;
+        if ($numOfModule === 2) {
+            $minStudent = 4;
+        } elseif ($numOfModule === 3) {
+            $minStudent = 6;
+        } elseif ($numOfModule === 4) {
+            $minStudent = 8;
+        } elseif ($numOfModule === 5) {
+            $minStudent = 10;
+        } elseif ($numOfModule === 6) {
+            $minStudent = 12;
+        }
+
+        if (Auth::user()->type === 'student') {
+            $this->changeAttendance($topicModuleModal->id);
+        }
+
         return inertia('Session/Index', compact('topicModuleModal',
-            'studentAttendModal', 'studentAbsentModal', 'timeAddBuffer'));
+            'studentAttendModal', 'studentAbsentModal', 'timeAddBuffer', 'minStudent'));
 
     }
 
@@ -121,7 +139,7 @@ class SessionController extends Controller
 
             (int)$totalGroup = floor(count($doneShuffleStudent) / $topicModuleModal->no_of_modules);
 
-            if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+            if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 12) {
                 $numOfModules *= 2;
 //                $totalGroup /= 2;
                 $modulesId = $modulesId->merge($modulesId);
@@ -206,7 +224,7 @@ class SessionController extends Controller
 
         (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
 
-        if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+        if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 12) {
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
@@ -321,6 +339,7 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
+
         return inertia('Session/Student/Index', compact('topicModuleModal'));
     }
 
@@ -332,16 +351,16 @@ class SessionController extends Controller
         $topicModal = Topic::find($request->input('topic_id'));
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
+            $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
             list($topicModal, $groupUserModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
-            $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
 
         } else {
             list($topicModal, $groupUserModal) =
                 $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
         }
 
-        $moduleModal = $groupUserModal->module()->first();
+        $moduleModal = $groupUserModal->module()->exists() ? $groupUserModal->module()->first() : null;
         return inertia('Session/Student/Expert',
             compact('topicModal', 'groupUserModal', 'moduleModal'));
 

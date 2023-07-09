@@ -42,25 +42,28 @@
                     </table>
                 </div>
                 <div class="divider mb-6"/>
-                <div class="float-left shadow bg-base-100 border-2 w-80">
-                    <div class="stat">
-                        <div class="stat-figure text-secondary">
-                            <font-awesome-icon icon="fa-solid fa-hourglass" size="xl"/>
-                        </div>
-                        <div class="stat-title">Time After Buffer</div>
-                        <div class="stat-value">{{ props.timeAddBuffer }}</div>
-                        <div class="stat-desc">
-                            You can start early if you like
-                        </div>
-                    </div>
-                </div>
-                <div :class="'float-right ' +
+                <GridLayout>
+                    <Stat title="Time After Buffer"
+                          :value="props.timeAddBuffer"
+                          desc="You can Start Early if you like"
+                          figure="fa-solid fa-hourglass"/>
+                    <Stat title="Minimum Student To Start"
+                          :value="props.minStudent +' Students'"
+                          desc="This is to avoid trouble when starting the session"
+                          figure="fa-solid fa-user"/>
+                </GridLayout>
+
+                <div :class="'float-right mt-4 ' +
                 (wizardStatus === 'onStartSession' ?
                 'tooltip tooltip-open tooltip-info tooltip-left':'')"
                      :data-tip="(wizardStatus=== 'onStartSession' ?
                  'Click here to continue':'')">
-                    <button class="btn btn-primary" @click="proceedExpert">Proceed to Expert Session</button>
+                    <button
+                        :class="'btn ' + (props.studentAttendModal.length >= props.minStudent ? 'btn-primary' : 'btn-disabled')"
+                        @click.prevent="proceedExpert">Proceed to Expert Session
+                    </button>
                 </div>
+                <p>{{ props.studentAttendModal.length }} : {{ props.minStudent }}</p>
             </TitleCard>
         </div>
         <div v-if="$page.props.auth.user.type ==='student'">
@@ -69,8 +72,10 @@
                 <div class="divider"/>
                 <GridLayout>
                     <Stat title="Topic Title" :value="props.topicModuleModal.name"/>
-                    <Stat title="Expert Session Duration" :value="props.topicModuleModal.max_time_expert + ' Minutes'" figure="fa-solid fa-hourglass"/>
-                    <Stat title="Jigsaw Session Duration" :value="props.topicModuleModal.max_time_jigsaw + ' Minutes'" figure="fa-solid fa-hourglass"/>
+                    <Stat title="Expert Session Duration" :value="props.topicModuleModal.max_time_expert + ' Minutes'"
+                          figure="fa-solid fa-hourglass"/>
+                    <Stat title="Jigsaw Session Duration" :value="props.topicModuleModal.max_time_jigsaw + ' Minutes'"
+                          figure="fa-solid fa-hourglass"/>
                 </GridLayout>
                 <div class="divider">Module</div>
                 <GridLayout>
@@ -99,6 +104,7 @@ const props = defineProps({
     studentAttendModal: Object,
     studentAbsentModal: Object,
     timeAddBuffer: Object,
+    minStudent: Object
 })
 
 const wizardStatus = usePage().props.auth.user.wizard_status
@@ -112,11 +118,12 @@ const proceedExpert = () => {
         transitionSecondCounter: 0,
     }))
 }
-
-window.Echo.channel('student-attendance-channel')
-    .listen('StudentAttendance', (e) => {
-        router.reload();
-    })
+if (usePage().props.auth.user.type === 'lecturer') {
+    window.Echo.channel('student-attendance-channel')
+        .listen('StudentAttendance', (e) => {
+            router.reload();
+        });
+}
 
 if (usePage().props.auth.user.type === 'student') {
     window.Echo.channel('move-expert-channel')

@@ -129,16 +129,13 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, router, useForm} from "@inertiajs/vue3";
 import '../bootstrap';
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import CardTable from "@/Components/CardTable.vue";
-import Card from "@/Components/Card.vue";
 import InputText from "@/Components/InputText.vue";
 import {ref} from "vue";
-import Checkbox from "@/Components/Archives/Checkbox.vue";
 
 // router.on('start', (e) => {
 //     router.reload();

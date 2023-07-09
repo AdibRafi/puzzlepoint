@@ -72,7 +72,7 @@ class TestController extends Controller
 
             (int)$totalGroup = floor(count($doneShuffleStudent) / $topicModuleModal->no_of_modules);
 
-            if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+            if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 6) {
                 $numOfModules *= 2;
 //                $totalGroup /= 2;
                 $modulesId = $modulesId->merge($modulesId);
@@ -134,7 +134,7 @@ class TestController extends Controller
 
         (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
 
-        if ($totalGroup % 2 === 0 && $numOfModules <= 3) {
+        if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 6) {
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);

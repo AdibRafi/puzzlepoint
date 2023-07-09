@@ -416,14 +416,12 @@ class TopicController extends Controller
         $optionNew->topic()->associate($topicNew);
         $optionNew->save();
 
-        $assessmentNew = $topicOld->assessment()->first()->replicate()->fill([
-            'time' => null,
-            'is_ready_publish' => 0,
-            'is_publish' => 0,
-            'is_complete' => 0,
-            'publish_end' => null,
-        ]);
+
+        $assessmentNew = new Assessment();
         $assessmentNew->topic()->associate($topicNew);
+        $assessmentNew->is_ready_publish = 0;
+        $assessmentNew->is_publish = 0;
+        $assessmentNew->is_complete = 0;
         $assessmentNew->save();
 
         $modulesOld = $topicOld->modules()->get();

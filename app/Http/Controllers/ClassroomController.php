@@ -260,31 +260,11 @@ class ClassroomController extends Controller
         }
     }
 
-    private function csvToArray($filename = '', $delimiter = ',')
+    public function removeStudentFromClassroom(Request $request) //classroom_id, student_id
     {
-        if (!file_exists($filename) || !is_readable($filename))
-            return false;
-
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== false) {
-            $header = fgetcsv($handle);
-            while ($row = fgetcsv($handle)) {
-                $data[] = array_combine($header, $row);
-            }
-        }
-        fclose($handle);
-//        $header = null;
-//        $data = array();
-//        if (($handle = fopen($filename, 'r')) !== false) {
-//            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
-//                if (!$header)
-//                    $header = $row;
-//                else
-//                    $data[] = array_combine($header, $row);
-//            }
-//            fclose($handle);
-//        }
-
-        return $data;
+        $classroomModal = Classroom::find($request->input('classroom_id'));
+        $studentModal = User::find($request->input('student_id'));
+        $classroomModal->users()->detach($studentModal->id);
+        return back()->with('alertMessage', 'Student ' . $studentModal->name . ' Successfully Remove');
     }
 }

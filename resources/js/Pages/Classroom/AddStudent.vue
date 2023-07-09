@@ -84,6 +84,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Gender</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -91,6 +92,10 @@
                         <td>{{ studentData.name }}</td>
                         <td>{{ studentData.email }}</td>
                         <td>{{ studentData.gender }}</td>
+                        <td class="btn btn-circle btn-warning opacity-75"
+                            @click.prevent="deleteStudent(studentData.id)">
+                            <font-awesome-icon icon="fa-solid fa-trash" size="lg"/>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -134,6 +139,12 @@ const submit = () => {
             wizardStatus = usePage().props.auth.user.wizard_status
         }
     });
+}
 
+const deleteStudent = (id) => {
+    router.post(route('add-student.remove'), {
+        classroom_id: props.classroomModal.id,
+        student_id: id
+    });
 }
 </script>
