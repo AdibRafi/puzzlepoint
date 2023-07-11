@@ -352,13 +352,10 @@ class SessionController extends Controller
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
             $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
-            list($topicModal, $groupUserModal) =
-                $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
 
-        } else {
-            list($topicModal, $groupUserModal) =
-                $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
         }
+        list($topicModal, $groupUserModal) =
+            $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
 
         $moduleModal = $groupUserModal->module()->exists() ? $groupUserModal->module()->first() : null;
         return inertia('Session/Student/Expert',
@@ -373,15 +370,10 @@ class SessionController extends Controller
         $topicModal = Topic::find($request->input('topic_id'));
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
-            list($topicModal, $groupUserModal, $moduleModal) =
-                $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
             $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
-
-
-        } else {
-            list($topicModal, $groupUserModal, $moduleModal) =
-                $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
         }
+        list($topicModal, $groupUserModal, $moduleModal) =
+            $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
         return inertia('Session/Student/Jigsaw',
             compact('topicModal', 'groupUserModal', 'moduleModal'));
     }

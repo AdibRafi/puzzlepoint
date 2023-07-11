@@ -172,7 +172,7 @@ class ClassroomController extends Controller
     public function addStudentCreate(Request $request) //classroom_id
     {
 //        dd($request->all());
-        $classroomModal = Classroom::find($request->input('classroom_id'))->first();
+        $classroomModal = Classroom::find($request->input('classroom_id'));
         $studentsModal = $classroomModal->users()
             ->where('type', '=', 'student')
             ->get();

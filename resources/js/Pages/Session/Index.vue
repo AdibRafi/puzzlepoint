@@ -63,7 +63,6 @@
                         @click.prevent="proceedExpert">Proceed to Expert Session
                     </button>
                 </div>
-                <p>{{ props.studentAttendModal.length }} : {{ props.minStudent }}</p>
             </TitleCard>
         </div>
         <div v-if="$page.props.auth.user.type ==='student'">
@@ -89,8 +88,6 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
-import Card from "@/Components/Card.vue";
 import '../../bootstrap'
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import SessionLayout from "@/Layouts/SessionLayout.vue";
