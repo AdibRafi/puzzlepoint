@@ -14,7 +14,7 @@
                </span>
             </div>
         </div>
-        <TitleCard :title="props.topicModuleModal.name"
+        <TitleCard :title="'Jigsaw Session - '+props.topicModuleModal.name"
                    top-right-button-label="Add 1 Minute"
                    @button-function="addOneMinute">
 
@@ -106,15 +106,12 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
-import Card from "@/Components/Card.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import '../../../bootstrap'
 import SessionLayout from "@/Layouts/SessionLayout.vue";
 import CardTable from "@/Components/CardTable.vue";
 import TitleCard from "@/Components/TitleCard.vue";
-import TimerDisplay from "@/Components/TimerDisplay.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import TimerDisplayStatic from "@/Components/TimerDisplayStatic.vue";
 
@@ -151,11 +148,6 @@ const addOneMinute = () => {
 //     }))
 // }
 
-const buttonTest = () => {
-    console.log('nice');
-    router.reload();
-    // postTime()
-}
 
 const endSession = () => {
     router.get(route('lecturer.session.end'), {
@@ -176,7 +168,6 @@ window.Echo.channel('student-attendance-channel')
     .listen('StudentAttendance', (e) => {
         console.log(e);
         router.reload();
-        // setTimeout(postTime, 5000)
     })
 
 
@@ -211,7 +202,6 @@ const interval = setInterval(() => {
         }
     }
 
-    console.log('jigsaw update Time')
     router.post(route('update.time'), {
         sessionType: 'jigsaw',
         minuteCounter: minuteCounter.value,

@@ -24,7 +24,7 @@
                             class="btn btn-accent">Cancel
                     </button>
                     <button type="submit" :disabled="form.processing"
-                            class="btn btn-primary float-right">Create Classroom
+                            class="btn btn-primary float-right">{{usePage().props.auth.user.type === 'lecturer' ? 'Create Classroom' : 'Join Classroom'}}
                     </button>
                 </div>
             </TitleCard>
@@ -33,10 +33,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
 import {Head, Link, router, useForm, usePage} from "@inertiajs/vue3";
-import InputForm from "@/Components/InputForm.vue";
-import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";

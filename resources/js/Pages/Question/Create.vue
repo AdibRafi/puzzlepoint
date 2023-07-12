@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="mt-16">
-                        <span @click="radioAnsNumber--"
+                        <span @click="radioAnsNumber === 1 ? null : radioAnsNumber--"
                               class="btn btn-circle float-left inline scale-90">
                             <font-awesome-icon icon="fa-solid fa-minus"
                                                class="scale-150 p-4"/>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     <div class="mt-12">
-                    <span @click="checkAnsNumber--"
+                    <span @click="checkAnsNumber === 1 ? null : checkAnsNumber--"
                           class="btn btn-circle float-left inline scale-90">
                         <font-awesome-icon icon="fa-solid fa-minus"
                                            class="scale-150 p-4"/>
@@ -119,7 +119,8 @@
                 <div :class="'float-right mx-2 ' +
                 (wizardStatus === 'onPublishAssessment' ? 'tooltip tooltip-info tooltip-open tooltip-bottom lg:tooltip-left':'')"
                      data-tip="If you're done, Click here to return to assessment page">
-                    <Link v-if="wizardStatus === 'onPublishAssessment' || $page.props.auth.user.is_wizard_complete" :href="route('assessment.index',{
+                    <Link v-if="wizardStatus === 'onPublishAssessment' || $page.props.auth.user.is_wizard_complete"
+                          :href="route('assessment.index',{
                         assessment_id:props.assessment_id
                     })"
                           class="btn btn-secondary">
@@ -129,8 +130,8 @@
                 <div v-if="errors" class="mt-6">
                     <div v-for="error in errors"
                          class="alert alert-error w-full shadow-lg mb-4">
-                            <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
-                            <p>{{ error.valueOf() }}</p>
+                        <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                        <p>{{ error.valueOf() }}</p>
                     </div>
                 </div>
             </form>

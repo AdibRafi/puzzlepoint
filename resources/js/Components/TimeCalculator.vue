@@ -116,7 +116,6 @@
                     class="btn btn-primary float-right">
                 Save Time
             </button>
-            <p>{{session.studentPresent}}</p>
         </div>
     </div>
 </template>
@@ -238,10 +237,10 @@ const changeInput = () => {
 }
 
 const saveTime = () => {
+    // For Manual Input
     session.studentPresent = session.studentPresent.map(function (str) {
         return parseInt(str);
     });
-
     displayBufferSession.value = parseInt(inputData.bufferDuration);
     displayExpertSession.value = parseInt(session.expert);
     displayTransitionTime.value = parseInt(session.transition);
@@ -250,7 +249,8 @@ const saveTime = () => {
     displayJigsawSession.value = session.jigsaw
     displayStudentPresent.value = session.studentPresent;
 
-    displayWholeSession.value = parseInt(session.expert) + session.jigsaw + parseInt((session.transition * 2));
+    displayWholeSession.value = parseInt(session.expert) + session.jigsaw +
+        parseInt((session.transition * 2));
 
     emit('outData', {
         outExpert: displayExpertSession.value,

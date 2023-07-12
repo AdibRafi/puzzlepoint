@@ -41,9 +41,9 @@ class SessionController extends Controller
 
         $timeAddBuffer = $timeFromDb->addMinutes($topicModuleModal->max_buffer)->format('H:i');
 
-        $topicModuleModal->update([
-            'is_start' => 1,
-        ]);
+//        dd($timeFromDb);
+//        dd($timeFromDb->subMinutes(15));
+
 
         $numOfModule = $topicModuleModal->no_of_modules;
         $minStudent = null;
@@ -59,7 +59,7 @@ class SessionController extends Controller
             $minStudent = 12;
         }
 
-        if (Auth::user()->type === 'student') {
+        if (Auth::user()->type === 'student' && $topicModuleModal->is_start === 0) {
             $this->changeAttendance($topicModuleModal->id);
         }
 
@@ -74,6 +74,10 @@ class SessionController extends Controller
         list($topicModuleModal, $studentAttendModal, $studentAbsentModal) =
             $this->initiateTopicModuleStudentModal($request->input('topic_id'));
 
+        $topicModuleModal->update([
+            'is_start' => 1,
+        ]);
+
         if ($topicModuleModal->is_buffer_add === 0) {
             $timeFromDb = Carbon::parse($topicModuleModal->date_time);
             $timeNow = Carbon::now();
@@ -81,7 +85,6 @@ class SessionController extends Controller
             $diff = $timeNow->diff($timeFromDb);
 
             $remainderTime = ($topicModuleModal->max_buffer) - $diff->i;
-//          todo: divide with student present on jigsaw session
             if ($remainderTime > 0) {
                 $splitTime = floor($remainderTime / 2);
                 $topicModuleModal->update([
@@ -147,8 +150,6 @@ class SessionController extends Controller
 
             $splitUser = $doneShuffleStudent->split($numOfModules);
 
-
-//            dd(count($splitUser[0]) >= 7);
             if (count($splitUser[0]) > 7) {
                 while (count($splitUser[0]) > 7) {
                     $numOfModules *= 2;
@@ -274,6 +275,7 @@ class SessionController extends Controller
                     ->first();
                 $jigsawGroup->users()->attach($remainderUser->pop());
             }
+
             $topicModuleModal->update([
                 'is_jigsaw_form' => 1
             ]);
@@ -346,13 +348,16 @@ class SessionController extends Controller
     public function studentExpertSession(Request $request) //topic_id
     {
 
-        $attendance = Auth::user()->attendances()->where('topic_id', '=', $request->input('topic_id'))->where('attend_status', '=', 'absent')->exists();
+        $attendance = Auth::user()->attendances()
+            ->where('topic_id', '=', $request->input('topic_id'))
+            ->where('attend_status', '=', 'absent')
+            ->exists();
 
         $topicModal = Topic::find($request->input('topic_id'));
+
         if ($attendance) {
             $this->changeAttendance($topicModal->id);
             $this->modifiedGroup($topicModal->id, 'expert', Auth::id());
-
         }
         list($topicModal, $groupUserModal) =
             $this->initiateStudentSessionModal($request->input('topic_id'), 'expert');
@@ -369,8 +374,8 @@ class SessionController extends Controller
 
         $topicModal = Topic::find($request->input('topic_id'));
         if ($attendance) {
-            $this->changeAttendance($topicModal->id);
             $this->modifiedGroup($topicModal->id, 'jigsaw', Auth::id());
+            $this->changeAttendance($topicModal->id);
         }
         list($topicModal, $groupUserModal, $moduleModal) =
             $this->initiateStudentSessionModal($request->input('topic_id'), 'jigsaw');
@@ -389,6 +394,11 @@ class SessionController extends Controller
         $minUser = $groupModalCount->min('users_count');
         $group = $groupModalCount->where('users_count', '=', $minUser)->first();
         $group->users()->attach($userId);
+        if ($groupType === 'jigsaw') {
+            $group->users()->updateExistingPivot($userId, [
+                'module_name' => 'Late Comers'
+            ]);
+        }
     }
 
     public function updateTime(Request $request) //time related, sessionType

@@ -165,7 +165,8 @@
                     </div>
                 </div>
                 <button @click.prevent="back"
-                        class="btn btn-accent mx-2">Cancel</button>
+                        class="btn btn-accent mx-2">Cancel
+                </button>
                 <button v-if="formStep >= 2"
                         @click.prevent="previousStep"
                         class="btn btn-primary">Previous
@@ -177,7 +178,8 @@
                         class="btn btn-primary float-right mx-2">Update Topic
                 </button>
                 <button @click.prevent="duplicateTopic"
-                        class="btn btn-primary float-right ">Duplicate Topic</button>
+                        class="btn btn-primary float-right ">Duplicate Topic
+                </button>
             </form>
         </TitleCard>
     </Layout>
@@ -268,7 +270,7 @@ const getTime = (value) => {
 
 }
 const previousStep = () => {
-    router.get(route('topic.show', props.topic))
+    formStep.value--;
 }
 
 const nextStep = () => {
@@ -284,7 +286,7 @@ const nextStep = () => {
         }, {
             onSuccess: () => {
                 formStep.value++;
-                console.log(form.topic.no_of_modules)
+                modulesNew.splice(0)
                 for (let i = 0; i < form.topic.no_of_modules; i++) {
                     if (form.modules[i] !== undefined) {
                         modulesNew.push({

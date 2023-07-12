@@ -40,6 +40,8 @@ class TopicController extends Controller
                 }
             ]);
 
+        //todo: PRIORITY set status on assessment and session
+
         return inertia('Topic/Create', compact('classroomModal'));
     }
 

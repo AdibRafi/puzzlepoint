@@ -178,18 +178,21 @@ class AssessmentController extends Controller
         }
 
         $assessmentId = Question::find($ansInput->pluck('id')[0])
-            ->assessment()
-            ->first()
-            ->pluck('id');
+            ->assessment()->first()->id;
 
-        $assessmentModal = Assessment::find($assessmentId)->first();
+//            ->first()
+//            ->pluck('id');
+//        dd($assessmentId);
+
+        $assessmentModal = Assessment::find($assessmentId);
+//        dd($assessmentModal);
 
         $assessmentModal->users()->updateExistingPivot(Auth::id(), ['marks' => $score]);
 //        dd(Auth::user());
 //        Assessment::find(1)->users()->attach(2);
         $topicId = $assessmentModal->topic()->first()->id;
 //        dd($topicId);
-        return redirect()->route('student.assessment.index', ['topic_id' => $topicId])
+        return redirect()->route('topic.show', $topicId)
             ->with('alertMessage', 'You got ' . $score . ' scores');
     }
 

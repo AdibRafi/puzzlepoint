@@ -459,6 +459,7 @@ const nextStep = () => {
             onSuccess: () => {
                 formStep.value++;
                 if (isWizardComplete) {
+                    form.modules = [];
                     for (let i = 0; i < form.topic.no_of_modules; i++) {
                         form.modules.push({
                             name: '',

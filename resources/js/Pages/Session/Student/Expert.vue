@@ -1,6 +1,6 @@
 <template>
     <SessionLayout page-title="Expert Session">
-        <TitleCard :title="'Expert Session ' + props.topicModal.name">
+        <TitleCard :title="'Expert Session - ' + props.topicModal.name">
             <TimerDisplayStatic session-type="Expert Time"
                                 :minute-counter="minuteCounter"
                                 :second-counter="secondCounter"

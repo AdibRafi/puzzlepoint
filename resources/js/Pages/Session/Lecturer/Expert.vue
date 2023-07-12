@@ -14,7 +14,7 @@
                </span>
             </div>
         </div>
-        <TitleCard :title="props.topicModuleModal.name"
+        <TitleCard :title="'Expert Session - '+props.topicModuleModal.name"
                    top-right-button-label="Add 1 Minute"
                    @button-function="addOneMinute">
             <TimerDisplayStatic :minute-counter="minuteCounter" :second-counter="secondCounter"
@@ -49,7 +49,7 @@
                  :data-tip="(wizardStatus=== 'onStartSession' ?
                  'Click here to continue':'')">
                 <button class="btn btn-primary" @click.prevent="toJigsawSession">
-                    Proceed to Jigsaw
+                    Proceed to Jigsaw Session
                 </button>
             </div>
         </TitleCard>
