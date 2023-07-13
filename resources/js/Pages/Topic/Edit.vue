@@ -158,10 +158,8 @@
                      class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div v-for="error in errors"
                          class="alert alert-error w-full shadow-lg mb-4">
-                        <div>
-                            <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
-                            <p>{{ error.valueOf() }}</p>
-                        </div>
+                        <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                        <p>{{ error.valueOf() }}</p>
                     </div>
                 </div>
                 <button @click.prevent="back"
@@ -275,6 +273,9 @@ const previousStep = () => {
 
 const nextStep = () => {
     if (formStep.value === 1) {
+        if (form.topic.date_time === '') {
+            return null;
+        }
         const date = new Date(form.topic.date_time);
         const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
         form.topic.date_time = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);
@@ -306,6 +307,11 @@ const nextStep = () => {
         })
     } else if (formStep.value === 2) {
         form.modules = modulesNew
+        for (let i = 0; i < form.modules.length; i++) {
+            if (form.modules[i].name === '') {
+                return null
+            }
+        }
         router.post(route('topic.validate.step'), {
             steps: 2,
             modules: form.modules,

@@ -49,6 +49,10 @@
                     </div>
                 </Stat>
             </div>
+            <div v-for="error in errors" class="alert alert-error w-full shadow-lg mb-4">
+                    <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                    <p>{{ error.valueOf() }}</p>
+            </div>
             <div class="divider"/>
             <h2 class="card-title">List of Questions</h2>
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
@@ -122,7 +126,7 @@ const props = defineProps({
     assessmentModal: Object,
     questionStatus: Object,
     endAssessmentStatus: Object,
-
+    errors: Object,
 });
 
 const form = useForm({

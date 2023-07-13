@@ -161,8 +161,9 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        //todo: detach topic n its relationship
-        $classroom->users()->detach();
+        $topic = $classroom->topics()->get();
+
+        $classroom->users()->detach($topic);
         $classroom->delete();
 
         return redirect()->route('classroom.index')

@@ -70,7 +70,7 @@ class QuestionController extends Controller
             $answer->save();
         }
 
-        if (Auth::user()->wizard_status === 'onCreateAssessment'){
+        if (Auth::user()->wizard_status === 'onCreateAssessment') {
             Auth::user()->update([
                 'wizard_status' => 'onPublishAssessment'
             ]);
@@ -105,20 +105,32 @@ class QuestionController extends Controller
     public
     function update(Request $request, Question $question) //question_name, question_type, answers { name, right_answer}
     {
-        //todo: do validated using QuestionStoreRequest (need to create)
-        dd($request->all());
         $question->update([
-            'name' => $request->input('question_name'),
-            'type' => $request->input('question_type')
+            'name' => $request->input('name'),
+            'type' => $request->input('type')
         ]);
 
         $question->answers()->delete();
-        //todo: need to add right_answer
-        $ansInput = $request->input('answer.name');
-        for ($i = 1; $i < count($request->input('answer.name')) + 1; $i++) {
+        $ansInput = $request->input('answer');
+        for ($i = 0; $i < count($ansInput); $i++) {
             $answer = new Answer();
             $answer->question()->associate($question->id);
-            $answer->name = $ansInput[$i];
+            $answer->name = $ansInput[$i]['name'];
+
+            if ($question->type === 'radio') {
+                if ($request->input('radioRightAnswer') === $i) {
+                    $answer->right_answer = 1;
+                } else {
+                    $answer->right_answer = 0;
+                }
+            } elseif ($question->type === 'check') {
+                if (in_array($i, $request->input('checkRightAnswer'))) {
+                    $answer->right_answer = 1;
+                } else {
+                    $answer->right_answer = 0;
+                }
+            }
+
             $answer->save();
         }
 

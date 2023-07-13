@@ -33,7 +33,6 @@ class UserImport implements ToModel
         }
     }
 
-//    todo: CHECK IF WORKING
     public function rules()
     {
         return [

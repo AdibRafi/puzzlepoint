@@ -1,7 +1,6 @@
 <template>
     <Head title="Create Classroom"/>
     <Layout>
-        <!--       todo: place the error alert-->
         <form @submit.prevent="form.post(route('classroom.store'));">
             <TitleCard :title="$page.props.auth.user.type === 'lecturer' ?'Create Classroom': 'Join Classroom'">
                 <div v-if="wizardStatus === 'onCreateClassroom'"
@@ -18,13 +17,19 @@
                 <div v-else>
                     <InputText label-title="Classroom Join Code" v-model="form.join_code"/>
                 </div>
+                <div v-for="error in errors"
+                     class="alert alert-error w-full shadow-lg mt-4">
+                    <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                    <p>{{ error.valueOf() }}</p>
+                </div>
                 <div class="mt-6">
                     <button v-if="wizardStatus !== 'onCreateClassroom'"
                             @click.prevent="router.get(route('classroom.index'))"
                             class="btn btn-accent">Cancel
                     </button>
                     <button type="submit" :disabled="form.processing"
-                            class="btn btn-primary float-right">{{usePage().props.auth.user.type === 'lecturer' ? 'Create Classroom' : 'Join Classroom'}}
+                            class="btn btn-primary float-right">
+                        {{ usePage().props.auth.user.type === 'lecturer' ? 'Create Classroom' : 'Join Classroom' }}
                     </button>
                 </div>
             </TitleCard>
@@ -37,6 +42,12 @@ import {Head, Link, router, useForm, usePage} from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import InputText from "@/Components/InputText.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
+const props = defineProps({
+    errors: Object,
+
+})
 
 const form = useForm({
     name: '',

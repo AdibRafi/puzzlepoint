@@ -25,7 +25,6 @@
 <!--                               width="800"/>-->
 <!--            </div>-->
 <!--        </div>-->
-        <!--        Todo: Put websocket on slides then put inside the EG n JG-->
 
         <!--                <div class="carousel flex flex-wrap">-->
         <!--                    <div id="slide1" class="carousel-item relative w-full">-->

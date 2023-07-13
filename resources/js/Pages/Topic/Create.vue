@@ -218,31 +218,31 @@
                     <p>According to MMU standard, the maximum time for each class is 120 minutes.</p>
                     <p>And realistically, student will come a bit late, so let say we have 30 minute buffer time.</p>
                     <br/>
-<!--                    <p>Then we suggest of doing...</p>-->
-<!--                    <div class="grid mt-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">-->
-<!--                        <div class="stat w-full border-2">-->
-<!--                            <div class="stat-title">Expert Session</div>-->
-<!--                            <div class="stat-value">29 Minutes</div>-->
-<!--                            <div class="stat-desc">Duration for the expert session</div>-->
-<!--                        </div>-->
-<!--                        <div class="stat w-full border-2">-->
-<!--                            <div class="stat-title">Jigsaw Session</div>-->
-<!--                            <div class="stat-value">58 Minutes</div>-->
-<!--                            <div class="stat-desc">Duration for the jigsaw session</div>-->
-<!--                        </div>-->
-<!--                        <div class="stat w-full border-2">-->
-<!--                            <div class="stat-title">Student present in Jigsaw Session</div>-->
-<!--                            <div class="stat-value">15 Minutes</div>-->
-<!--                            <div class="stat-desc">Since there are 4 modules, <br/> it will divided evenly with jigsaw-->
-<!--                                session time-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="stat w-full border-2">-->
-<!--                            <div class="stat-title">Transition Time</div>-->
-<!--                            <div class="stat-value">2 Minutes</div>-->
-<!--                            <div class="stat-desc">Duration before expert and jigsaw session</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <p>Then we suggest of doing...</p>-->
+                    <!--                    <div class="grid mt-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">-->
+                    <!--                        <div class="stat w-full border-2">-->
+                    <!--                            <div class="stat-title">Expert Session</div>-->
+                    <!--                            <div class="stat-value">29 Minutes</div>-->
+                    <!--                            <div class="stat-desc">Duration for the expert session</div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="stat w-full border-2">-->
+                    <!--                            <div class="stat-title">Jigsaw Session</div>-->
+                    <!--                            <div class="stat-value">58 Minutes</div>-->
+                    <!--                            <div class="stat-desc">Duration for the jigsaw session</div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="stat w-full border-2">-->
+                    <!--                            <div class="stat-title">Student present in Jigsaw Session</div>-->
+                    <!--                            <div class="stat-value">15 Minutes</div>-->
+                    <!--                            <div class="stat-desc">Since there are 4 modules, <br/> it will divided evenly with jigsaw-->
+                    <!--                                session time-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="stat w-full border-2">-->
+                    <!--                            <div class="stat-title">Transition Time</div>-->
+                    <!--                            <div class="stat-value">2 Minutes</div>-->
+                    <!--                            <div class="stat-desc">Duration before expert and jigsaw session</div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div class="divider"/>
                     <p>In the case of choosing <span class="font-semibold">UNEVEN</span> time option, you will be given
                         a selection of how long for each module that student would present.</p>
@@ -299,10 +299,8 @@
             <div class="divider"/>
             <GridLayout>
                 <div v-for="error in errors" class="alert alert-error w-full shadow-lg mb-4">
-                    <div>
-                        <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
-                        <p>{{ error.valueOf() }}</p>
-                    </div>
+                    <font-awesome-icon icon="fa-solid fa-xmark" bounce/>
+                    <p>{{ error.valueOf() }}</p>
                 </div>
             </GridLayout>
             <button @click.prevent="back" class="btn btn-accent mx-2">Cancel</button>
@@ -451,7 +449,6 @@ const submitTopic = () => {
 
 const nextStep = () => {
     if (formStep.value === 1) {
-        //todo: validate date_time
         if (form.topic.date_time === '') {
             return null;
         }
@@ -481,6 +478,11 @@ const nextStep = () => {
         })
     } else if (formStep.value === 2) {
         // form.modules = modulesNew
+        for (let i = 0; i < form.modules.length; i++) {
+            if (form.modules[i].name === '') {
+                return null
+            }
+        }
         router.post(route('topic.validate.step'), {
             steps: 2,
             modules: form.modules,

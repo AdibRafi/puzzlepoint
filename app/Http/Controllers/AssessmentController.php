@@ -66,7 +66,7 @@ class AssessmentController extends Controller
         }
 
         return inertia('Assessment/Lecturer/Index',
-            compact('topicModal', 'questionAnswerModal', 'assessmentModal','questionStatus','endAssessmentStatus'));
+            compact('topicModal', 'questionAnswerModal', 'assessmentModal', 'questionStatus', 'endAssessmentStatus'));
 //        }
 //        else {
 //            $assessmentModal = new Assessment();
@@ -217,7 +217,13 @@ class AssessmentController extends Controller
 
     public function publishAssessment(Request $request) //assessment_id, time, publishEndTime
     {
-//        todo: Add security that no date after now()
+        $request->validate([
+            'time' => 'required',
+            'endPublishTime' => 'required|after_or_equal:' . date('Y-m-d\TH:i'),
+        ], [
+            'time.required' => 'Please Specify the Duration of the Assessment',
+            'endPublishTime.after_or_equal' => 'Please Choose Not Before Today'
+        ]);
 
 
         $assessmentModal = Assessment::find($request->input('assessment_id'));

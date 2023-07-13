@@ -40,8 +40,6 @@ class TopicController extends Controller
                 }
             ]);
 
-        //todo: PRIORITY set status on assessment and session
-
         return inertia('Topic/Create', compact('classroomModal'));
     }
 
@@ -470,20 +468,18 @@ class TopicController extends Controller
     {
 //        dd($request->all());
 
-
         $steps = $request->input('steps');
         if ($steps === 1) {
             $request->validate([
                 'name' => 'required',
-                'date_time' => 'required|date_format:Y-m-d\TH:i',
+                'date_time' => 'required|date_format:Y-m-d\TH:i|after_or_equal:' . date('Y-m-d\TH:i'),
 //                after_or_equal:' . date(DATE_ATOM)
             ], [
                 'name.required' => 'Please fill in the name of the Topic',
                 'date_time.required' => 'Please Specify the date to start the topic',
-//                'date_time.after_or_equal' => 'Invalid Date Format'
+                'date_time.after_or_equal' => 'Please Choose After Today'
             ]);
         } elseif ($steps === 2) {
-            //todo: doesn't return error
             $request->validate([
                 'modules.*.name' => 'required'
             ], [
