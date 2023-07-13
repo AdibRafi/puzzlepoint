@@ -52,9 +52,8 @@
                 </div>
                 <div class="border-2 shadow bg-base-100">
                     <div class="stat">
-                        <!--todo: PRIORITY: FIND OUT HOW TO DISABLE-->
                         <div
-                            :class="'stat-figure btn btn-circle btn-primary '"
+                            :class="'stat-figure btn btn-circle ' + (props.assessmentStatus === 1 ? 'btn-primary': 'btn-disabled')"
                             @click.prevent="toAssessment(props.topic.id)">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
@@ -69,9 +68,13 @@
                 </div>
                 <div class="border-2 shadow bg-base-100">
                     <div class="stat">
+<!--                        <div-->
+<!--                            :class="'stat-figure btn btn-circle ' +-->
+<!--                        ((wizardStatus !== 'onStartSession' && !isWizardComplete) || isSessionComplete ? 'btn-disabled':'btn-primary')"-->
+<!--                            @click.prevent="openSession">-->
                         <div
                             :class="'stat-figure btn btn-circle ' +
-                        ((wizardStatus !== 'onStartSession' && !isWizardComplete) || isSessionComplete ? 'btn-disabled':'btn-primary')"
+                        (props.sessionStatus === 1 ? 'btn-primary':'btn-disabled')"
                             @click.prevent="openSession">
                             <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl"/>
                         </div>
@@ -84,7 +87,8 @@
                 </div>
             </div>
             <button @click.prevent="back"
-                    class="btn btn-accent mt-10">Back to Classroom</button>
+                    class="btn btn-accent mt-10">Back to Classroom
+            </button>
         </TitleCard>
         <div v-if="wizardStatus === 'onStartSession' || wizardStatus === 'onCreateAssessment'"
              class="alert alert-info shadow-lg mt-10">
@@ -141,6 +145,7 @@ const props = defineProps({
     assessmentModal: Object,
     classroomModal: Object,
     assessmentStatus: Object,
+    sessionStatus: Object,
 })
 
 const formatDate = (date) => {

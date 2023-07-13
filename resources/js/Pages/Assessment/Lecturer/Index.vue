@@ -8,9 +8,14 @@
             <div class="grid mt-2 md:grid-cols-2 grid-cols-1 gap-6">
                 <Stat title="Total Question" :value="props.questionAnswerModal.length"
                       desc="Click Button to Add Question">
+                    <!--                    <div @click.prevent="toCreateQuestion"-->
+                    <!--                         :class="'stat-figure btn btn-circle ' +-->
+                    <!--                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">-->
+                    <!--                        <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>-->
+                    <!--                    </div>-->
                     <div @click.prevent="toCreateQuestion"
                          :class="'stat-figure btn btn-circle ' +
-                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">
+                          (props.questionStatus === 1 ? 'btn-primary' : 'btn-disabled')">
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                     </div>
                 </Stat>
@@ -30,14 +35,16 @@
                                input-name="date"/>
                 </Stat>
                 <Stat v-else-if="props.assessmentModal.is_ready_publish"
-                      title="End Assessment Session" :value="props.assessmentModal.time + ' Minutes'"
-                      desc="Click Button to End">
+                      title="End Date" :value="dateTime"
+                      desc="Click Button to End Early">
                     <div @click.prevent="toEndAssessment"
                          class="stat-figure btn btn-circle btn-primary">
                         <font-awesome-icon icon="fa-solid fa-forward-step" size="xl"/>
                     </div>
                 </Stat>
-                <Stat title="End Date" :value="dateTime"/>
+                <Stat title="Assessment Duration" :value="props.assessmentModal.time + ' Minutes'"
+                      desc="Duration students have when answering a question">
+                </Stat>
             </div>
             <div class="divider"/>
             <h2 class="card-title">List of Questions</h2>
@@ -49,9 +56,14 @@
                         <div v-for="answerData in questionData.answers">
                             <p>{{ answerData.name }}</p>
                         </div>
+                        <!--                        <div @click.prevent="editQuestion(questionData.id)"-->
+                        <!--                             :class="'stat-figure btn btn-circle ' +-->
+                        <!--                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">-->
+                        <!--                            <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>-->
+                        <!--                        </div>-->
                         <div @click.prevent="editQuestion(questionData.id)"
                              :class="'stat-figure btn btn-circle ' +
-                          (!isWizardComplete && wizardStatus === 'onEndAssessment' ? 'btn-disabled' : 'btn-primary')">
+                          (props.questionStatus === 1 ? 'btn-primary' : 'btn-disabled')">
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl"/>
                         </div>
                     </Stat>
@@ -105,6 +117,7 @@ const props = defineProps({
     topicModal: Object,
     questionAnswerModal: Object,
     assessmentModal: Object,
+    questionStatus: Object,
 });
 
 const form = useForm({
@@ -159,7 +172,6 @@ const toEditAssessment = () => {
 const editQuestion = (id) => {
     router.get(route('question.edit', id))
 }
-
 
 
 </script>

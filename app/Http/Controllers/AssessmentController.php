@@ -14,44 +14,55 @@ class AssessmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) //topic_id OR assessment_id
+    public function index(Request $request) //assessment_id
     {
-//        todo:Clean this up
-        $assessmentModal = Assessment::find($request->input('assessment_id'));
-//        dd($request->all());
-        $topicModal = Topic::find($request->input('topic_id'));
-
-
-        if ($assessmentModal !== null) {
+        if ($request->exists('assessment_id')) {
+            $assessmentModal = Assessment::find($request->input('assessment_id'));
             $topicModal = $assessmentModal->topic()->first();
-            $questionAnswerModal = $assessmentModal
-                ->questions()
-                ->with('answers')
-                ->get();
-
-            if (Auth::user()->type === 'student') {
-                return inertia('Assessment/Student/Index',
-                    compact('topicModal', 'assessmentModal'));
-            } else {
-                return inertia('Assessment/Lecturer/Index',
-                    compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
-            }
-        } else if ($topicModal->assessment()->exists()) {
-            $assessmentModal = $topicModal
-                ->assessment()
-                ->first();
-            $questionAnswerModal = Assessment::find($assessmentModal->id)
-                ->questions()
-                ->with('answers')
-                ->get();
-
-            if (Auth::user()->type === 'student') {
-                return inertia('Assessment/Student/Index',
-                    compact('topicModal', 'assessmentModal'));
-            }
-            return inertia('Assessment/Lecturer/Index',
-                compact('topicModal', 'questionAnswerModal', 'assessmentModal'));
+        } else {
+            $topicModal = Topic::find($request->input('topic_id'));
+            $assessmentModal = $topicModal->assessment()->first();
         }
+//        dd($request->all());
+//        $topicModal = Topic::find($request->input('topic_id'));
+        $questionStatus = 1;
+
+//        if ($assessmentModal !== null) {
+//            $topicModal = $assessmentModal->topic()->first();
+//            $questionAnswerModal = $assessmentModal
+//                ->questions()
+//                ->with('answers')
+//                ->get();
+//
+//            if (Auth::user()->type === 'student') {
+//                return inertia('Assessment/Student/Index',
+//                    compact('topicModal', 'assessmentModal'));
+//            } else {
+//                return inertia('Assessment/Lecturer/Index',
+//                    compact('topicModal', 'assessmentModal', 'questionAnswerModal'));
+//            }
+//        } else
+//            if ($topicModal->assessment()->exists()) {
+//        $assessmentModal = $topicModal
+//            ->assessment()
+//            ->first();
+        $questionAnswerModal = $assessmentModal
+            ->questions()
+            ->with('answers')
+            ->get();
+
+        if ($assessmentModal->is_ready_publish === 1) {
+            $questionStatus = 0;
+        }
+
+        if (Auth::user()->type === 'student') {
+            return inertia('Assessment/Student/Index',
+                compact('topicModal', 'assessmentModal'));
+        }
+
+        return inertia('Assessment/Lecturer/Index',
+            compact('topicModal', 'questionAnswerModal', 'assessmentModal','questionStatus'));
+//        }
 //        else {
 //            $assessmentModal = new Assessment();
 //            $assessmentModal->topic()->associate($topicModal->id);
@@ -187,7 +198,10 @@ class AssessmentController extends Controller
         $assessmentModal = Assessment::find($assessmentId);
 //        dd($assessmentModal);
 
-        $assessmentModal->users()->updateExistingPivot(Auth::id(), ['marks' => $score]);
+        $assessmentModal->users()->updateExistingPivot(Auth::id(), [
+            'marks' => $score,
+            'is_finish' => 1,
+        ]);
 //        dd(Auth::user());
 //        Assessment::find(1)->users()->attach(2);
         $topicId = $assessmentModal->topic()->first()->id;

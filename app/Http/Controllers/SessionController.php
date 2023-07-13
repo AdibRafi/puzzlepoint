@@ -452,14 +452,12 @@ class SessionController extends Controller
     public function studentEndSession(Request $request) //topic_id
     {
         $topicModal = Topic::find($request->input('topic_id'));
-        $topicModal->update([
-            'is_complete' => true,
-        ]);
-
-        $classroom = $topicModal->classroom()->first();
+//        $topicModal->update([
+//            'is_complete' => 1,
+//        ]);
 
 
-        return redirect()->route('classroom.show', $classroom)
-            ->with('alertMessage', 'Your Lecturer Successfully Ended the session');
+        return redirect()->route('topic.show', $topicModal)
+            ->with('alertMessage', 'Your Lecturer Successfully Ended the Session');
     }
 }

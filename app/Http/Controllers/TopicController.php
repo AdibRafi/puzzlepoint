@@ -160,7 +160,8 @@ class TopicController extends Controller
         $classroomModal = $topic->classroom()->first();
 
         //todo: make assessment status from backend instead of frontend
-        $assessmentStatus = null;
+        $assessmentStatus = 1;
+        $sessionStatus = 0;
         if (Auth::user()->type === 'student') {
             $pivot = Assessment::find($topic->assessment()->first()->id)
                 ->users()
@@ -168,16 +169,26 @@ class TopicController extends Controller
                 ->withPivot('is_finish')
                 ->first();
             $assessmentModal = Assessment::find($topic->assessment()->first()->id);
-            $assessmentModal->pivot = $pivot;
+            $assessmentModal->is_assessment_finish = $pivot->pivot->is_finish;
+            if ($assessmentModal->is_assessment_finish
+                || $assessmentModal->is_publish === 0) {
+                $assessmentStatus = 0;
+            }
         } else {
             $assessmentModal = Assessment::find($topic->assessment()->first()->id);
+        }
+
+        if ($assessmentModal->is_ready_publish === 1
+            && $topic->is_complete === 0 &&
+            Carbon::now() >= Carbon::parse($topic->date_time)) {
+            $sessionStatus = 1;
         }
 
 
         return inertia('Topic/Show',
             compact('topic', 'moduleModal',
                 'studentModal', 'assessmentModal', 'classroomModal',
-                'assessmentStatus'));
+                'assessmentStatus', 'sessionStatus'));
     }
 
     /**
