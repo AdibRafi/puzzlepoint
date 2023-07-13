@@ -10,9 +10,9 @@
             <h1 class="text-2xl font-semibold ml-2">{{ pageTitle }}</h1>
         </div>
         <div class="order-1">
-            {{$page.props.auth.user.name}}
+            {{ $page.props.auth.user.name }}
             |
-            {{$page.props.auth.user.type}}
+            {{ $page.props.auth.user.type }}
         </div>
         <div class="order-last">
             <select class="select mr-4" data-choose-theme>
@@ -29,7 +29,8 @@
                 </label>
                 <ul tabIndex="0"
                     class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                    <li class="justify-between">
+                    <li v-if="$page.props.auth.user.is_wizard_complete === 1"
+                        class="justify-between">
                         <Link :href="route('profile.edit')">
                             Profile Settings
                         </Link>

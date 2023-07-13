@@ -51,7 +51,7 @@
                      class="alert alert-info shadow-lg">
                     <div>
                         <font-awesome-icon icon="fa-solid fa-circle-info" size="lg" bounce/>
-                        <span class="ml-4">Or you can insert the list of file in CSV
+                        <span class="ml-4">Or you can insert the list of file in xlsx
                         <br/>Format: 1st column = Name, 2nd column = Email, 3rd column = Gender</span>
                     </div>
                 </div>

@@ -25,7 +25,8 @@ class UserImport implements ToModel
                 'name' => $row[0],
                 'email' => $row[1],
                 'gender' => $row[2],
-                'password' =>Hash::make('test1234'),
+                'password' => Hash::make('test1234'),
+                'email_verified_at' => now(),
                 'type' => 'student',
                 'is_wizard_complete' => 1,
             ]);

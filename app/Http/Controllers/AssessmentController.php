@@ -26,6 +26,7 @@ class AssessmentController extends Controller
 //        dd($request->all());
 //        $topicModal = Topic::find($request->input('topic_id'));
         $questionStatus = 1;
+        $endAssessmentStatus = 1;
 
 //        if ($assessmentModal !== null) {
 //            $topicModal = $assessmentModal->topic()->first();
@@ -55,13 +56,17 @@ class AssessmentController extends Controller
             $questionStatus = 0;
         }
 
+        if ($topicModal->is_complete === 0) {
+            $endAssessmentStatus = 0;
+        }
+
         if (Auth::user()->type === 'student') {
             return inertia('Assessment/Student/Index',
                 compact('topicModal', 'assessmentModal'));
         }
 
         return inertia('Assessment/Lecturer/Index',
-            compact('topicModal', 'questionAnswerModal', 'assessmentModal','questionStatus'));
+            compact('topicModal', 'questionAnswerModal', 'assessmentModal','questionStatus','endAssessmentStatus'));
 //        }
 //        else {
 //            $assessmentModal = new Assessment();

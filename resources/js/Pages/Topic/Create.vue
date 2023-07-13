@@ -218,31 +218,31 @@
                     <p>According to MMU standard, the maximum time for each class is 120 minutes.</p>
                     <p>And realistically, student will come a bit late, so let say we have 30 minute buffer time.</p>
                     <br/>
-                    <p>Then we suggest of doing...</p>
-                    <div class="grid mt-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
-                        <div class="stat w-full border-2">
-                            <div class="stat-title">Expert Session</div>
-                            <div class="stat-value">29 Minutes</div>
-                            <div class="stat-desc">Duration for the expert session</div>
-                        </div>
-                        <div class="stat w-full border-2">
-                            <div class="stat-title">Jigsaw Session</div>
-                            <div class="stat-value">58 Minutes</div>
-                            <div class="stat-desc">Duration for the jigsaw session</div>
-                        </div>
-                        <div class="stat w-full border-2">
-                            <div class="stat-title">Student present in Jigsaw Session</div>
-                            <div class="stat-value">15 Minutes</div>
-                            <div class="stat-desc">Since there are 4 modules, <br/> it will divided evenly with jigsaw
-                                session time
-                            </div>
-                        </div>
-                        <div class="stat w-full border-2">
-                            <div class="stat-title">Transition Time</div>
-                            <div class="stat-value">2 Minutes</div>
-                            <div class="stat-desc">Duration before expert and jigsaw session</div>
-                        </div>
-                    </div>
+<!--                    <p>Then we suggest of doing...</p>-->
+<!--                    <div class="grid mt-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">-->
+<!--                        <div class="stat w-full border-2">-->
+<!--                            <div class="stat-title">Expert Session</div>-->
+<!--                            <div class="stat-value">29 Minutes</div>-->
+<!--                            <div class="stat-desc">Duration for the expert session</div>-->
+<!--                        </div>-->
+<!--                        <div class="stat w-full border-2">-->
+<!--                            <div class="stat-title">Jigsaw Session</div>-->
+<!--                            <div class="stat-value">58 Minutes</div>-->
+<!--                            <div class="stat-desc">Duration for the jigsaw session</div>-->
+<!--                        </div>-->
+<!--                        <div class="stat w-full border-2">-->
+<!--                            <div class="stat-title">Student present in Jigsaw Session</div>-->
+<!--                            <div class="stat-value">15 Minutes</div>-->
+<!--                            <div class="stat-desc">Since there are 4 modules, <br/> it will divided evenly with jigsaw-->
+<!--                                session time-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="stat w-full border-2">-->
+<!--                            <div class="stat-title">Transition Time</div>-->
+<!--                            <div class="stat-value">2 Minutes</div>-->
+<!--                            <div class="stat-desc">Duration before expert and jigsaw session</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="divider"/>
                     <p>In the case of choosing <span class="font-semibold">UNEVEN</span> time option, you will be given
                         a selection of how long for each module that student would present.</p>
@@ -387,6 +387,11 @@ if (!usePage().props.auth.user.is_wizard_complete) {
     form.topic.no_of_modules = dummyData.no_of_modules;
     form.topic.max_time_expert = dummyData.max_expert_time;
     form.topic.max_time_jigsaw = dummyData.max_jigsaw_time;
+
+    const date = new Date();
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    form.topic.date_time = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);
+
     for (let i = 0; i < form.topic.no_of_modules; i++) {
         modulesNew.push({
             name: dummyData.modules[i],
@@ -447,6 +452,9 @@ const submitTopic = () => {
 const nextStep = () => {
     if (formStep.value === 1) {
         //todo: validate date_time
+        if (form.topic.date_time === '') {
+            return null;
+        }
         const date = new Date(form.topic.date_time);
         const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
         form.topic.date_time = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);

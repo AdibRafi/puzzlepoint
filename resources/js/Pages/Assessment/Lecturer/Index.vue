@@ -38,12 +38,15 @@
                       title="End Date" :value="dateTime"
                       desc="Click Button to End Early">
                     <div @click.prevent="toEndAssessment"
-                         class="stat-figure btn btn-circle btn-primary">
+                         :class="'stat-figure btn btn-circle '+ (props.endAssessmentStatus === 1 ? 'btn-primary' : 'btn-disabled')">
                         <font-awesome-icon icon="fa-solid fa-forward-step" size="xl"/>
                     </div>
                 </Stat>
-                <Stat title="Assessment Duration" :value="props.assessmentModal.time + ' Minutes'"
+                <Stat title="Assessment Duration"
                       desc="Duration students have when answering a question">
+                    <div class="stat-value">
+                        {{ props.assessmentModal.time !== null ? props.assessmentModal.time : 'Not Publish' }}
+                    </div>
                 </Stat>
             </div>
             <div class="divider"/>
@@ -118,6 +121,8 @@ const props = defineProps({
     questionAnswerModal: Object,
     assessmentModal: Object,
     questionStatus: Object,
+    endAssessmentStatus: Object,
+
 });
 
 const form = useForm({
@@ -156,7 +161,11 @@ const toCreateQuestion = () => {
 }
 
 const sendPublish = () => {
-    form.post(route('assessment.publish'))
+    console.log(form.endPublishTime);
+    if (form.endPublishTime === '') {
+        return null
+    } else
+        form.post(route('assessment.publish'));
 }
 
 const toEndAssessment = () => {

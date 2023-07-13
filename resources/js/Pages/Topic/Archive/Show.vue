@@ -2,7 +2,8 @@
     <Head title="Archive"/>
     <Layout page-title="Archive">
         <TitleCard :title="props.topic.name"
-                   :top-right-button-label="$page.props.auth.user.type === 'lecturer' ? 'Duplicate Topic' : ''"
+                   :top-right-button-label="($page.props.auth.user.type === 'lecturer' && $page.props.auth.user.is_wizard_complete === 1) ?
+                   'Duplicate Topic' : ''"
                    @button-function="duplicateTopic">
             <div v-if="wizardStatus === 'onShowArchive'"
                  class="alert alert-info shadow-lg mb-4">
@@ -225,7 +226,6 @@
 
 <script setup>
 
-import Card from "@/Components/Card.vue";
 import Layout from "@/Layouts/Layout.vue";
 import TitleCard from "@/Components/TitleCard.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -238,6 +238,7 @@ import GridLayout from "@/Components/GridLayout.vue";
 const props = defineProps({
     topic: Object,
     moduleModal: Object,
+    classroomModal: Object,
     expertGroupModal: Object,
     jigsawGroupModal: Object,
     studentModal: Object,
@@ -273,7 +274,9 @@ for (let i = 0; i < props.studentAssessmentModal.length; i++) {
 }
 
 const back = () => {
-    router.get(route('topic.archive.index', props.classroomModal.id))
+    router.get(route('topic.archive.index'), {
+        classroom_id: props.classroomModal.id
+    })
 }
 
 const duplicateTopic = () => {

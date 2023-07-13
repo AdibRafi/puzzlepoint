@@ -159,7 +159,6 @@ class TopicController extends Controller
         $studentModal = $topic->getStudents();
         $classroomModal = $topic->classroom()->first();
 
-        //todo: make assessment status from backend instead of frontend
         $assessmentStatus = 1;
         $sessionStatus = 0;
         if (Auth::user()->type === 'student') {
@@ -182,6 +181,10 @@ class TopicController extends Controller
             && $topic->is_complete === 0 &&
             Carbon::now() >= Carbon::parse($topic->date_time)) {
             $sessionStatus = 1;
+        }
+
+        if (Auth::user()->wizard_status === 'onStartSession') {
+            $assessmentStatus = 0;
         }
 
 
