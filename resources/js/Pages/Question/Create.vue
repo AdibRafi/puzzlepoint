@@ -56,7 +56,6 @@
                         To choose the right answers, tick the right box</span>
                     </div>
                 </div>
-                <!--todo: fix bug on small area can be click on InputText-->
                 <div v-if="form.type ==='radio'">
                     <div v-for="ansItem in radioAnsNumber">
                         <div class="inline-block mr-4 mt-12">
