@@ -20,6 +20,12 @@ class ModuleFactory extends Factory
         return [
             'topic_id' => Topic::find(rand(1, Topic::all()->count()))->id,
             'name' => $this->faker->text(20),
+            'file_path' => $this->faker->randomElement([
+                'modules/addition.pdf',
+                'modules/subtraction.pdf',
+                'modules/multiplication.pdf',
+                'modules/division.pdf',
+            ])
 
         ];
     }

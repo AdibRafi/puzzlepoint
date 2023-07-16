@@ -160,15 +160,21 @@ class TopicController extends Controller
         $assessmentStatus = 1;
         $sessionStatus = 0;
         if (Auth::user()->type === 'student') {
-            $pivot = Assessment::find($topic->assessment()->first()->id)
-                ->users()
-                ->where('id', '=', Auth::id())
-                ->withPivot('is_finish')
-                ->first();
-            $assessmentModal = Assessment::find($topic->assessment()->first()->id);
-            $assessmentModal->is_assessment_finish = $pivot->pivot->is_finish;
-            if ($assessmentModal->is_assessment_finish
-                || $assessmentModal->is_publish === 0) {
+            if ($topic->assessment()->first()->is_ready_publish === 1) {
+                $pivot = Assessment::find($topic->assessment()->first()->id)
+                    ->users()
+                    ->where('id', '=', Auth::id())
+                    ->withPivot('is_finish')
+                    ->first();
+                $assessmentModal = Assessment::find($topic->assessment()->first()->id);
+                $assessmentModal->is_assessment_finish = $pivot->pivot->is_finish;
+                if ($assessmentModal->is_assessment_finish
+                    || $assessmentModal->is_publish === 0) {
+                    $assessmentStatus = 0;
+                }
+            } else{
+                $assessmentModal = Assessment::find($topic->assessment()->first()->id);
+                $assessmentModal->is_assessment_finish = null;
                 $assessmentStatus = 0;
             }
         } else {
@@ -466,10 +472,9 @@ class TopicController extends Controller
 
     public function topicValidateStep(Request $request)// steps, data
     {
-//        dd($request->all());
 
         $steps = $request->input('steps');
-        if ($steps === 1) {
+        if ($steps === '1') {
             $request->validate([
                 'name' => 'required',
                 'date_time' => 'required|date_format:Y-m-d\TH:i|after_or_equal:' . date('Y-m-d\TH:i'),
@@ -479,7 +484,8 @@ class TopicController extends Controller
                 'date_time.required' => 'Please Specify the date to start the topic',
                 'date_time.after_or_equal' => 'Please Choose After Today'
             ]);
-        } elseif ($steps === 2) {
+        } elseif ($steps === '2') {
+//            dd($request->all());
             $request->validate([
                 'modules.*.name' => 'required'
             ], [
@@ -491,9 +497,10 @@ class TopicController extends Controller
                 if ($request->hasFile($filePath)) {
                     $file = $request->file($filePath);
                     $file->move('modules', $file->getClientOriginalName());
+
                 }
             }
-        } elseif ($steps === 3) {
+        } elseif ($steps === '3') {
             $request->validate([
                 'group_distribution' => 'required',
                 'time_method' => 'required',
@@ -501,7 +508,7 @@ class TopicController extends Controller
                 'group_distribution.required' => "Please choose the group method",
                 'time_method.required' => 'Please choose the time method',
             ]);
-        } elseif ($steps === 4) {
+        } elseif ($steps === '4') {
             $request->validate([
                 'max_session' => 'required',
                 'max_buffer' => 'required'
