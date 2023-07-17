@@ -36,7 +36,7 @@ class ThreeTopicSeeder extends Seeder
 
         Topic::factory()->create([
             'classroom_id' => 1,
-            'name' => 'topic - preSession',
+            'name' => 'preSession',
             'date_time' => now(),
             'no_of_modules' => 4,
             'max_session' => 120,
@@ -77,7 +77,7 @@ class ThreeTopicSeeder extends Seeder
 
         Topic::factory()->create([
             'classroom_id' => 1,
-            'name' => 'topic - expertSession',
+            'name' => 'expertSession',
             'date_time' => now(),
             'no_of_modules' => 4,
             'max_session' => 120,
@@ -98,7 +98,7 @@ class ThreeTopicSeeder extends Seeder
 
         Option::factory()->create([
             'topic_id' => 2,
-            'group_distribution' => 'random',
+            'group_distribution' => 'genderFixed',
             'time_method' => 'even',
             'tm1' => '15',
             'tm2' => '15',
@@ -118,7 +118,7 @@ class ThreeTopicSeeder extends Seeder
 
         Topic::factory()->create([
             'classroom_id' => 1,
-            'name' => 'topic - jigsaw session',
+            'name' => 'jigsawSession',
             'date_time' => now(),
             'no_of_modules' => 4,
             'max_session' => 120,
@@ -139,7 +139,7 @@ class ThreeTopicSeeder extends Seeder
 
         Option::factory()->create([
             'topic_id' => 3,
-            'group_distribution' => 'random',
+            'group_distribution' => 'genderMixed',
             'time_method' => 'even',
             'tm1' => '15',
             'tm2' => '15',
