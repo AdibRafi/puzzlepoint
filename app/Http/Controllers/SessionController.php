@@ -209,14 +209,16 @@ class SessionController extends Controller
             ->flatten();
 
         $remainderUser = collect();
-        $lessGroup = $expertGroupModal->min('users_count');
-        for ($i = 0; $i < count($expertGroupModal); $i++) {
-            if ($expertGroupModal[$i]->users_count > $lessGroup) {
-                $user = $expertGroupModal[$i]->users()->get()->pop();
-                $remainderUser->push($user);
-                $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
-                    return $value->id == $user->id;
-                });
+        if ($topicModuleModal->getAttendStudents()->count() % $topicModuleModal->no_of_modules !== 0) {
+            $lessGroup = $expertGroupModal->min('users_count');
+            for ($i = 0; $i < count($expertGroupModal); $i++) {
+                if ($expertGroupModal[$i]->users_count > $lessGroup) {
+                    $user = $expertGroupModal[$i]->users()->get()->pop();
+                    $remainderUser->push($user);
+                    $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
+                        return $value->id === $user->id;
+                    });
+                }
             }
         }
 
@@ -233,6 +235,27 @@ class SessionController extends Controller
         $splitUser = $expertUserModal->split($numOfModules);
 
         $loop = count($splitUser[0]);
+
+        if (count($splitUser[0]) > 7) {
+            while (count($splitUser[0]) > 7) {
+                $numOfModules *= 2;
+                $modulesId = $modulesId->merge($modulesId);
+                $splitUser = $studentAttendModal->split($numOfModules);
+            }
+        }
+        $addGroup = $splitUser->count() / $topicModuleModal->no_of_modules;
+
+        if ($addGroup >= 1) {
+            for ($o = 0; $o < $topicModuleModal->no_of_modules; $o++) {
+                $a = collect();
+                for ($n = 0; $n < $addGroup; $n++) {
+                    $a = $a->merge($splitUser[($n * $topicModuleModal->no_of_modules) + $o]);
+                }
+                $splitUser[$o] = $a;
+            }
+            $splitUser = $splitUser->slice(0, $topicModuleModal->no_of_modules);
+        }
+
         if ($topicModuleModal->is_jigsaw_form === 0) {
             for ($j = 0; $j < $loop; $j++) {
                 $group = new Group();
@@ -240,7 +263,7 @@ class SessionController extends Controller
                 $group->type = 'jigsaw';
                 $group->topic()->associate($topicModuleModal->id);
                 $group->save();
-                for ($k = 0; $k < $numOfModules; $k++) {
+                for ($k = 0; $k < $topicModuleModal->no_of_modules; $k++) {
                     $userToPop = $splitUser[$k]->pop();
                     $userModuleId = $userToPop->groups()
                         ->where('topic_id', '=', $topicModuleModal->id)

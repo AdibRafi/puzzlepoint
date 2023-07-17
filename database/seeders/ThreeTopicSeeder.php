@@ -151,7 +151,6 @@ class ThreeTopicSeeder extends Seeder
 
         Assessment::factory()->create([
             'topic_id' => 3,
-            'time' => 10,
             'is_ready_publish' => 0,
             'is_publish' => 0,
             'is_complete' => 0,

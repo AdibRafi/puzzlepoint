@@ -141,7 +141,7 @@ class TestController extends Controller
 
         (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
 
-        if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 6) {
+        if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 12) {
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
@@ -151,7 +151,6 @@ class TestController extends Controller
 
         $loop = count($splitUser[0]);
 
-        $addGroup = 0;
 //        dd($splitUser);
         if (count($splitUser[0]) > 7) {
             while (count($splitUser[0]) > 7) {
