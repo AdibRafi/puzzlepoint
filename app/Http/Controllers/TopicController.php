@@ -172,7 +172,7 @@ class TopicController extends Controller
                     || $assessmentModal->is_publish === 0) {
                     $assessmentStatus = 0;
                 }
-            } else{
+            } else {
                 $assessmentModal = Assessment::find($topic->assessment()->first()->id);
                 $assessmentModal->is_assessment_finish = null;
                 $assessmentStatus = 0;
@@ -311,9 +311,19 @@ class TopicController extends Controller
         $topicModuleModal = $classroomModal
             ->topics()
             ->where('is_complete', '=', 1)
-            ->with('modules')
+//            ->with('modules')
+            ->whereHas('assessment', function ($q) {
+                return $q->where('is_complete', '=', 1);
+            })
+//            ->with('assessment')
+
+//            ->where('assessment.is_complete', '=', '1')
+//            ->with(['assessment' => function ($q) {
+//                $q->where('is_complete', '=', 1);
+//            }])
             ->get();
 
+//        dd($topicModuleModal);
 
         return inertia('Topic/Archive/Index',
             compact('topicModuleModal', 'classroomModal'));
