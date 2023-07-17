@@ -482,9 +482,10 @@ class TopicController extends Controller
 
     public function topicValidateStep(Request $request)// steps, data
     {
-
+//        dd('idk');
         $steps = $request->input('steps');
-        if ($steps === '1') {
+        if ($steps === 1) {
+
             $request->validate([
                 'name' => 'required',
                 'date_time' => 'required|date_format:Y-m-d\TH:i|after_or_equal:' . date('Y-m-d\TH:i'),
@@ -494,7 +495,7 @@ class TopicController extends Controller
                 'date_time.required' => 'Please Specify the date to start the topic',
                 'date_time.after_or_equal' => 'Please Choose After Today'
             ]);
-        } elseif ($steps === '2') {
+        } elseif ($steps === 2) {
 //            dd($request->all());
             $request->validate([
                 'modules.*.name' => 'required'
@@ -510,7 +511,7 @@ class TopicController extends Controller
 
                 }
             }
-        } elseif ($steps === '3') {
+        } elseif ($steps === 3) {
             $request->validate([
                 'group_distribution' => 'required',
                 'time_method' => 'required',
@@ -518,7 +519,7 @@ class TopicController extends Controller
                 'group_distribution.required' => "Please choose the group method",
                 'time_method.required' => 'Please choose the time method',
             ]);
-        } elseif ($steps === '4') {
+        } elseif ($steps === 4) {
             $request->validate([
                 'max_session' => 'required',
                 'max_buffer' => 'required'
