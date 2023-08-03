@@ -209,30 +209,70 @@ class SessionController extends Controller
             ->flatten();
 
         $remainderUser = collect();
-        $lessGroup = $expertGroupModal->min('users_count');
-        for ($i = 0; $i < count($expertGroupModal); $i++) {
-            if ($expertGroupModal[$i]->users_count > $lessGroup) {
-                $user = $expertGroupModal[$i]->users()->get()->pop();
-                $remainderUser->push($user);
-                $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
-                    return $value->id == $user->id;
-                });
+        if (($topicModuleModal->getAttendStudents()->count() % $topicModuleModal->no_of_modules !== 0)) {
+            $lessGroup = $expertGroupModal->min('users_count');
+            for ($i = 0; $i < count($expertGroupModal); $i++) {
+                if ($expertGroupModal[$i]->users_count > $lessGroup) {
+                    $user = $expertGroupModal[$i]->users()->get()->pop();
+                    $remainderUser->push($user);
+                    $expertUserModal = $expertUserModal->reject(function ($value, $key) use ($user) {
+                        return $value->id === $user->id;
+                    });
+                }
             }
         }
 
+//        dd($remainderUser);
         $numOfModules = $topicModuleModal->no_of_modules;
         $modulesId = $topicModuleModal->modules->pluck('id');
 
         (int)$totalGroup = floor(count($studentAttendModal) / $topicModuleModal->no_of_modules);
 
+
+        $twoOrThreeM = false;
+        $twoOrthreeMNeedRemainder = false;
         if ($totalGroup % 2 === 0 && $numOfModules <= 3 && count($studentAttendModal) > 12) {
             $numOfModules *= 2;
             $totalGroup /= 2;
             $modulesId = $modulesId->merge($modulesId);
+            $twoOrThreeM = true;
+        } elseif ($totalGroup % 2 !== 0 && $numOfModules <= 3 && count($studentAttendModal) > 12) {
+            $twoOrthreeMNeedRemainder = true;
         }
         $splitUser = $expertUserModal->split($numOfModules);
 
+        $changeLoop = false;
+
+        $addGroup = $splitUser->count() / $topicModuleModal->no_of_modules;
+
         $loop = count($splitUser[0]);
+
+
+        if (count($splitUser[0]) > 7) {
+            while (count($splitUser[0]) > 7) {
+                $numOfModules *= 2;
+                $modulesId = $modulesId->merge($modulesId);
+                $splitUser = $studentAttendModal->split($numOfModules);
+                $addGroup += 1;
+            }
+        }
+
+        if ($addGroup >= 1) {
+            for ($o = 0; $o < $topicModuleModal->no_of_modules; $o++) {
+                $a = collect();
+                for ($n = 0; $n < $addGroup; $n++) {
+                    $a = $a->merge($splitUser[($n * $topicModuleModal->no_of_modules) + $o]);
+                }
+                $splitUser[$o] = $a;
+            }
+        }
+
+
+        $loop = count($splitUser[0]);
+
+//        dd($loop);
+//        dd($splitUser);
+
         if ($topicModuleModal->is_jigsaw_form === 0) {
             for ($j = 0; $j < $loop; $j++) {
                 $group = new Group();
@@ -240,8 +280,11 @@ class SessionController extends Controller
                 $group->type = 'jigsaw';
                 $group->topic()->associate($topicModuleModal->id);
                 $group->save();
-                for ($k = 0; $k < $numOfModules; $k++) {
+                for ($k = 0; $k < $topicModuleModal->no_of_modules; $k++) {
                     $userToPop = $splitUser[$k]->pop();
+                    if ($j === 3) {
+
+                    }
                     $userModuleId = $userToPop->groups()
                         ->where('topic_id', '=', $topicModuleModal->id)
                         ->first()->module_id;
@@ -268,12 +311,20 @@ class SessionController extends Controller
             }
 
             while ($remainderUser->isNotEmpty()) {
+                $userModal = User::find($remainderUser->pop()->id);
+                $userModuleId = $userModal->groups()
+                    ->where('topic_id', '=', $topicModuleModal->id)
+                    ->first()->module_id;
                 $jigsawGroup = $topicModuleModal->groups()
                     ->where('type', '=', 'jigsaw')
                     ->withCount('users')
                     ->orderBy('users_count', 'asc')
                     ->first();
-                $jigsawGroup->users()->attach($remainderUser->pop());
+                $jigsawGroup->users()->attach($userModal);
+                $jigsawGroup->users()->updateExistingPivot($userModal->id, [
+                    'module_id' => $userModuleId,
+                    'module_name' => Module::find($userModuleId)->name,
+                ]);
             }
 
             $topicModuleModal->update([

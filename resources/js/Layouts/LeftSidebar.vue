@@ -30,35 +30,35 @@
             </Link>
          </li>
          <div class="divider"/>
-         <li>
-            <div class="flex-col">
-                <div class="w-full" @click="setIsExpanded">
-                    DEVELOPER
-               </div>
-               <div :class="'w-full ' + (isExpanded ? '' : 'hidden')">
-                  <ul class="menu menu-compact">
-                     <li>
-                        <Link :href="route('test.index')"
-                              :class="route().current('text.index') ? activeRoute : inactiveRoute">
-                           test
-                           <span v-if="route().current('test.index')"
-                                 :class="activeSubRouteSpan"
-                                 aria-hidden="true"/>
-                        </Link>
-                     </li>
-                     <li>
-                        <Link :href="route('display.group',{topic_id:1})"
-                              :class="route().current('display.group',{topic_id:1}) ? activeRoute : inactiveRoute">
-                           Display Group
-                           <span v-if="route().current('display.group')"
-                                 :class="activeSubRouteSpan"
-                                 aria-hidden="true"/>
-                        </Link>
-                     </li>
-                  </ul>
-               </div>
-            </div>
-         </li>
+<!--         <li>-->
+<!--            <div class="flex-col">-->
+<!--                <div class="w-full" @click="setIsExpanded">-->
+<!--                    DEVELOPER-->
+<!--               </div>-->
+<!--               <div :class="'w-full ' + (isExpanded ? '' : 'hidden')">-->
+<!--                  <ul class="menu menu-compact">-->
+<!--                     <li>-->
+<!--                        <Link :href="route('test.index')"-->
+<!--                              :class="route().current('text.index') ? activeRoute : inactiveRoute">-->
+<!--                           test-->
+<!--                           <span v-if="route().current('test.index')"-->
+<!--                                 :class="activeSubRouteSpan"-->
+<!--                                 aria-hidden="true"/>-->
+<!--                        </Link>-->
+<!--                     </li>-->
+<!--                     <li>-->
+<!--                        <Link :href="route('display.group',{topic_id:1})"-->
+<!--                              :class="route().current('display.group',{topic_id:1}) ? activeRoute : inactiveRoute">-->
+<!--                           Display Group-->
+<!--                           <span v-if="route().current('display.group')"-->
+<!--                                 :class="activeSubRouteSpan"-->
+<!--                                 aria-hidden="true"/>-->
+<!--                        </Link>-->
+<!--                     </li>-->
+<!--                  </ul>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--         </li>-->
       </ul>
    </div>
 </template>

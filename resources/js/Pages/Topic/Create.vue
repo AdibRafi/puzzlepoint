@@ -387,8 +387,9 @@ if (!usePage().props.auth.user.is_wizard_complete) {
     form.topic.max_time_jigsaw = dummyData.max_jigsaw_time;
 
     const date = new Date();
+
     const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-    form.topic.date_time = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, 16);
+    form.topic.date_time = (new Date(date.getTime() + (2 * 60000) - tzoffset)).toISOString().slice(0, 16);
 
     for (let i = 0; i < form.topic.no_of_modules; i++) {
         modulesNew.push({

@@ -65,9 +65,11 @@ class Topic extends Model
 
     public function getStudents(): Collection
     {
-        return $this->classroom()->with(['users' => function ($query) {
+        return $this->classroom()->with(
+            ['users' => function ($query) {
             $query->where('users.type', '=', 'student');
-        }])->get()->pluck('users')->flatten();
+        }
+        ])->get()->pluck('users')->flatten();
     }
 
     public function getAbsentStudents()

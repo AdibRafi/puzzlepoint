@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div v-else-if="question.type === 'check'">
-                        <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
+                        <div v-for="(option, optionIndex) in question.options" :key="option">
                             <label class="cursor-pointer">
                                 <input type="checkbox" :id="`option_${optionIndex}`"
                                        class="mr-2 checkbox" :value="option"
@@ -35,7 +35,7 @@
                     </div>
                 </Card>
                 <Card>
-                    <button type="submit" class="btn btn-primary" :disabled="form.processing">Submit</button>
+                    <button class="btn btn-primary" @click.prevent="submit">Submit</button>
                 </Card>
             </div>
         </form>
@@ -101,4 +101,8 @@ const interval = setInterval(() => {
 onUnmounted(() => {
     clearInterval(interval);
 })
+
+const submit = () => {
+    router.post(route('student.assessment.check.answer', form))
+}
 </script>
